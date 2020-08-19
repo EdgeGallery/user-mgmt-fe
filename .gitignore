@@ -1,11 +1,15 @@
-target/
-static/
+.DS_Store
+node_modules
+/dist
+
 # local env files
 .env.local
 .env.*.local
 
 # Log files
-*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Editor directories and files
 .idea
@@ -15,5 +19,3 @@ static/
 *.njsproj
 *.sln
 *.sw?
-*.exe
-*.iml
