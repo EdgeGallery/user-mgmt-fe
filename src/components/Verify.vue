@@ -20,7 +20,7 @@
       class="verify-box"
       :class="sliderStatus?'success':''"
     >
-      <i
+      <em
         @mousedown="moveSlider"
         :class="sliderStatus?successIcon:startIcon"
         ref="btn"
@@ -87,8 +87,8 @@ export default {
       if (this.sliderStatus) { // 不运行
         return false
       }
-      document.onmousemove = (e) => {
-        let endX = e.clientX
+      document.onmousemove = (event) => {
+        let endX = event.clientX
         this.disX = endX - startX
         if (this.disX <= 0) {
           this.disX = 0
@@ -98,7 +98,7 @@ export default {
         }
         ele.style.transition = '.1s all'
         ele.style.transform = 'translateX(' + this.disX + 'px)'
-        e.preventDefault()
+        event.preventDefault()
       }
       document.onmouseup = () => {
         if (this.disX !== MaxX) {
@@ -119,7 +119,6 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-.verifyCom{
   .verify-box{
     background-color: #FFCCCC;
     position: relative;
@@ -133,7 +132,7 @@ export default {
     line-height: 40px;;
     border-radius: 4px;
     margin-bottom: 15px;
-    i{
+    em{
       position: absolute;
       left: 0;
       width: 60px;
@@ -156,5 +155,4 @@ export default {
       color: #7AC23C;
     }
   }
-}
 </style>
