@@ -259,7 +259,7 @@ export default {
       width: 100%;
       line-height: 18px;
       font-size: 18px;
-      font-family: PingFangSC-Medium;
+      font-family: PingFangSC-Medium,sans-serif;
       color: #252B3A;
       margin-bottom:25px;
     }

@@ -195,7 +195,7 @@ export default {
       width: 100%;
       line-height: 18px;
       font-size: 18px;
-      font-family: PingFangSC-Medium;
+      font-family: PingFangSC-Medium,sans-serif;
       color: #252b3a;
       margin-bottom: 25px;
     }
