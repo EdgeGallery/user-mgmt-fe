@@ -27,6 +27,8 @@ const cn = {
     userAgreement: '《EdgeGallery用户协议》',
     and: '和',
     privacyStatement: '《隐私政策声明》',
+    legalProvisions: '法律条文',
+    siteAgreement: '网站协议',
     confirmPass: '密码确认',
     contact: '联系方式',
     company: '工作单位',

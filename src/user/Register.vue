@@ -130,8 +130,7 @@
             {{ $t('login.iAgree') }}
             <el-link
               type="primary"
-              href="#"
-              target="_blank"
+              @click="jumpBlank('useragreement')"
             >
               {{ $t('login.userAgreement') }}
             </el-link>

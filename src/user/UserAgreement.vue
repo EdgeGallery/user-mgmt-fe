@@ -22,10 +22,10 @@
         <p class="title">
           <em class="el-icon-arrow-down" />{{ $t('login.siteAgreement') }}
         </p>
-        <li @click="jumpTo('/mecm/userAgreement')">
+        <li class="selected">
           <span class="line" />{{ $t('login.userAgreement') }}
         </li>
-        <li class="selected">
+        <li @click="jumpTo('/mecm/userPrivacy')">
           <span class="line" />{{ $t('login.privacyStatement') }}
         </li>
       </ul>
@@ -47,7 +47,7 @@
 <script>
 import axios from 'axios'
 export default {
-  name: 'UserPrivacy',
+  name: 'UserAgreement',
   data () {
     return {
       markdownSource: ''
@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     getMarkDown () {
-      let url = './user- privacy.md'
+      let url = './user-agreement.md'
       axios(url).then(res => {
         this.markdownSource = res.data
       })

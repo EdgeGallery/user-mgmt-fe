@@ -27,6 +27,8 @@ const en = {
     userAgreement: '《EdgeGallery User Agreement》',
     and: 'and',
     privacyStatement: '《Privacy Policy Statement》',
+    legalProvisions: 'Legal provisions',
+    siteAgreement: 'Site Agreement',
     confirmPass: 'Confirm Password',
     contact: 'Contact Number',
     company: 'Company',
