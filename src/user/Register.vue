@@ -122,14 +122,36 @@
           </el-form-item>
         </div>
         <div>
+          <p class="legal-register">
+            <el-checkbox
+              v-model="legalRegister"
+              @change="selectLegal"
+            />
+            {{ $t('login.iAgree') }}
+            <el-link
+              type="primary"
+              href="#"
+              target="_blank"
+            >
+              {{ $t('login.userAgreement') }}
+            </el-link>
+            {{ $t('login.and') }}
+            <el-link
+              type="primary"
+              @click="jumpBlank('userprivacy')"
+            >
+              {{ $t('login.privacyStatement') }}
+            </el-link>
+          </p>
           <el-button
             id="submitBtn"
             type="primary"
             size="medium"
             :loading="regBtnLoading"
+            :disabled="!legalRegister"
             @click="submitForm('userData')"
           >
-            {{ $t('common.submit') }}
+            {{ $t('login.legalRegister') }}
           </el-button>
           <el-button
             id="cancelBtn"
@@ -214,7 +236,8 @@ export default {
           { pattern: /^1[34578]\d{9}$/, message: this.$t('login.phoneNumberRule') }
         ]
       },
-      regBtnLoading: false
+      regBtnLoading: false,
+      legalRegister: false
     }
   },
   mounted () {
@@ -229,6 +252,12 @@ export default {
     this.interval = null
   },
   methods: {
+    jumpBlank (name) {
+      let routeData = this.$router.resolve({
+        name: name
+      })
+      window.open(routeData.href, '_blank')
+    },
     jumpTo (path) {
       this.$router.push(path)
     },
@@ -274,7 +303,7 @@ export default {
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
-        if (valid) {
+        if (valid && this.legalRegister) {
           if (this.nameTip && this.telTip) {
             this.regBtnLoading = true
             if (!this.enableSms) {
@@ -334,6 +363,9 @@ export default {
           this.regBtnLoading = false
         })
       }
+    },
+    selectLegal (val) {
+      this.legalRegister = val
     }
   }
 }
@@ -345,7 +377,7 @@ export default {
   background-size:cover;
   .loginBox{
     float: right;
-    width: 350px;
+    width: 410px;
     height: auto;
     text-align: center;
     margin: 5% 10% 0 0;
@@ -367,7 +399,7 @@ export default {
       p{
         line-height: 25px;
         text-align: left;
-        margin-top:15px;
+        margin-top:5px;
         margin-bottom: 0px;
       }
     }
@@ -383,6 +415,18 @@ export default {
         border-radius: 5px;
         font-size:18px;
         font-weight:bold;
+      }
+    }
+    .legal-register{
+      font-size: 12px;
+      margin: 5px 0 15px;
+      .el-checkbox{
+        margin-right: 5px;
+      }
+      .el-link{
+        font-weight: normal;
+        font-size: 12px;
+        margin-top: -3px;
       }
     }
   }

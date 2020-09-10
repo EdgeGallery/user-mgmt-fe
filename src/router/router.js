@@ -40,6 +40,11 @@ export default new Router({
           path: 'mecm/getPwd',
           name: 'getpwd',
           component: () => import('../user/Getpwd.vue')
+        },
+        {
+          path: 'mecm/userPrivacy',
+          name: 'userprivacy',
+          component: () => import('../user/UserPrivacy.vue')
         }
       ]
     }
