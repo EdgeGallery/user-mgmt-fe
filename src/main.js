@@ -25,9 +25,12 @@ import locale from 'element-ui/lib/locale/lang/en'
 import i18n from './locales/i18n.js'
 import axios from 'axios'
 import VueCookies from 'vue-cookies'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 axios.defaults.withCredentials = true
 Vue.use(ElementUI, { locale })
 Vue.use(VueCookies)
+Vue.use(mavonEditor)
 Vue.config.productionTip = false
 new Vue({
   router,
