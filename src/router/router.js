@@ -45,11 +45,6 @@ export default new Router({
           path: 'mecm/userPrivacy',
           name: 'userprivacy',
           component: () => import('../user/UserPrivacy.vue')
-        },
-        {
-          path: 'mecm/userAgreement',
-          name: 'useragreement',
-          component: () => import('../user/UserAgreement.vue')
         }
       ]
     }

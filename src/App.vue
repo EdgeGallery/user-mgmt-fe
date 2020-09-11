@@ -33,7 +33,7 @@ export default {
   methods: {},
   watch: {
     $route (to, from) {
-      if (to.path !== '/' && to.path !== '/mecm/register' && to.path !== '/mecm/getPwd' && to.path !== '/mecm/userPrivacy' && to.path !== '/mecm/userAgreement') {
+      if (to.path !== '/' && to.path !== '/mecm/register' && to.path !== '/mecm/getPwd' && to.path !== '/mecm/userPrivacy') {
         this.$router.push('/')
       }
     }

@@ -252,8 +252,9 @@ export default {
   },
   methods: {
     jumpBlank (name) {
+      sessionStorage.setItem('privacyName', name)
       let routeData = this.$router.resolve({
-        name: name
+        name: 'userprivacy'
       })
       window.open(routeData.href, '_blank')
     },

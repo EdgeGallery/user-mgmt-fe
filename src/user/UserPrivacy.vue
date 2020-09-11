@@ -22,10 +22,16 @@
         <p class="title">
           <em class="el-icon-arrow-down" />{{ $t('login.siteAgreement') }}
         </p>
-        <li @click="jumpTo('/mecm/userAgreement')">
+        <li
+          :class="{'selected':privacyName==='useragreement'}"
+          @click="jumpTo('useragreement')"
+        >
           <span class="line" />{{ $t('login.userAgreement') }}
         </li>
-        <li class="selected">
+        <li
+          :class="{'selected':privacyName==='userprivacy'}"
+          @click="jumpTo('userprivacy')"
+        >
           <span class="line" />{{ $t('login.privacyStatement') }}
         </li>
       </ul>
@@ -50,24 +56,31 @@ export default {
   name: 'UserPrivacy',
   data () {
     return {
-      markdownSource: ''
+      markdownSource: '',
+      privacyName: sessionStorage.getItem('privacyName')
     }
   },
   methods: {
-    getMarkDown () {
-      let url = './user- privacy.md'
+    getMarkDown (privacyName) {
+      let url = ''
+      if (privacyName === 'useragreement') {
+        url = './user-agreement.md'
+      } else if (privacyName === 'userprivacy') {
+        url = './user-privacy.md'
+      }
       axios(url).then(res => {
         this.markdownSource = res.data
       })
     },
-    jumpTo (path) {
-      this.$router.push(path)
+    jumpTo (name) {
+      this.privacyName = name
+      this.getMarkDown(name)
     }
   },
   created () {
   },
   mounted () {
-    this.getMarkDown()
+    this.getMarkDown(this.privacyName)
     function apiHeight () {
       const oApi = document.getElementById('mavon-editor')
       const deviceHeight = document.documentElement.clientHeight
