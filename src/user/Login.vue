@@ -227,6 +227,9 @@ export default {
       width: 100%;
       font-size: 18px;
     }
+    .verify-box em{
+      top: 0;
+    }
   }
   .login-tips {
     margin-top: 15px;

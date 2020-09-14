@@ -99,7 +99,7 @@ export default {
   display: flex;
   font-size: 14px;
   .left{
-    width: 280px;
+    width: 300px;
     background: #f7f7f7;
     h4{
       padding-left: 30px;
