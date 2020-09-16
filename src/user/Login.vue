@@ -133,8 +133,9 @@ export default {
       if (this.verifyStatus) {
         this.loginBtnLoading = true
         let formData = new FormData()
-        formData.set('username', this.userData.username)
-        formData.set('password', this.userData.password)
+        Object.keys(this.userData).forEach(item => {
+          formData.append(item, this.userData[item])
+        })
         let headers = {
           'Content-Type': 'multipart/form-data',
           'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
