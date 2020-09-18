@@ -128,8 +128,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 40px; /*no*/
-    line-height: 40px;;
+    height: 40px;
+    line-height: 40px;
     border-radius: 4px;
     margin-bottom: 15px;
     em{

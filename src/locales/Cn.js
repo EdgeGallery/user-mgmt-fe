@@ -81,7 +81,8 @@ const cn = {
     failedToGetCaptcha: '获取手机验证码失败',
     nameAlSinged: '用户名已被注册，请重新输入或前往登陆',
     telAlSigned: '电话号码已被注册，请重新输入或前往登陆',
-    getVerifyCodeSuc: '获取验证码成功！'
+    getVerifyCodeSuc: '获取验证码成功！',
+    passDiferent: '两次密码输入不一致'
   },
   ...zhLocale
 }
