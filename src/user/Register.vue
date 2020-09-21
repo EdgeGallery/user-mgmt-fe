@@ -48,10 +48,10 @@
               :placeholder="$t('login.pwdPla')"
             />
           </el-form-item>
-          <el-form-item>
+          <el-form-item prop="checkPass">
             <el-input
               id="verifypass"
-              v-model="confirmPassword"
+              v-model="userData.checkPass"
               type="password"
               :placeholder="$t('login.pwdConfPla')"
             />
@@ -177,9 +177,6 @@ export default {
       if (value === '') {
         callback(new Error('Username cannot be empty'))
       } else {
-        if (this.userData.checkPass !== '') {
-          this.$refs.userData.validateField('checkPass')
-        }
         callback()
       }
     }
@@ -193,19 +190,22 @@ export default {
         callback()
       }
     }
+    var validatepassconfirm = (rule, value, callback) => {
+      if (value !== this.userData.password) {
+        callback(new Error('The two passwords are different'))
+      } else {
+        callback()
+      }
+    }
     var validatetelephone = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('Contact Number cannot be empty'))
       } else {
-        if (this.userData.checkPass !== '') {
-          this.$refs.userData.validateField('checkPass')
-        }
         callback()
       }
     }
     return {
       visible: false,
-      confirmPassword: '',
       ifBtnAble: false,
       time: 60,
       showTime: false,
@@ -213,6 +213,7 @@ export default {
       userData: {
         username: '',
         password: '',
+        checkPass: '',
         telephone: '',
         verificationCode: '',
         company: '',
@@ -233,6 +234,9 @@ export default {
         telephone: [
           { validator: validatetelephone, trigger: 'blur' },
           { pattern: /^1[34578]\d{9}$/, message: this.$t('login.phoneNumberRule') }
+        ],
+        checkPass: [
+          { validator: validatepassconfirm, trigger: 'blur' }
         ]
       },
       regBtnLoading: false,
@@ -306,6 +310,7 @@ export default {
         if (valid && this.legalRegister) {
           if (this.nameTip && this.telTip) {
             this.regBtnLoading = true
+            delete this.userData.checkPass
             if (!this.enableSms) {
               delete this.userData.verificationCode
             }

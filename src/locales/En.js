@@ -82,7 +82,8 @@ const en = {
     failedToGetCaptcha: 'Failed to get captcha',
     nameAlSinged: 'The username number has been already registered, please change another one',
     telAlSigned: 'The telephone number has been already registered, please change another one',
-    getVerifyCodeSuc: 'Successfully obtained verification code'
+    getVerifyCodeSuc: 'Successfully obtained verification code',
+    passDiferent: 'The two passwords are different!'
   },
   ...enLocale
 }
