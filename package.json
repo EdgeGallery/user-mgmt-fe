@@ -27,6 +27,7 @@
     "serialize-javascript": "^4.0.0",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.0",
+    "vue-drag-verify": "^1.0.6",
     "vue-generate-component": "^3.0.0",
     "vue-i18n": "^8.15.3",
     "vue-router": "^3.1.3",

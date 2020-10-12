@@ -68,6 +68,13 @@ export default {
         this.$router.push(path)
       }
     },
+    os () {
+      let UserAgent = navigator.userAgent.toLowerCase()
+      return {
+        isWindows: /windows/.test(UserAgent),
+        isMac: /mac/.test(UserAgent)
+      }
+    },
     changeLang () {
       let language
       if (this.language === 'English') {
@@ -167,6 +174,11 @@ export default {
       top:8px;
       cursor:pointer;
       color:#f5f5f5;
+    }
+    @media screen and (max-width: 640px) {
+      span{
+        color: #333;
+      }
     }
   }
 }
