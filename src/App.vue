@@ -46,7 +46,7 @@ export default {
   font-family: Huaweisans, Arial, Microsoft YaHei, FZLTXHJW, Microsoft JhengHei, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-width: 988px;
+  min-width: 320px;
   height:100%;
   background-size:cover;
 }

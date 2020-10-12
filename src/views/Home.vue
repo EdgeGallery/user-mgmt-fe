@@ -48,4 +48,9 @@ export default {
 #container{
   padding:0 50px;
 }
+@media screen and (max-width: 640px) {
+  #container{
+    padding: 0;
+  }
+}
 </style>
