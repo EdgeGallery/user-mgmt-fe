@@ -53,10 +53,11 @@ const en = {
     verify: 'Drag slider to verify',
     finishVerify: 'Verifiy succeeded',
     changeOne: 'Chang one',
-    loginFail: 'Failed to log in, Please check your username and password',
+    loginFail: 'Failed to log in, please check your username and password, enter the wrong password more than three consecutive times, the account will be locked',
     usernameRule: '6-20 letters/numbers/underscores, begin with letters',
     passwordRule: 'Must consist of 6-18 letters/numbers/symbols',
-    phoneNumberRule: 'The phone number is not in accordance with the rules'
+    phoneNumberRule: 'The phone number is not in accordance with the rules',
+    userLock: 'You have entered the wrong password three times in a row, the account has been locked, please try again in 5 minutes'
   },
   common: {
     cancel: 'Cancel',
