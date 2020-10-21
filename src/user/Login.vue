@@ -173,9 +173,8 @@ export default {
         api.login(formData, headers).then(res => {
           window.location.href = decodeURIComponent(JSON.parse(sessionStorage.getItem('obj')).return_url)
         }).catch(error => {
+          this.loginBtnLoading = false
           if (error && error.response) {
-            this.verifyStatus = false
-            this.loginBtnLoading = false
             switch (error.response.status) {
               case 400:
                 error.message = 'Bad request'
