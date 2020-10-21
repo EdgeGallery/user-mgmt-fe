@@ -183,7 +183,7 @@ export default {
               case 401:
                 error.message = this.$t('login.loginFail')
                 break
-              case 402:
+              case 423:
                 error.message = this.$t('login.userLock')
                 break
             }
