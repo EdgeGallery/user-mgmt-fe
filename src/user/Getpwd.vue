@@ -38,7 +38,10 @@
           </el-form-item>
           <el-form-item prop="verificationCode">
             <el-row>
-              <el-col :span="16">
+              <el-col
+                :span="16"
+                :xs="12"
+              >
                 <el-input
                   v-model="userData.verificationCode"
                   type="text"
@@ -46,7 +49,10 @@
                   style="margin-top:0;"
                 />
               </el-col>
-              <el-col :span="8">
+              <el-col
+                :span="8"
+                :xs="12"
+              >
                 <el-button
                   style="float:right;"
                   type="primary"
@@ -304,7 +310,8 @@ export default {
   background-size:cover;
   .loginBox{
     float: right;
-    width: 350px;
+    width: 80%;
+    max-width: 410px;
     height: auto;
     text-align: center;
     margin: 5% 10% 0 0;

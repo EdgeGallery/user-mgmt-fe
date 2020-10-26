@@ -418,8 +418,6 @@ export default {
 .register{
   min-width: 320px;
   height:100%;
-  background: url('./../assets/images/login.png') no-repeat center;
-  background-size:cover;
   .loginBox{
     float: right;
     width: 80%;

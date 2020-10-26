@@ -114,7 +114,8 @@ export default {
       successText: this.$t('login.finishVerify'),
       width: 300,
       height: 40,
-      textSize: '16px'
+      textSize: '16px',
+      interval: ''
     }
   },
   watch: {
@@ -142,8 +143,26 @@ export default {
       }
       sessionStorage.setItem('obj', JSON.stringify(obj))
     }
+    this.interval = setInterval(() => {
+      this.setDivWidth()
+    }, 100)
+  },
+  beforeDestroy () {
+    this.clearInterval()
   },
   methods: {
+    setDivWidth () {
+      let screenWidth = document.body.clientWidth
+      if (screenWidth >= 640) {
+        this.width = 360
+      } else {
+        this.width = 260
+      }
+    },
+    clearInterval () {
+      clearTimeout(this.interval)
+      this.interval = null
+    },
     verifySuccess () {
       if (this.$refs.Verify.isPassing) {
         this.verifyStatus = true
@@ -211,11 +230,9 @@ export default {
 <style lang="less">
 .login {
   height: 100%;
-  background: url("./../assets/images/login.png") no-repeat center;
-  background-size: cover;
   .loginBox {
     float: right;
-    width: 350px;
+    width: 410px;
     height: auto;
     text-align: center;
     margin: 10% 12% 0 0;
@@ -257,7 +274,8 @@ export default {
   }
   @media screen and (max-width: 640px) {
     .loginBox{
-      margin: 15% 20px 0 0;
+      width: 310px;
+      margin: 5% 10px 0 0;
     }
   }
   .login-btn {
