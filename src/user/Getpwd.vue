@@ -188,7 +188,7 @@ export default {
       ifBtnAble: false,
       time: 60,
       showTime: false,
-      interval: '',
+      interval: null,
       rules: {
         newPassword: [
           { validator: validatePass, trigger: 'blur' },

@@ -115,7 +115,7 @@ export default {
       width: 300,
       height: 40,
       textSize: '16px',
-      interval: ''
+      interval: null
     }
   },
   watch: {
