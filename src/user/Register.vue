@@ -239,7 +239,7 @@ export default {
       ifBtnAble: false,
       time: 60,
       showTime: false,
-      interval: '',
+      interval: null,
       userData: {
         username: '',
         password: '',
