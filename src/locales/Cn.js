@@ -53,10 +53,11 @@ const cn = {
     verify: '拖动完成验证',
     finishVerify: '验证成功',
     changeOne: '换一张',
-    loginFail: '登陆失败，请检查用户名和密码',
-    usernameRule: '6-30位字母,数字,下划线组合，首位必须为字母',
-    passwordRule: '密码必须由6-18位字母、数字、特殊符号组成',
-    phoneNumberRule: '电话号码不满足要求'
+    loginFail: '登陆失败，请检查用户名和密码，连续输入错误密码三次以上，账户将会被锁定',
+    usernameRule: '6-30位字母,数字,下划线任意两种组合，首位必须为字母',
+    passwordRule: '密码必须由6-18位字母、数字、特殊符号三种组成',
+    phoneNumberRule: '电话号码不满足要求',
+    userLock: '您已经连续输入错误密码三次，账户已被锁定，请在5分钟后重试'
   },
   common: {
     cancel: '取消',

@@ -39,13 +39,23 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-.home-container{
+.home{
   height:100%;
+  background: url('../assets/images/login.png') no-repeat center;
+  background-size:cover;
+}
+.home-container{
+  height: calc(100% - 65px);
   position: relative;
   top: 65px;
   overflow-y: auto;
 }
 #container{
   padding:0 50px;
+}
+@media screen and (max-width: 640px) {
+  #container{
+    padding: 0;
+  }
 }
 </style>

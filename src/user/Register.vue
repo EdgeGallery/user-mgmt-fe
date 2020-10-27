@@ -23,7 +23,6 @@
       </p>
       <el-form
         :model="userData"
-        status-icon
         :rules="rules"
         ref="userData"
         class="demo-ruleForm"
@@ -35,8 +34,10 @@
               v-model="userData.username"
               auto-complete="new-accounts"
               type="text"
+              clearable
               :placeholder="$t('login.userName')"
               @blur.native.capture="verifyName()"
+              :class="{'errMsg':errorMsg}"
             />
           </el-form-item>
           <el-form-item prop="password">
@@ -45,6 +46,7 @@
               v-model="userData.password"
               auto-complete="new-password"
               type="password"
+              clearable
               :placeholder="$t('login.pwdPla')"
             />
           </el-form-item>
@@ -53,6 +55,7 @@
               id="verifypass"
               v-model="userData.checkPass"
               type="password"
+              clearable
               :placeholder="$t('login.pwdConfPla')"
             />
           </el-form-item>
@@ -61,6 +64,7 @@
               id="contact"
               v-model="userData.telephone"
               type="text"
+              clearable
               :placeholder="$t('login.telPla')"
               @blur.native.capture="verifyName()"
             />
@@ -98,12 +102,12 @@
               id="company"
               v-model="userData.company"
               type="text"
+              clearable
               :placeholder="$t('login.compPla')"
             />
           </el-form-item>
-          <el-form-item>
+          <el-form-item class="gender">
             <p
-              style="padding:5px 0;"
               id="gender"
             >
               <el-radio
@@ -142,24 +146,26 @@
               {{ $t('login.privacyStatement') }}
             </el-link>
           </p>
-          <el-button
-            id="submitBtn"
-            type="primary"
-            size="medium"
-            :loading="regBtnLoading"
-            :disabled="!legalRegister"
-            @click="submitForm('userData')"
-          >
-            {{ $t('login.legalRegister') }}
-          </el-button>
-          <el-button
-            id="cancelBtn"
-            type="primary"
-            size="medium"
-            @click="closeSucessPop()"
-          >
-            {{ $t('common.cancel') }}
-          </el-button>
+          <div class="regBtn">
+            <el-button
+              id="submitBtn"
+              type="primary"
+              size="medium"
+              :loading="regBtnLoading"
+              :disabled="!legalRegister"
+              @click="submitForm('userData')"
+            >
+              {{ $t('login.legalRegister') }}
+            </el-button>
+            <el-button
+              id="cancelBtn"
+              type="primary"
+              size="medium"
+              @click="closeSucessPop()"
+            >
+              {{ $t('common.cancel') }}
+            </el-button>
+          </div>
         </div>
       </el-form>
     </div>
@@ -175,14 +181,22 @@ export default {
   data () {
     var validateName = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('Username cannot be empty'))
+        callback(new Error(this.$t('verify.usernameTip')))
+      } else {
+        callback()
+      }
+    }
+    var validateNameRule = (rule, value, callback) => {
+      let pattern = /^[a-zA-Z][a-zA-Z0-9_]{5,29}$/
+      if (value.match(pattern) === null) {
+        callback(new Error(this.$t('login.usernameRule')))
       } else {
         callback()
       }
     }
     var validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('Password cannot be empty'))
+        callback(new Error(this.$t('verify.passwordTip')))
       } else {
         if (this.userData.checkPass !== '') {
           this.$refs.userData.validateField('checkPass')
@@ -190,16 +204,32 @@ export default {
         callback()
       }
     }
+    var validatePassRule = (rule, value, callback) => {
+      let pattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{6,18}$/
+      if (value.match(pattern) === null) {
+        callback(new Error(this.$t('login.passwordRule')))
+      } else {
+        callback()
+      }
+    }
     var validatepassconfirm = (rule, value, callback) => {
       if (value !== this.userData.password) {
-        callback(new Error('The two passwords are different'))
+        callback(new Error(this.$t('tip.passDiferent')))
       } else {
         callback()
       }
     }
     var validatetelephone = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('Contact Number cannot be empty'))
+        callback(new Error(this.$t('verify.telephoneTip')))
+      } else {
+        callback()
+      }
+    }
+    var validateTelRule = (rule, value, callback) => {
+      let pattern = /^1[34578]\d{9}$/
+      if (value.match(pattern) === null) {
+        callback(new Error(this.$t('login.phoneNumberRule')))
       } else {
         callback()
       }
@@ -209,7 +239,7 @@ export default {
       ifBtnAble: false,
       time: 60,
       showTime: false,
-      interval: '',
+      interval: null,
       userData: {
         username: '',
         password: '',
@@ -225,15 +255,15 @@ export default {
       rules: {
         username: [
           { validator: validateName, trigger: 'blur' },
-          { pattern: /^[a-zA-Z][a-zA-Z0-9_]{5,29}$/, message: this.$t('login.usernameRule') }
+          { validator: validateNameRule }
         ],
         password: [
           { validator: validatePass, trigger: 'blur' },
-          { pattern: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{6,18}$/, message: this.$t('login.passwordRule') }
+          { validator: validatePassRule }
         ],
         telephone: [
           { validator: validatetelephone, trigger: 'blur' },
-          { pattern: /^1[34578]\d{9}$/, message: this.$t('login.phoneNumberRule') }
+          { validator: validateTelRule }
         ],
         checkPass: [
           { validator: validatepassconfirm, trigger: 'blur' }
@@ -241,6 +271,15 @@ export default {
       },
       regBtnLoading: false,
       legalRegister: false
+    }
+  },
+  watch: {
+    '$i18n.locale': function () {
+      this.$refs['userData'].fields.forEach(item => {
+        if (item.validateState === 'error') {
+          this.$refs['userData'].validateField(item.labelFor)
+        }
+      })
     }
   },
   mounted () {
@@ -377,16 +416,15 @@ export default {
 </script>
 <style lang="less">
 .register{
+  min-width: 320px;
   height:100%;
-  background: url('./../assets/images/login.png') no-repeat center;
-  background-size:cover;
   .loginBox{
     float: right;
-    width: 410px;
-    height: auto;
+    width: 80%;
+    max-width: 410px;
     text-align: center;
     margin: 5% 10% 0 0;
-    padding:25px 15px;
+    padding:0 15px;
     background: #fff;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
     .login-top{
@@ -397,16 +435,31 @@ export default {
       font-size: 18px;
       font-family: PingFangSC-Medium,sans-serif;
       color: #252B3A;
-      margin-bottom:25px;
+      margin:25px 0;
     }
     .login-area{
       padding: 0 25px;
+      .el-form-item{
+        margin-bottom: 25px;
+        .el-form-item__error{
+          text-align: left;
+          padding-top: 2px;
+        }
+      }
+      .el-form-item.is-error{
+        .el-input__clear{
+          color: #F56C6C;
+        }
+      }
       p{
         line-height: 25px;
         text-align: left;
         margin-top:5px;
         margin-bottom: 0px;
       }
+    }
+    .regBtn{
+      padding-bottom: 25px;
     }
     .login-certify{
       padding: 0 25px;
@@ -435,12 +488,16 @@ export default {
       }
     }
   }
-  .el-input{
-    height:30px;
-    margin:15px 0;
-  }
-  .el-form-item{
-    margin-bottom: 0px;
+  .gender{
+    height: 25px;
+    line-height: 25px;
+    margin: -10px 0 10px 0;
+    .el-form-item__content{
+      line-height: 25px;
+      p{
+        margin-top: 0;
+      }
+    }
   }
 }
 </style>

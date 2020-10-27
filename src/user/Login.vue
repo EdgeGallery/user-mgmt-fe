@@ -35,10 +35,21 @@
         />
       </div>
       <div class="login-btn">
-        <verify
-          :success-fun="success"
-          :error-fun="error"
-          :verify-status="verifyStatus"
+        <drag-verify
+          :width="width"
+          :height="height"
+          :text="text"
+          :success-text="successText"
+          :background="background"
+          :progress-bar-bg="progressBarBg"
+          :completed-bg="completedBg"
+          :handler-bg="handlerBg"
+          :handler-icon="handlerIcon"
+          :text-size="textSize"
+          :success-icon="successIcon"
+          :circle="false"
+          ref="Verify"
+          @passcallback="verifySuccess"
         />
       </div>
       <div class="login-btn">
@@ -75,12 +86,13 @@
   </div>
 </template>
 <script>
-import Verify from '../components/Verify'
+import 'font-awesome/css/font-awesome.min.css'
+import dragVerify from 'vue-drag-verify'
 import { api } from '../tools/api.js'
 export default {
   name: '',
   components: {
-    Verify
+    dragVerify
   },
   data () {
     return {
@@ -91,7 +103,25 @@ export default {
       loginBtnLoading: false,
       verifyStatus: false,
       returnUrl: '',
-      enableSms: ''
+      enableSms: '',
+      handlerIcon: 'fa fa-angle-double-right',
+      successIcon: 'fa fa-check',
+      background: '#FFCCCC',
+      progressBarBg: '#4b0',
+      completedBg: '#66cc66',
+      handlerBg: '#fff',
+      text: this.$t('login.verify'),
+      successText: this.$t('login.finishVerify'),
+      width: 300,
+      height: 40,
+      textSize: '16px',
+      interval: null
+    }
+  },
+  watch: {
+    '$i18n.locale': function () {
+      this.text = this.$t('login.verify')
+      this.successText = this.$t('login.finishVerify')
     }
   },
   created () {
@@ -113,13 +143,32 @@ export default {
       }
       sessionStorage.setItem('obj', JSON.stringify(obj))
     }
+    this.interval = setInterval(() => {
+      this.setDivWidth()
+    }, 100)
+  },
+  beforeDestroy () {
+    this.clearInterval()
   },
   methods: {
-    success () {
-      this.verifyStatus = true
+    setDivWidth () {
+      let screenWidth = document.body.clientWidth
+      if (screenWidth >= 640) {
+        this.width = 360
+      } else {
+        this.width = 260
+      }
     },
-    error () {
-      this.verifyStatus = false
+    clearInterval () {
+      clearTimeout(this.interval)
+      this.interval = null
+    },
+    verifySuccess () {
+      if (this.$refs.Verify.isPassing) {
+        this.verifyStatus = true
+      } else {
+        this.verifyStatus = false
+      }
     },
     getQueryString (name) {
       let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
@@ -143,7 +192,6 @@ export default {
         api.login(formData, headers).then(res => {
           window.location.href = decodeURIComponent(JSON.parse(sessionStorage.getItem('obj')).return_url)
         }).catch(error => {
-          this.verifyStatus = false
           this.loginBtnLoading = false
           if (error && error.response) {
             switch (error.response.status) {
@@ -152,6 +200,9 @@ export default {
                 break
               case 401:
                 error.message = this.$t('login.loginFail')
+                break
+              case 423:
+                error.message = this.$t('login.userLock')
                 break
             }
             this.$message.error(error.message)
@@ -178,11 +229,9 @@ export default {
 <style lang="less">
 .login {
   height: 100%;
-  background: url("./../assets/images/login.png") no-repeat center;
-  background-size: cover;
   .loginBox {
     float: right;
-    width: 350px;
+    width: 410px;
     height: auto;
     text-align: center;
     margin: 10% 12% 0 0;
@@ -222,6 +271,12 @@ export default {
       }
     }
   }
+  @media screen and (max-width: 640px) {
+    .loginBox{
+      width: 310px;
+      margin: 5% 10px 0 0;
+    }
+  }
   .login-btn {
     padding: 0 25px;
     button {
@@ -230,6 +285,12 @@ export default {
     }
     .verify-box em{
       top: 0;
+    }
+    .drag_verify{
+      margin-bottom: 15px;
+    }
+    .drag_verify .dv_handler i{
+      font-size: 16px;
     }
   }
   .login-tips {

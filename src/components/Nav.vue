@@ -68,6 +68,13 @@ export default {
         this.$router.push(path)
       }
     },
+    os () {
+      let UserAgent = navigator.userAgent.toLowerCase()
+      return {
+        isWindows: /windows/.test(UserAgent),
+        isMac: /mac/.test(UserAgent)
+      }
+    },
     changeLang () {
       let language
       if (this.language === 'English') {
@@ -106,7 +113,8 @@ export default {
   z-index: 2;
   .logo{
     height:65px;
-    width:430px;
+    width: 80%;
+    max-width:430px;
     line-height: 65px;
     margin-left:17px;
     img{
@@ -127,6 +135,15 @@ export default {
       color:#409EFF;
     }
   }
+  @media screen and (max-width: 640px) {
+      .logo{
+        width: 35%;
+        img{
+          width: 110px;
+          margin-top: 8px;
+        }
+      }
+    }
   .language {
     display: inline-block;
     line-height: 65px;
