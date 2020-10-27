@@ -113,7 +113,8 @@ export default {
   z-index: 2;
   .logo{
     height:65px;
-    width:430px;
+    width: 80%;
+    max-width:430px;
     line-height: 65px;
     margin-left:17px;
     img{
@@ -134,6 +135,15 @@ export default {
       color:#409EFF;
     }
   }
+  @media screen and (max-width: 640px) {
+      .logo{
+        width: 35%;
+        img{
+          width: 110px;
+          margin-top: 8px;
+        }
+      }
+    }
   .language {
     display: inline-block;
     line-height: 65px;
@@ -174,11 +184,6 @@ export default {
       top:8px;
       cursor:pointer;
       color:#f5f5f5;
-    }
-    @media screen and (max-width: 640px) {
-      span{
-        color: #333;
-      }
     }
   }
 }

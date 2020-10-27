@@ -22,7 +22,6 @@
       </p>
       <el-form
         :model="userData"
-        status-icon
         :rules="rules"
         ref="userData"
         class="demo-ruleForm"
@@ -33,12 +32,16 @@
               id="contact"
               v-model="userData.telephone"
               type="text"
+              clearable
               :placeholder="$t('login.telPla')"
             />
           </el-form-item>
           <el-form-item prop="verificationCode">
-            <el-row style="margin-top:18px;">
-              <el-col :span="16">
+            <el-row>
+              <el-col
+                :span="16"
+                :xs="12"
+              >
                 <el-input
                   v-model="userData.verificationCode"
                   type="text"
@@ -46,7 +49,10 @@
                   style="margin-top:0;"
                 />
               </el-col>
-              <el-col :span="8">
+              <el-col
+                :span="8"
+                :xs="12"
+              >
                 <el-button
                   style="float:right;"
                   type="primary"
@@ -65,6 +71,7 @@
               v-model="userData.newPassword"
               auto-complete="new-password"
               type="password"
+              clearable
               :placeholder="$t('login.pwdPla')"
             />
           </el-form-item>
@@ -73,6 +80,7 @@
               id="verifypass"
               v-model="confirmPassword"
               type="password"
+              clearable
               :placeholder="$t('login.pwdConfPla')"
             />
           </el-form-item>
@@ -118,6 +126,14 @@ export default {
         callback()
       }
     }
+    var validatePassRule = (rule, value, callback) => {
+      let pattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{6,18}$/
+      if (value.match(pattern) === null) {
+        callback(new Error(this.$t('login.passwordRule')))
+      } else {
+        callback()
+      }
+    }
     var validatetelephone = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('verify.telephoneTip')))
@@ -128,6 +144,14 @@ export default {
         callback()
       }
     }
+    var validateTelRule = (rule, value, callback) => {
+      let pattern = /^1[34578]\d{9}$/
+      if (value.match(pattern) === null) {
+        callback(new Error(this.$t('login.phoneNumberRule')))
+      } else {
+        callback()
+      }
+    }
     var validateverifycode = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('verify.verifyCodeTip')))
@@ -135,6 +159,21 @@ export default {
         if (this.userData.checkPass !== '') {
           this.$refs.userData.validateField('checkPass')
         }
+        callback()
+      }
+    }
+    var validateVerifyRule = (rule, value, callback) => {
+      let pattern = /^\d{6}$/
+      if (value.match(pattern) === null) {
+        callback(new Error(this.$t('verify.verifycodeRule')))
+      } else {
+        callback()
+      }
+    }
+    var validatepassconfirm = (rule, value, callback) => {
+      if (value !== this.userData.newPassword) {
+        callback(new Error(this.$t('tip.passDiferent')))
+      } else {
         callback()
       }
     }
@@ -153,15 +192,18 @@ export default {
       rules: {
         newPassword: [
           { validator: validatePass, trigger: 'blur' },
-          { pattern: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{6,18}$/, message: this.$t('login.passwordRule') }
+          { validator: validatePassRule }
         ],
         telephone: [
           { validator: validatetelephone, trigger: 'blur' },
-          { pattern: /^1[34578]\d{9}$/, message: this.$t('login.phoneNumberRule') }
+          { validator: validateTelRule }
         ],
         verificationCode: [
           { validator: validateverifycode, trigger: 'blur' },
-          { pattern: /^\d{6}$/, message: this.$t('verify.verifycodeRule') }
+          { validator: validateVerifyRule }
+        ],
+        confirmPassword: [
+          { validator: validatepassconfirm, trigger: 'blur' }
         ]
       },
       regBtnLoading: false
@@ -173,6 +215,15 @@ export default {
   beforeDestroy () {
     clearTimeout(this.interval)
     this.interval = null
+  },
+  watch: {
+    '$i18n.locale': function () {
+      this.$refs['userData'].fields.forEach(item => {
+        if (item.validateState === 'error') {
+          this.$refs['userData'].validateField(item.labelFor)
+        }
+      })
+    }
   },
   methods: {
     jumpTo (path) {
@@ -259,7 +310,8 @@ export default {
   background-size:cover;
   .loginBox{
     float: right;
-    width: 350px;
+    width: 80%;
+    max-width: 410px;
     height: auto;
     text-align: center;
     margin: 5% 10% 0 0;
@@ -278,6 +330,17 @@ export default {
     }
     .login-area{
       padding: 0 25px;
+      .el-form-item{
+        margin-bottom: 25px;
+        .el-form-item__error{
+          text-align: left;
+        }
+      }
+      .el-form-item.is-error{
+        .el-input__clear{
+          color: #F56C6C;
+        }
+      }
       p{
         line-height: 25px;
         text-align: left;
@@ -299,13 +362,6 @@ export default {
         font-weight:bold;
       }
     }
-  }
-  .el-input{
-    height:30px;
-    margin:15px 0;
-  }
-  .el-form-item{
-    margin-bottom: 0px;
   }
 }
 </style>
