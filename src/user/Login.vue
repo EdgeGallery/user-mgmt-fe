@@ -146,6 +146,11 @@ export default {
     this.interval = setInterval(() => {
       this.setDivWidth()
     }, 100)
+    let userInfo = JSON.parse(sessionStorage.getItem('userinfo'))
+    if (userInfo) {
+      this.userData.username = userInfo.username
+      this.userData.password = userInfo.password
+    }
   },
   beforeDestroy () {
     this.clearInterval()
@@ -191,7 +196,9 @@ export default {
         }
         api.login(formData, headers).then(res => {
           window.location.href = decodeURIComponent(JSON.parse(sessionStorage.getItem('obj')).return_url)
+          sessionStorage.removeItem('userinfo')
         }).catch(error => {
+          sessionStorage.setItem('userinfo', JSON.stringify(this.userData))
           this.loginBtnLoading = false
           if (error && error.response) {
             switch (error.response.status) {
@@ -207,6 +214,9 @@ export default {
             }
             this.$message.error(error.message)
           }
+          setTimeout(() => {
+            location.reload()
+          }, 2000)
         })
       } else {
         this.$message.error(this.$t('tip.wrongCaptcha'))
