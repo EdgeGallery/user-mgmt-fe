@@ -94,6 +94,7 @@ export default {
   components: {
     dragVerify
   },
+  inject: ['reload'],
   data () {
     return {
       userData: {
@@ -112,7 +113,7 @@ export default {
       handlerBg: '#fff',
       text: this.$t('login.verify'),
       successText: this.$t('login.finishVerify'),
-      width: 300,
+      width: 360,
       height: 40,
       textSize: '16px',
       interval: null
@@ -215,7 +216,7 @@ export default {
             this.$message.error(error.message)
           }
           setTimeout(() => {
-            location.reload()
+            this.reload()
           }, 2000)
         })
       } else {

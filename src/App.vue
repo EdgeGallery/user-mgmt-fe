@@ -16,7 +16,7 @@
 
 <template>
   <div id="app">
-    <router-view />
+    <router-view v-if="isRouterAlive" />
   </div>
 </template>
 
@@ -25,12 +25,25 @@ export default {
   name: 'App',
   components: {
   },
+  provide () {
+    return {
+      reload: this.reload
+    }
+  },
   data () {
     return {
+      isRouterAlive: true
     }
   },
   mounted () {},
-  methods: {},
+  methods: {
+    reload () {
+      this.isRouterAlive = false
+      this.$nextTick(function () {
+        this.isRouterAlive = true
+      })
+    }
+  },
   watch: {
     $route (to, from) {
       if (to.path !== '/' && to.path !== '/mecm/register' && to.path !== '/mecm/getPwd' && to.path !== '/mecm/userPrivacy') {
