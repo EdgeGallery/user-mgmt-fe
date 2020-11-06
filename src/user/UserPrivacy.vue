@@ -139,6 +139,7 @@ export default {
   }
   #mavon-editor{
     flex-grow: 1;
+    background: #fff;
   }
 }
 </style>
