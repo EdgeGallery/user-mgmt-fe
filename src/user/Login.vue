@@ -150,7 +150,6 @@ export default {
     let userInfo = JSON.parse(sessionStorage.getItem('userinfo'))
     if (userInfo) {
       this.userData.username = userInfo.username
-      this.userData.password = userInfo.password
     }
   },
   beforeDestroy () {
@@ -197,10 +196,9 @@ export default {
         }
         api.login(formData, headers).then(res => {
           window.location.href = decodeURIComponent(JSON.parse(sessionStorage.getItem('obj')).return_url)
-          sessionStorage.removeItem('userinfo')
         }).catch(error => {
-          sessionStorage.setItem('userinfo', JSON.stringify(this.userData))
           this.loginBtnLoading = false
+          this.userData.password = ''
           if (error && error.response) {
             switch (error.response.status) {
               case 400:
