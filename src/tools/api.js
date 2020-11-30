@@ -48,8 +48,6 @@ let api = {
     return axios({
       method: 'GET',
       url: '/auth/logout'
-    }).then(res => {
-      location.reload()
     })
   },
   getCaptcha (params, headers) {

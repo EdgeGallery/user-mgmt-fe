@@ -21,7 +21,7 @@
     >
       <div
         class="login-area"
-        v-if="hasLogin"
+        v-if="!hasLogin"
       >
         <p class="login-top">
           {{ $t('login.loginWithUser') }}
@@ -41,6 +41,7 @@
       </div>
       <div
         class="login-area"
+        v-if="hasLogin"
       >
         <p
           style="height: 120px;line-height: 120px;"
@@ -50,7 +51,7 @@
       </div>
       <div
         class="login-btn"
-        v-if="hasLogin"
+        v-if="!hasLogin"
       >
         <drag-verify
           :width="width"
@@ -71,7 +72,7 @@
       </div>
       <div
         class="login-btn"
-        v-if="hasLogin"
+        v-if="!hasLogin"
       >
         <el-button
           id="loginBtn"
@@ -86,6 +87,7 @@
       <div
         class="login-btn"
         style="margin-top:130px;"
+        v-if="hasLogin"
       >
         <el-button
           id="loginBtn"
@@ -135,7 +137,7 @@ export default {
         password: ''
       },
       username: '',
-      hasLogin: true,
+      hasLogin: false,
       loginBtnLoading: false,
       verifyStatus: false,
       returnUrl: '',
@@ -166,9 +168,7 @@ export default {
   mounted () {
     api.loginInfo().then(res => {
       this.username = res.data.username
-    }).catch(error => {
-      console.log(error)
-      this.hasLogin = false
+      this.hasLogin = true
     })
     if (window.location.href.indexOf('return_to=') > -1) {
       this.returnUrl = this.getQueryString('return_to')
@@ -264,7 +264,7 @@ export default {
     },
     logout () {
       api.logout().then(res => {
-
+        location.reload()
       })
     },
     keyupSubmit () {
