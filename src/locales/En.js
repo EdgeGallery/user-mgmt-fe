@@ -57,7 +57,8 @@ const en = {
     usernameRule: 'Any of two combinations of 6-30 characters, numbers, and underscores. The first digit must be a letter',
     passwordRule: 'The password must be composed of 6-18 characters, numbers and special symbols',
     phoneNumberRule: 'The phone number is not in accordance with the rules',
-    userLock: 'You have entered the wrong password five times in a row, the account has been locked, please try again in 5 minutes'
+    userLock: 'You have entered the wrong password five times in a row, the account has been locked, please try again in 5 minutes',
+    hasLogin: 'has log in.'
   },
   common: {
     cancel: 'Cancel',

@@ -46,7 +46,7 @@
         <p
           style="height: 120px;line-height: 120px;"
         >
-          {{ username }}已登录
+          {{ username }}{{ $t('login.hasLogin') }}
         </p>
       </div>
       <div
@@ -168,6 +168,7 @@ export default {
     this.keyupSubmit()
   },
   mounted () {
+    this.hasLogin = true
     api.loginInfo().then(res => {
       this.username = res.data.username
       this.hasLogin = true
