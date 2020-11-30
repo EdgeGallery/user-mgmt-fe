@@ -379,7 +379,7 @@ export default {
       })
     },
     closeSucessPop () {
-      this.$router.push(JSON.parse(sessionStorage.getItem('obj')).login_url)
+      this.$router.push('/')
     },
     keyupSubmit () {
       document.onkeydown = e => {

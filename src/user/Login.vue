@@ -16,8 +16,13 @@
 
 <template>
   <div class="login">
-    <div class="loginBox">
-      <div class="login-area">
+    <div
+      class="loginBox"
+    >
+      <div
+        class="login-area"
+        v-if="hasLogin"
+      >
         <p class="login-top">
           {{ $t('login.loginWithUser') }}
         </p>
@@ -34,7 +39,19 @@
           :placeholder="$t('login.pwdPla')"
         />
       </div>
-      <div class="login-btn">
+      <div
+        class="login-area"
+      >
+        <p
+          style="height: 120px;line-height: 120px;"
+        >
+          {{ username }}已登录
+        </p>
+      </div>
+      <div
+        class="login-btn"
+        v-if="hasLogin"
+      >
         <drag-verify
           :width="width"
           :height="height"
@@ -52,7 +69,10 @@
           @passcallback="verifySuccess"
         />
       </div>
-      <div class="login-btn">
+      <div
+        class="login-btn"
+        v-if="hasLogin"
+      >
         <el-button
           id="loginBtn"
           type="primary"
@@ -61,6 +81,19 @@
           @click="submitForm()"
         >
           {{ $t('login.login') }}
+        </el-button>
+      </div>
+      <div
+        class="login-btn"
+        style="margin-top:130px;"
+      >
+        <el-button
+          id="loginBtn"
+          type="primary"
+          size="medium"
+          @click="logout()"
+        >
+          {{ $t('login.logout') }}
         </el-button>
       </div>
       <div class="login-tips rt">
@@ -101,6 +134,8 @@ export default {
         username: '',
         password: ''
       },
+      username: '',
+      hasLogin: true,
       loginBtnLoading: false,
       verifyStatus: false,
       returnUrl: '',
@@ -129,6 +164,12 @@ export default {
     this.keyupSubmit()
   },
   mounted () {
+    api.loginInfo().then(res => {
+      this.username = res.data.username
+    }).catch(error => {
+      console.log(error)
+      this.hasLogin = false
+    })
     if (window.location.href.indexOf('return_to=') > -1) {
       this.returnUrl = this.getQueryString('return_to')
       this.enableSms = this.getQueryString('enable_sms')
@@ -220,6 +261,11 @@ export default {
       } else {
         this.$message.error(this.$t('tip.wrongCaptcha'))
       }
+    },
+    logout () {
+      api.logout().then(res => {
+
+      })
     },
     keyupSubmit () {
       document.onkeydown = e => {

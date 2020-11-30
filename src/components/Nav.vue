@@ -29,16 +29,6 @@
       <div class="language rt">
         <span @click="changeLang">{{ language }}</span>
       </div>
-      <div class="user rt">
-        <span
-          @click="jumpTo('/mecm/register')"
-        >{{ $t('login.register') }}</span>
-      </div>
-      <div class="user rt">
-        <span
-          @click="jumpTo('/')"
-        >{{ $t('login.login') }}</span>
-      </div>
     </div>
   </div>
 </template>
@@ -62,11 +52,7 @@ export default {
   },
   methods: {
     jumpTo (path) {
-      if (path === '/') {
-        this.$router.push(JSON.parse(sessionStorage.getItem('obj')).login_url)
-      } else {
-        this.$router.push(path)
-      }
+      this.$router.push(path)
     },
     os () {
       let UserAgent = navigator.userAgent.toLowerCase()
