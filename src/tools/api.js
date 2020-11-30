@@ -38,6 +38,18 @@ let api = {
       data: params
     })
   },
+  loginInfo () {
+    return axios({
+      method: 'GET',
+      url: '/auth/login-info'
+    })
+  },
+  logout () {
+    return axios({
+      method: 'GET',
+      url: '/auth/logout'
+    })
+  },
   getCaptcha (params, headers) {
     return POST('/v1/identity/sms', params, headers)
   },
