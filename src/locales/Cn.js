@@ -57,7 +57,8 @@ const cn = {
     usernameRule: '6-30位字母,数字,下划线任意两种组合，首位必须为字母',
     passwordRule: '密码必须由6-18位字母、数字、特殊符号三种组成',
     phoneNumberRule: '电话号码不满足要求',
-    userLock: '您已经连续输入错误密码五次，账户已被锁定，请在5分钟后重试'
+    userLock: '您已经连续输入错误密码五次，账户已被锁定，请在5分钟后重试',
+    hasLogin: '已登录'
   },
   common: {
     cancel: '取消',

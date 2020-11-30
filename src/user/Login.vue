@@ -46,7 +46,7 @@
         <p
           style="height: 120px;line-height: 120px;"
         >
-          {{ username }}已登录
+          {{ username }}{{ $t('login.hasLogin') }}
         </p>
       </div>
       <div
@@ -90,9 +90,10 @@
         v-if="hasLogin"
       >
         <el-button
-          id="loginBtn"
+          id="logoutBtn"
           type="primary"
           size="medium"
+          :loading="logoutBtnLoading"
           @click="logout()"
         >
           {{ $t('login.logout') }}
@@ -139,6 +140,7 @@ export default {
       username: '',
       hasLogin: false,
       loginBtnLoading: false,
+      logoutBtnLoading: false,
       verifyStatus: false,
       returnUrl: '',
       enableSms: '',
@@ -166,6 +168,7 @@ export default {
     this.keyupSubmit()
   },
   mounted () {
+    this.hasLogin = true
     api.loginInfo().then(res => {
       this.username = res.data.username
       this.hasLogin = true
@@ -264,6 +267,7 @@ export default {
     },
     logout () {
       api.logout().then(res => {
+        this.logoutBtnLoading = true
         location.reload()
       })
     },
