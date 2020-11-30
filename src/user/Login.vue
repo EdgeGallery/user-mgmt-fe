@@ -90,9 +90,10 @@
         v-if="hasLogin"
       >
         <el-button
-          id="loginBtn"
+          id="logoutBtn"
           type="primary"
           size="medium"
+          :loading="logoutBtnLoading"
           @click="logout()"
         >
           {{ $t('login.logout') }}
@@ -139,6 +140,7 @@ export default {
       username: '',
       hasLogin: false,
       loginBtnLoading: false,
+      logoutBtnLoading: false,
       verifyStatus: false,
       returnUrl: '',
       enableSms: '',
@@ -264,6 +266,7 @@ export default {
     },
     logout () {
       api.logout().then(res => {
+        this.logoutBtnLoading = true
         location.reload()
       })
     },
