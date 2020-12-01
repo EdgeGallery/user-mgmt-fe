@@ -168,7 +168,6 @@ export default {
     this.keyupSubmit()
   },
   mounted () {
-    this.hasLogin = true
     api.loginInfo().then(res => {
       this.username = res.data.username
       this.hasLogin = true
