@@ -326,6 +326,9 @@ export default {
               this.$message.error(this.$t('tip.telAlSigned'))
               this.telTip = false
             }
+          } else {
+            this.nameTip = true
+            this.telTip = true
           }
         }
       })
