@@ -21,7 +21,6 @@
       :visible.sync="showDlg"
       @closed="cancel"
       width="25%"
-      style="height:400px"
     >
       <div style="margin-top:20px">
         <el-form

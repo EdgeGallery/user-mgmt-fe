@@ -367,7 +367,4 @@ export default {
     }
   }
 }
-.el-dialog__body {
-  height: 123px;
-}
 </style>
