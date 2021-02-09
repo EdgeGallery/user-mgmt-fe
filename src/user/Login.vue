@@ -102,17 +102,18 @@
       <div class="login-tips rt">
         <el-button
           type="text"
+          v-if="!hasLogin"
           @click="jumpTo('/mecm/register')"
         >
           {{ $t('login.freeSign') }}
         </el-button>
         <el-divider
           direction="vertical"
-          v-if="this.enableSms"
+          v-if="!hasLogin && this.enableSms"
         />
         <el-button
           type="text"
-          v-if="this.enableSms"
+          v-if="!hasLogin && this.enableSms"
           @click="jumpTo('/mecm/getPwd')"
         >
           {{ $t('login.forgotPwd') }}
@@ -170,7 +171,9 @@ export default {
   mounted () {
     api.loginInfo().then(res => {
       this.username = res.data.username
-      this.hasLogin = true
+      if (this.username) {
+        this.hasLogin = true
+      }
     })
     if (window.location.href.indexOf('return_to=') > -1) {
       this.returnUrl = this.getQueryString('return_to')
@@ -249,6 +252,9 @@ export default {
                 break
               case 401:
                 error.message = this.$t('login.loginFail')
+                if (error.response.data.msg === 'User is not allowed to login') {
+                  error.message = this.$t('login.loginFailDisallow')
+                }
                 break
               case 423:
                 error.message = this.$t('login.userLock')
