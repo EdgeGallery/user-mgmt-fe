@@ -168,6 +168,9 @@ export default {
   created () {
     this.keyupSubmit()
   },
+  destroyed () {
+    this.clearKeyEvent()
+  },
   mounted () {
     api.loginInfo().then(res => {
       this.username = res.data.username
@@ -283,6 +286,9 @@ export default {
           this.submitForm()
         }
       }
+    },
+    clearKeyEvent () {
+      document.onkeydown = null
     },
     jumpTo (path) {
       this.$router.push(path)
