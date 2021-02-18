@@ -25,21 +25,47 @@
         alt=""
       >
     </div>
+    <div>
+      <Topbar :json-data="jsonData" />
+    </div>
     <div class="nav-tabs rt">
       <div class="language rt">
         <span @click="changeLang">{{ language }}</span>
+      </div>
+      <div class="user rt">
+        <span
+          v-if="hasLogin"
+        >{{ userName }}</span>
+        <span
+          v-if="hasLogin"
+        >|</span>
+        <span
+          v-if="hasLogin"
+          @click="beforeLogout()"
+        >{{ $t('login.logout') }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import NavDataCn from '../data/NavDataCn.js'
+import NavData from '../data/NavData.js'
+import Topbar from '../components/Topbar.vue'
+import { api } from '../tools/api.js'
+
 export default {
   name: 'Navgation',
-  components: {},
+  components: {
+    Topbar
+  },
   data () {
     return {
-      language: 'English'
+      jsonData: [],
+      language: 'English',
+      hasLogin: false,
+      userName: '',
+      isSuperAdmin: false
     }
   },
   mounted () {
@@ -49,6 +75,19 @@ export default {
       : localStorage.setItem('language', 'cn')
     language = localStorage.getItem('language')
     this.language = language === 'en' ? '简体中文' : 'English'
+
+    api.loginInfo().then(res => {
+      this.userName = res.data.username
+      if (this.userName) {
+        this.hasLogin = true
+        this.isSuperAdmin = this.userName === 'admin'
+      }
+
+      if (this.isSuperAdmin) {
+        this.jsonData = this.language === 'English' ? NavDataCn : NavData
+        this.jumpTo('/usermgmt/list')
+      }
+    })
   },
   methods: {
     jumpTo (path) {
@@ -70,6 +109,9 @@ export default {
         this.language = 'English'
         language = 'cn'
       }
+      if (this.isSuperAdmin) {
+        this.jsonData = this.language === 'English' ? NavDataCn : NavData
+      }
       this.$i18n.locale = language
       localStorage.setItem('language', language)
       this.$store.commit('changelanguage', language)
@@ -84,6 +126,21 @@ export default {
           appDom.style.fontFamily = 'Microsoft YaHei, FZLTXHJW, Microsoft JhengHei, sans-serif'
         }
       }
+    },
+    beforeLogout () {
+      this.$confirm(this.$t('nav.logoutTip'), this.$t('common.warning'), {
+        confirmButtonText: this.$t('common.confirm'),
+        cancelButtonText: this.$t('common.cancel'),
+        type: 'warning'
+      }).then(() => {
+        this.logout()
+      })
+    },
+    logout () {
+      api.logout().then(res => {
+        let urlPrefix = window.location.href.indexOf('https') > -1 ? 'https://' : 'http://'
+        window.location.href = urlPrefix + window.location.host + '/index.html'
+      })
     }
   }
 }
@@ -162,10 +219,8 @@ export default {
     line-height: 50px;
     margin-right: 10px;
     span{
-      display: inline-block;
-      width:100%;
       height:24px;
-      margin-right: 20px;
+      margin-right: 10px;
       position: relative;
       top:8px;
       cursor:pointer;

@@ -46,7 +46,8 @@ export default {
   },
   watch: {
     $route (to, from) {
-      if (to.path !== '/' && to.path !== '/mecm/register' && to.path !== '/mecm/getPwd' && to.path !== '/mecm/userPrivacy') {
+      if (to.path !== '/' && to.path !== '/mecm/register' && to.path !== '/mecm/getPwd' && to.path !== '/mecm/userPrivacy' &&
+        to.path !== '/usermgmt/list') {
         this.$router.push('/')
       }
     }

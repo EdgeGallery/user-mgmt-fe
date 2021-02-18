@@ -26,9 +26,13 @@
         :rules="rules"
         ref="userData"
         class="demo-ruleForm"
+        label-width="140px"
       >
         <div class="login-area">
-          <el-form-item prop="username">
+          <el-form-item
+            prop="username"
+            :label="$t('login.userName')"
+          >
             <el-input
               id="uname"
               v-model="userData.username"
@@ -36,11 +40,14 @@
               type="text"
               clearable
               :placeholder="$t('login.userName')"
-              @blur.native.capture="verifyName()"
+              @blur.native.capture="verifyUnique()"
               :class="{'errMsg':errorMsg}"
             />
           </el-form-item>
-          <el-form-item prop="password">
+          <el-form-item
+            prop="password"
+            :label="$t('login.pwdPla')"
+          >
             <el-input
               id="upass"
               v-model="userData.password"
@@ -50,7 +57,10 @@
               :placeholder="$t('login.pwdPla')"
             />
           </el-form-item>
-          <el-form-item prop="checkPass">
+          <el-form-item
+            prop="checkPass"
+            :label="$t('login.pwdConfPla')"
+          >
             <el-input
               id="verifypass"
               v-model="userData.checkPass"
@@ -59,71 +69,37 @@
               :placeholder="$t('login.pwdConfPla')"
             />
           </el-form-item>
-          <el-form-item prop="telephone">
+          <el-form-item
+            prop="mailAddress"
+            :label="$t('login.mailAddr')"
+          >
+            <el-input
+              id="contact_mail"
+              v-model="userData.mailAddress"
+              type="text"
+              clearable
+              :placeholder="$t('login.mailAddr')"
+              @blur.native.capture="verifyUnique()"
+            />
+          </el-form-item>
+          <el-form-item
+            prop="telephone"
+            :label="$t('login.telPla')"
+          >
             <el-input
               id="contact"
               v-model="userData.telephone"
               type="text"
               clearable
               :placeholder="$t('login.telPla')"
-              @blur.native.capture="verifyName()"
+              @blur.native.capture="verifyUnique()"
             />
           </el-form-item>
-          <el-form-item
-            v-if="enableSms"
-          >
-            <el-row
-              style="
-            margin-top:18px;"
-            >
-              <el-col :span="14">
-                <el-input
-                  v-model="userData.verificationCode"
-                  type="text"
-                  :placeholder="$t('login.capPla')"
-                  style="margin:0;"
-                />
-              </el-col>
-              <el-col :span="10">
-                <el-button
-                  style="float:right;"
-                  type="primary"
-                  size="middle"
-                  @click="getCaptcha"
-                  :disabled="ifBtnAble"
-                >
-                  <span v-if="!showTime">{{ $t('login.getCap') }}</span><span v-if="showTime">&nbsp;&nbsp;{{ time }}s</span>
-                </el-button>
-              </el-col>
-            </el-row>
-          </el-form-item>
-          <el-form-item>
-            <el-input
-              id="company"
-              v-model="userData.company"
-              type="text"
-              clearable
-              :placeholder="$t('login.compPla')"
-            />
-          </el-form-item>
-          <el-form-item class="gender">
-            <p
-              id="gender"
-            >
-              <el-radio
-                v-model="userData.gender"
-                label="1"
-              >
-                {{ $t('login.male') }}
-              </el-radio>
-              <el-radio
-                v-model="userData.gender"
-                label="2"
-              >
-                {{ $t('login.female') }}
-              </el-radio>
-            </p>
-          </el-form-item>
+        </div>
+        <div>
+          <p class="register-hint">
+            {{ $t('login.registerHint') }}
+          </p>
         </div>
         <div>
           <p class="legal-register">
@@ -213,26 +189,35 @@ export default {
       }
     }
     var validatepassconfirm = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('verify.confirmpasswordTip')))
+        return
+      }
       if (value !== this.userData.password) {
         callback(new Error(this.$t('tip.passDiferent')))
-      } else {
-        callback()
+        return
       }
-    }
-    var validatetelephone = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(this.$t('verify.telephoneTip')))
-      } else {
-        callback()
-      }
+      callback()
     }
     var validateTelRule = (rule, value, callback) => {
-      let pattern = /^1[34578]\d{9}$/
-      if (value.match(pattern) === null) {
-        callback(new Error(this.$t('login.phoneNumberRule')))
-      } else {
-        callback()
+      if (value !== '') {
+        let pattern = /^1[34578]\d{9}$/
+        if (value.match(pattern) === null) {
+          callback(new Error(this.$t('login.phoneNumberRule')))
+          return
+        }
       }
+      callback()
+    }
+    var validateMailAddress = (rule, value, callback) => {
+      if (value !== '') {
+        let pattern = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+        if (value.match(pattern) === null) {
+          callback(new Error(this.$t('login.mailAddressRule')))
+          return
+        }
+      }
+      callback()
     }
     return {
       visible: false,
@@ -245,28 +230,31 @@ export default {
         password: '',
         checkPass: '',
         telephone: '',
-        verificationCode: '',
-        company: '',
-        gender: ''
+        mailAddress: ''
       },
-      nameTip: true,
-      telTip: true,
-      enableSms: false,
+      usernameUnique: true,
+      telephoneUnique: true,
+      mailUnique: true,
       rules: {
         username: [
           { validator: validateName, trigger: 'blur' },
-          { validator: validateNameRule }
+          { validator: validateNameRule },
+          { required: true }
         ],
         password: [
           { validator: validatePass, trigger: 'blur' },
-          { validator: validatePassRule }
+          { validator: validatePassRule },
+          { required: true }
         ],
         telephone: [
-          { validator: validatetelephone, trigger: 'blur' },
           { validator: validateTelRule }
         ],
+        mailAddress: [
+          { validator: validateMailAddress }
+        ],
         checkPass: [
-          { validator: validatepassconfirm, trigger: 'blur' }
+          { validator: validatepassconfirm, trigger: 'blur' },
+          { required: true }
         ]
       },
       regBtnLoading: false,
@@ -283,8 +271,6 @@ export default {
     }
   },
   mounted () {
-    let obj = JSON.parse(sessionStorage.getItem('obj'))
-    this.enableSms = obj.enable_sms
   },
   created () {
     this.keyupSubmit()
@@ -307,28 +293,34 @@ export default {
     to () {
       this.jumpTo('/')
     },
-    verifyName () {
+    verifyUnique () {
       let param = {
         username: this.userData.username,
-        telephone: this.userData.telephone
+        telephone: this.userData.telephone,
+        mailAddress: this.userData.mailAddress
       }
       let headers = {
         'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
       }
       api.uniqueness(param, headers).then(res => {
         if (res.data) {
-          if (res.data.username || res.data.telephone) {
+          if (res.data.username || res.data.telephone || res.data.mailAddress) {
             if (res.data.username) {
               this.$message.error(this.$t('tip.nameAlSinged'))
-              this.nameTip = false
+              this.usernameUnique = false
             }
             if (res.data.telephone) {
               this.$message.error(this.$t('tip.telAlSigned'))
-              this.telTip = false
+              this.telephoneUnique = false
+            }
+            if (res.data.mailAddress) {
+              this.$message.error(this.$t('tip.mailAlSigned'))
+              this.mailUnique = false
             }
           } else {
-            this.nameTip = true
-            this.telTip = true
+            this.usernameUnique = true
+            this.telephoneUnique = true
+            this.mailUnique = true
           }
         }
       })
@@ -350,12 +342,9 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid && this.legalRegister) {
-          if (this.nameTip && this.telTip) {
+          if (this.usernameUnique && this.telephoneUnique && this.mailUnique) {
             this.regBtnLoading = true
             delete this.userData.checkPass
-            if (!this.enableSms) {
-              delete this.userData.verificationCode
-            }
             let headers = {
               'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
             }
@@ -370,10 +359,12 @@ export default {
               this.regBtnLoading = false
             })
           } else {
-            if (this.nameTip) {
-              this.$message.error(this.$t('tip.telAlSigned'))
-            } else {
+            if (!this.usernameUnique) {
               this.$message.error(this.$t('tip.nameAlSinged'))
+            } else if (!this.mailUnique) {
+              this.$message.error(this.$t('tip.mailAlSigned'))
+            } else {
+              this.$message.error(this.$t('tip.telAlSigned'))
             }
           }
         } else {
@@ -392,25 +383,6 @@ export default {
         }
       }
     },
-    getCaptcha () {
-      if (this.telTip && this.userData.telephone) {
-        this.ifBtnAble = true
-        this.showTime = true
-        this.intervalStart()
-        let param = { telephone: this.userData.telephone }
-        let headers = {
-          'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
-        }
-        api.getCaptcha(param, headers).then(res => {
-          this.$message.success(this.$t('tip.getVerifyCodeSuc'))
-        }, error => {
-          if (error) {
-            this.$message.error(this.$t('tip.failedReg') + error.response.data.detail)
-          }
-          this.regBtnLoading = false
-        })
-      }
-    },
     selectLegal (val) {
       this.legalRegister = val
     }
@@ -424,7 +396,7 @@ export default {
   .loginBox{
     float: right;
     width: 80%;
-    max-width: 410px;
+    max-width: 500px;
     text-align: center;
     margin: 5% 10% 0 0;
     padding:0 15px;
@@ -490,16 +462,10 @@ export default {
         margin-top: -3px;
       }
     }
-  }
-  .gender{
-    height: 25px;
-    line-height: 25px;
-    margin: -10px 0 10px 0;
-    .el-form-item__content{
-      line-height: 25px;
-      p{
-        margin-top: 0;
-      }
+    .register-hint{
+      font-size: 12px;
+      color: orange;
+      margin: 5px 0 15px;
     }
   }
 }

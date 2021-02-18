@@ -15,62 +15,38 @@
  */
 
 import axios from 'axios'
-
-function POST (url, params, headers) {
-  return axios.post(url, params, {
-    headers: headers
-  })
-}
-
-function PUT (url, params, headers) {
-  return axios.put(url, params, {
-    headers: headers
-  })
-}
+require('../mock.js')
 
 let api = {
   login (params, headers) {
-    return axios({
-      method: 'POST',
-      url: '/login',
-      withCredentials: true,
-      headers: headers,
-      data: params
-    })
+    return axios.get('/mock/login')
   },
   loginInfo () {
-    return axios({
-      method: 'GET',
-      url: '/auth/login-info'
-    })
+    return axios.get('/mock/auth/login-info')
   },
   logout () {
-    return axios({
-      method: 'GET',
-      url: '/auth/logout'
-    })
+    return axios.get('/mock/auth/logout')
   },
   getCaptcha (params, headers) {
-    return POST('/v1/identity/sms', params, headers)
+    return axios.get('/mock/identity/sms')
   },
   getPwd (params, headers) {
-    return PUT('/v1/users/password', params, headers)
+    return axios.get('/mock/users/password')
   },
   register (params, headers) {
-    return POST('/v1/users', params, headers)
+    return axios.get('/mock/users/register')
   },
   uniqueness (params, headers) {
-    return POST('/v1/users/action/uniqueness', params, headers)
+    return axios.get('/mock/users/action/uniqueness')
   },
   getUserList (params, headers) {
-    return POST('/v1/users/list', params, headers)
+    return axios.get('/mock/users/list')
   },
   updateUserStatus (userId, disallowFlag, headers) {
-    let urlSuffix = disallowFlag ? 'disallow' : 'allow'
-    return PUT('/v1/users/status/' + userId + '/' + urlSuffix, {}, headers)
+    return axios.get('/mock/donothing')
   },
   configUser (userId, params, headers) {
-    return PUT('/v1/users/settings/' + userId, params, headers)
+    return axios.get('/mock/donothing')
   }
 }
 
