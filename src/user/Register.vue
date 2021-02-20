@@ -26,12 +26,10 @@
         :rules="rules"
         ref="userData"
         class="demo-ruleForm"
-        label-width="140px"
       >
         <div class="login-area">
           <el-form-item
             prop="username"
-            :label="$t('login.userName')"
           >
             <el-input
               id="uname"
@@ -46,7 +44,6 @@
           </el-form-item>
           <el-form-item
             prop="password"
-            :label="$t('login.pwdPla')"
           >
             <el-input
               id="upass"
@@ -59,7 +56,6 @@
           </el-form-item>
           <el-form-item
             prop="checkPass"
-            :label="$t('login.pwdConfPla')"
           >
             <el-input
               id="verifypass"
@@ -71,7 +67,6 @@
           </el-form-item>
           <el-form-item
             prop="mailAddress"
-            :label="$t('login.mailAddr')"
           >
             <el-input
               id="contact_mail"
@@ -84,7 +79,6 @@
           </el-form-item>
           <el-form-item
             prop="telephone"
-            :label="$t('login.telPla')"
           >
             <el-input
               id="contact"
@@ -211,7 +205,7 @@ export default {
     }
     var validateMailAddress = (rule, value, callback) => {
       if (value !== '') {
-        let pattern = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+        let pattern = /^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)*@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
         if (value.match(pattern) === null) {
           callback(new Error(this.$t('login.mailAddressRule')))
           return
@@ -396,7 +390,7 @@ export default {
   .loginBox{
     float: right;
     width: 80%;
-    max-width: 500px;
+    max-width: 410px;
     text-align: center;
     margin: 5% 10% 0 0;
     padding:0 15px;
@@ -453,6 +447,8 @@ export default {
     .legal-register{
       font-size: 12px;
       margin: 5px 0 15px;
+      padding: 0 25px;
+      text-align: left;
       .el-checkbox{
         margin-right: 5px;
       }
@@ -466,6 +462,8 @@ export default {
       font-size: 12px;
       color: orange;
       margin: 5px 0 15px;
+      padding: 0 25px;
+      text-align: left;
     }
   }
 }
