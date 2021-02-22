@@ -136,9 +136,9 @@ const cn = {
     sessionOut: '你的登录信息过期，请重新登录',
     sessionExp: 'Session过期',
     failedToGetCaptcha: '获取手机验证码失败',
-    nameAlSinged: '用户名已被注册',
-    telAlSigned: '手机号码已被注册',
-    mailAlSigned: '邮箱地址已被注册',
+    nameAlSinged: '用户名已经被注册',
+    telAlSigned: '手机号码已经被注册',
+    mailAlSigned: '邮箱地址已经被注册',
     getVerifyCodeSuc: '获取验证码成功！',
     passDiferent: '两次密码输入不一致'
   },

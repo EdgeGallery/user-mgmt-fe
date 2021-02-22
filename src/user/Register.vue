@@ -38,8 +38,6 @@
               type="text"
               clearable
               :placeholder="$t('login.userName')"
-              @blur.native.capture="verifyUnique()"
-              :class="{'errMsg':errorMsg}"
             />
           </el-form-item>
           <el-form-item
@@ -49,7 +47,7 @@
               id="upass"
               v-model="userData.password"
               auto-complete="new-password"
-              type="password"
+              show-password
               clearable
               :placeholder="$t('login.pwdPla')"
             />
@@ -60,7 +58,7 @@
             <el-input
               id="verifypass"
               v-model="userData.checkPass"
-              type="password"
+              show-password
               clearable
               :placeholder="$t('login.pwdConfPla')"
             />
@@ -74,7 +72,6 @@
               type="text"
               clearable
               :placeholder="$t('login.mailAddr')"
-              @blur.native.capture="verifyUnique()"
             />
           </el-form-item>
           <el-form-item
@@ -86,7 +83,6 @@
               type="text"
               clearable
               :placeholder="$t('login.telPla')"
-              @blur.native.capture="verifyUnique()"
             />
           </el-form-item>
         </div>
@@ -164,6 +160,9 @@ export default {
         callback()
       }
     }
+    var validateNameUnique = (rule, value, callback) => {
+      this.verifyUnique(1, callback)
+    }
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('verify.passwordTip')))
@@ -203,6 +202,9 @@ export default {
       }
       callback()
     }
+    var validateTelUnique = (rule, value, callback) => {
+      this.verifyUnique(2, callback)
+    }
     var validateMailAddress = (rule, value, callback) => {
       if (value !== '') {
         let pattern = /^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)*@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
@@ -212,6 +214,9 @@ export default {
         }
       }
       callback()
+    }
+    var validateMailUnique = (rule, value, callback) => {
+      this.verifyUnique(3, callback)
     }
     return {
       visible: false,
@@ -226,13 +231,11 @@ export default {
         telephone: '',
         mailAddress: ''
       },
-      usernameUnique: true,
-      telephoneUnique: true,
-      mailUnique: true,
       rules: {
         username: [
           { validator: validateName, trigger: 'blur' },
           { validator: validateNameRule },
+          { validator: validateNameUnique, trigger: 'blur' },
           { required: true }
         ],
         password: [
@@ -241,10 +244,12 @@ export default {
           { required: true }
         ],
         telephone: [
-          { validator: validateTelRule }
+          { validator: validateTelRule },
+          { validator: validateTelUnique, trigger: 'blur' }
         ],
         mailAddress: [
-          { validator: validateMailAddress }
+          { validator: validateMailAddress },
+          { validator: validateMailUnique, trigger: 'blur' }
         ],
         checkPass: [
           { validator: validatepassconfirm, trigger: 'blur' },
@@ -287,34 +292,25 @@ export default {
     to () {
       this.jumpTo('/')
     },
-    verifyUnique () {
+    verifyUnique (type, callback) {
       let param = {
-        username: this.userData.username,
-        telephone: this.userData.telephone,
-        mailAddress: this.userData.mailAddress
+        username: type === 1 ? this.userData.username : '',
+        telephone: type === 2 ? this.userData.telephone : '',
+        mailAddress: type === 3 ? this.userData.mailAddress : ''
       }
       let headers = {
         'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
       }
       api.uniqueness(param, headers).then(res => {
         if (res.data) {
-          if (res.data.username || res.data.telephone || res.data.mailAddress) {
-            if (res.data.username) {
-              this.$message.error(this.$t('tip.nameAlSinged'))
-              this.usernameUnique = false
-            }
-            if (res.data.telephone) {
-              this.$message.error(this.$t('tip.telAlSigned'))
-              this.telephoneUnique = false
-            }
-            if (res.data.mailAddress) {
-              this.$message.error(this.$t('tip.mailAlSigned'))
-              this.mailUnique = false
-            }
+          if (type === 1 && res.data.username) {
+            callback(new Error(this.$t('tip.nameAlSinged')))
+          } else if (type === 2 && res.data.telephone) {
+            callback(new Error(this.$t('tip.telAlSigned')))
+          } else if (type === 3 && res.data.mailAddress) {
+            callback(new Error(this.$t('tip.mailAlSigned')))
           } else {
-            this.usernameUnique = true
-            this.telephoneUnique = true
-            this.mailUnique = true
+            callback()
           }
         }
       })
@@ -336,31 +332,21 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid && this.legalRegister) {
-          if (this.usernameUnique && this.telephoneUnique && this.mailUnique) {
-            this.regBtnLoading = true
-            delete this.userData.checkPass
-            let headers = {
-              'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
-            }
-            api.register(this.userData, headers).then(res => {
-              this.$message.success(this.$t('tip.regUserSuc'))
-              this.regBtnLoading = false
-              this.to()
-            }, error => {
-              if (error) {
-                this.$message.error(this.$t('tip.failedReg'))
-              }
-              this.regBtnLoading = false
-            })
-          } else {
-            if (!this.usernameUnique) {
-              this.$message.error(this.$t('tip.nameAlSinged'))
-            } else if (!this.mailUnique) {
-              this.$message.error(this.$t('tip.mailAlSigned'))
-            } else {
-              this.$message.error(this.$t('tip.telAlSigned'))
-            }
+          this.regBtnLoading = true
+          delete this.userData.checkPass
+          let headers = {
+            'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
           }
+          api.register(this.userData, headers).then(res => {
+            this.$message.success(this.$t('tip.regUserSuc'))
+            this.regBtnLoading = false
+            this.to()
+          }, error => {
+            if (error) {
+              this.$message.error(this.$t('tip.failedReg'))
+            }
+            this.regBtnLoading = false
+          })
         } else {
           return false
         }
