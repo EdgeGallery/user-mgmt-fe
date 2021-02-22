@@ -64,6 +64,8 @@ const en = {
     hasLogin: ' has logged in.'
   },
   nav: {
+    platform: 'Edge Gallery',
+    usermgmt: 'User Management',
     logoutTip: 'Are you sure to log out?'
   },
   usermgmt: {
@@ -71,8 +73,8 @@ const en = {
     role: 'Role',
     accessPlatform: 'Platform',
     status: 'Status',
-    telephone: 'Mobile Phone Number',
-    mailAddress: 'Email Address',
+    telephone: 'Mobile Phone',
+    mailAddress: 'Email',
     registerTime: 'Register Time',
 
     registerTimeRange: 'Register Time Range',
@@ -117,7 +119,8 @@ const en = {
     query: 'Query',
     all: 'All',
     warning: 'Promt',
-    unknown: 'Unknown'
+    unknown: 'Unknown',
+    noconfig: 'No configured'
   },
   verify: {
     usernameTip: 'User name can not be empty',

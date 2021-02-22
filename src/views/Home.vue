@@ -45,7 +45,7 @@ export default {
   background-size:cover;
 }
 .home-container{
-  height: calc(100% - 65px);
+  height: calc(100% + 20px);
   position: relative;
   top: 65px;
   overflow-y: auto;

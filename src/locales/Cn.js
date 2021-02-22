@@ -64,6 +64,8 @@ const cn = {
     hasLogin: '已登录'
   },
   nav: {
+    platform: 'Edge Gallery平台',
+    usermgmt: '用户管理',
     logoutTip: '确认要离开吗？'
   },
   usermgmt: {
@@ -117,7 +119,8 @@ const cn = {
     query: '查询',
     all: '全部',
     warning: '提示',
-    unknown: '未知'
+    unknown: '未知',
+    noconfig: '未设置'
   },
   verify: {
     usernameTip: '用户名不能为空',
