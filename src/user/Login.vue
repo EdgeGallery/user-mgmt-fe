@@ -305,10 +305,11 @@ export default {
     height: auto;
     text-align: center;
     margin: 10% 12% 0 0;
-    padding: 25px 15px;
+    padding: 25px 15px 5px;
     background: #fff;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
       0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+    border-radius: 15px;
     .login-top {
       text-align: center;
       display: inline-block;
