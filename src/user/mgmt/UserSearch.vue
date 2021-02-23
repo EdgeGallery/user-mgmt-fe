@@ -39,6 +39,7 @@
               v-model="formData.username"
               :placeholder="$t('usermgmt.userName')"
               @keyup.enter.native="search"
+              clearable
             />
           </el-form-item>
         </el-col>
@@ -56,6 +57,7 @@
               v-model="formData.mailAddress"
               :placeholder="$t('usermgmt.mailAddress')"
               @keyup.enter.native="search"
+              clearable
             />
           </el-form-item>
         </el-col>
@@ -73,6 +75,7 @@
               v-model="formData.telephone"
               :placeholder="$t('usermgmt.telephone')"
               @keyup.enter.native="search"
+              clearable
             />
           </el-form-item>
         </el-col>
