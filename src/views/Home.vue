@@ -15,7 +15,10 @@
   -->
 
 <template>
-  <div class="home">
+  <div
+    class="home"
+    :style="{backgroundImage: 'url(' + bgImg + ')' }"
+  >
     <Navbar />
     <div class="home-container">
       <router-view id="container" />
@@ -32,16 +35,30 @@ export default {
   },
   data () {
     return {
+      bgImg: require('../assets/images/login2.jpg'),
+      bgImgData: [
+        require('../assets/images/login2.jpg'),
+        require('../assets/images/login4.jpg'),
+        require('../assets/images/login6.jpg'),
+        require('../assets/images/login7.jpg')
+      ]
     }
   },
   methods: {
+    changeBgImg () {
+      let dataItem = this.bgImgData[Math.floor(Math.random() * this.bgImgData.length)]
+      this.bgImg = dataItem
+    }
+  },
+  mounted () {
+    this.changeBgImg()
   }
 }
 </script>
 <style lang='less' scoped>
 .home{
   height:100%;
-  background: url('../assets/images/login.png') no-repeat center;
+  background: no-repeat center;
   background-size:cover;
 }
 .home-container{
