@@ -18,8 +18,8 @@
   <div class="userlist">
     <Breadcrumb
       class="breadcrumb"
-      :first="'Edge Gallery平台'"
-      :second="'用户管理'"
+      :first="$t('nav.platform')"
+      :second="$t('nav.usermgmt')"
       :path="{ path: '/usermgmt/list' }"
     />
     <div
@@ -74,12 +74,21 @@
               show-overflow-tooltip
             />
             <el-table-column
-              width="300"
+              width="320"
               align="center"
               :label="$t('usermgmt.accessPlatform')"
-              :formatter="convertPlatform"
               show-overflow-tooltip
-            />
+            >
+              <template slot-scope="scope">
+                <el-tag
+                  size="mini"
+                  v-for="(item,index) in scope.row.permissions"
+                  :key="index"
+                >
+                  {{ item.platform }}
+                </el-tag>
+              </template>
+            </el-table-column>
             <el-table-column
               width="100"
               align="center"
@@ -91,6 +100,7 @@
               prop="mailAddress"
               align="center"
               :label="$t('usermgmt.mailAddress')"
+              :formatter="showNoConfigOnEmpty"
               show-overflow-tooltip
             />
             <el-table-column
@@ -98,6 +108,7 @@
               width="150"
               align="center"
               :label="$t('usermgmt.telephone')"
+              :formatter="showNoConfigOnEmpty"
               show-overflow-tooltip
             />
             <el-table-column
@@ -297,7 +308,6 @@ export default {
       }
       _queryReq.queryCtrl = _queryCtrl
 
-      console.log(JSON.stringify(_queryReq))
       return _queryReq
     },
     convertRole (row) {
@@ -310,13 +320,6 @@ export default {
 
       return this.$t('common.unknown')
     },
-    convertPlatform (row) {
-      if (row.permissions && row.permissions.length) {
-        return row.permissions.map(item => item.platform).join(';')
-      }
-
-      return ''
-    },
     convertStatus (row) {
       if (row.allowed === undefined) {
         return this.$t('common.unknown')
@@ -326,6 +329,12 @@ export default {
       } else {
         return this.$t('usermgmt.statusValue.disallowed')
       }
+    },
+    showNoConfigOnEmpty (row, column, cellValue) {
+      if (cellValue === undefined || cellValue === null || cellValue === '') {
+        return this.$t('common.noconfig')
+      }
+      return cellValue
     },
     judgeSystemUser (row) {
       return row.username === 'admin' || row.username === 'guest'

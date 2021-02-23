@@ -34,13 +34,13 @@ const cn = {
     gender: '性别',
     male: '男',
     female: '女',
-    namePla: '用户名/邮箱/手机号',
+    namePla: '用户名 / 邮箱 / 手机',
     pwdPla: '密码',
     pwdConfPla: '确认密码',
     compPla: '公司任职信息',
     mailAddr: '邮箱地址',
-    telPla: '电话号码',
-    registerHint: '提示：建议邮箱地址和电话号码二者至少填一项真实信息，方便忘记密码后找回。',
+    telPla: '手机号码',
+    registerHint: '提示：建议邮箱地址和手机号码二者至少提供一项真实信息，方便忘记密码后找回。',
     getCap: '获取验证码',
     capPla: '验证码',
     newPwd: '新密码',
@@ -54,16 +54,18 @@ const cn = {
     verify: '拖动完成验证',
     finishVerify: '验证成功',
     changeOne: '换一张',
-    loginFail: '登录失败，请检查用户名和密码，连续输入错误密码五次以上，账户将会被锁定',
+    loginFail: '登录失败，请检查登录名和密码，连续输入错误密码五次以上，账户将会被锁定',
     loginFailDisallow: '登录失败，用户被管理员禁止登录',
     usernameRule: '6-30位字母,数字,下划线任意两种组合，首位必须为字母',
     passwordRule: '密码必须由6-18位字母、数字、特殊符号三种组成',
-    phoneNumberRule: '电话号码不满足要求',
+    phoneNumberRule: '手机号码不满足要求',
     mailAddressRule: '邮箱地址不满足要求',
     userLock: '您已经连续输入错误密码五次，账户已被锁定，请在5分钟后重试',
     hasLogin: '已登录'
   },
   nav: {
+    platform: 'Edge Gallery平台',
+    usermgmt: '用户管理',
     logoutTip: '确认要离开吗？'
   },
   usermgmt: {
@@ -71,7 +73,7 @@ const cn = {
     role: '角色',
     accessPlatform: '可访问平台',
     status: '状态',
-    telephone: '电话号码',
+    telephone: '手机号码',
     mailAddress: '邮箱地址',
     registerTime: '注册时间',
 
@@ -117,13 +119,14 @@ const cn = {
     query: '查询',
     all: '全部',
     warning: '提示',
-    unknown: '未知'
+    unknown: '未知',
+    noconfig: '未设置'
   },
   verify: {
     usernameTip: '用户名不能为空',
     passwordTip: '密码不能为空',
     confirmpasswordTip: '确认密码不能为空',
-    telephoneTip: '电话号码不能为空',
+    telephoneTip: '手机号码不能为空',
     verifyCodeTip: '验证码不能为空',
     verifycodeRule: '请输入六位数字的验证码'
   },
@@ -136,9 +139,9 @@ const cn = {
     sessionOut: '你的登录信息过期，请重新登录',
     sessionExp: 'Session过期',
     failedToGetCaptcha: '获取手机验证码失败',
-    nameAlSinged: '用户名已被注册，请重新输入或前往登录',
-    telAlSigned: '电话号码已被注册，请重新输入或前往登录',
-    mailAlSigned: '邮箱地址已被注册，请重新输入或前往登录',
+    nameAlSinged: '用户名已经被注册',
+    telAlSigned: '手机号码已经被注册',
+    mailAlSigned: '邮箱地址已经被注册',
     getVerifyCodeSuc: '获取验证码成功！',
     passDiferent: '两次密码输入不一致'
   },

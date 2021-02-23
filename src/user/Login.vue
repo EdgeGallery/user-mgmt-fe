@@ -26,18 +26,34 @@
         <p class="login-top">
           {{ $t('login.loginWithUser') }}
         </p>
-        <el-input
-          id="uname"
-          v-model="userData.username"
-          type="text"
-          :placeholder="$t('login.namePla')"
-        />
-        <el-input
-          id="upass"
-          v-model="userData.password"
-          type="password"
-          :placeholder="$t('login.pwdPla')"
-        />
+        <el-form
+          :model="userData"
+          :rules="rules"
+          ref="userData"
+        >
+          <el-form-item
+            prop="username"
+          >
+            <el-input
+              id="uname"
+              v-model="userData.username"
+              type="text"
+              :placeholder="$t('login.namePla')"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item
+            prop="password"
+          >
+            <el-input
+              id="upass"
+              v-model="userData.password"
+              type="password"
+              :placeholder="$t('login.pwdPla')"
+              clearable
+            />
+          </el-form-item>
+        </el-form>
       </div>
       <div
         class="login-area"
@@ -79,7 +95,7 @@
           type="primary"
           size="medium"
           :loading="loginBtnLoading"
-          @click="submitForm()"
+          @click="submitForm('userData')"
         >
           {{ $t('login.login') }}
         </el-button>
@@ -133,10 +149,32 @@ export default {
   },
   inject: ['reload'],
   data () {
+    var validateName = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('verify.usernameTip')))
+      } else {
+        callback()
+      }
+    }
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('verify.passwordTip')))
+      } else {
+        callback()
+      }
+    }
     return {
       userData: {
         username: '',
         password: ''
+      },
+      rules: {
+        username: [
+          { validator: validateName }
+        ],
+        password: [
+          { validator: validatePass }
+        ]
       },
       username: '',
       hasLogin: false,
@@ -232,8 +270,15 @@ export default {
       }
       return null
     },
-    submitForm () {
-      if (this.verifyStatus) {
+    submitForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (!valid) {
+          return false
+        }
+        if (!this.verifyStatus) {
+          this.$message.error(this.$t('tip.wrongCaptcha'))
+          return false
+        }
         this.loginBtnLoading = true
         let formData = new FormData()
         Object.keys(this.userData).forEach(item => {
@@ -247,7 +292,6 @@ export default {
           window.location.href = decodeURIComponent(JSON.parse(sessionStorage.getItem('obj')).return_url)
         }).catch(error => {
           this.loginBtnLoading = false
-          this.userData.password = ''
           if (error && error.response) {
             switch (error.response.status) {
               case 400:
@@ -267,11 +311,9 @@ export default {
           }
           setTimeout(() => {
             this.reload()
-          }, 2000)
+          }, 500)
         })
-      } else {
-        this.$message.error(this.$t('tip.wrongCaptcha'))
-      }
+      })
     },
     logout () {
       api.logout().then(res => {
@@ -322,9 +364,6 @@ export default {
     }
     .login-area {
       padding: 0 25px;
-      .el-input {
-        margin: 15px 0;
-      }
     }
     .login-certify {
       padding: 0 25px;

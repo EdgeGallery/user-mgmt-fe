@@ -24,7 +24,6 @@
         :model="userData"
         :rules="rules"
         ref="userData"
-        class="demo-ruleForm"
       >
         <div class="login-area">
           <el-form-item prop="telephone">
