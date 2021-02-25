@@ -55,7 +55,6 @@ const en = {
     finishVerify: 'Verifiy succeeded',
     changeOne: 'Chang one',
     loginFail: 'Failed to log in, please check your account and password, enter the wrong password more than five consecutive times, the account will be locked',
-    loginFailDisallow: 'Failed to log in, forbidden to login',
     usernameRule: 'Any of two combinations of 6-30 characters, numbers, and underscores. The first digit must be a letter',
     passwordRule: 'The password must be composed of 6-18 characters, numbers and special symbols',
     phoneNumberRule: 'The mobile phone number is not in accordance with the rules',

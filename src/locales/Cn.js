@@ -55,7 +55,6 @@ const cn = {
     finishVerify: '验证成功',
     changeOne: '换一张',
     loginFail: '登录失败，请检查登录名和密码，连续输入错误密码五次以上，账户将会被锁定',
-    loginFailDisallow: '登录失败，用户被管理员禁止登录',
     usernameRule: '6-30位字母,数字,下划线任意两种组合，首位必须为字母',
     passwordRule: '密码必须由6-18位字母、数字、特殊符号三种组成',
     phoneNumberRule: '手机号码不满足要求',

@@ -299,9 +299,6 @@ export default {
                 break
               case 401:
                 error.message = this.$t('login.loginFail')
-                if (error.response.data.msg === 'User is not allowed to login') {
-                  error.message = this.$t('login.loginFailDisallow')
-                }
                 break
               case 423:
                 error.message = this.$t('login.userLock')
