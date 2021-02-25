@@ -30,8 +30,12 @@ html,body{
   padding:20px 20px 60px 20px;
 }
 a{
+  color: #688ef3;
   text-decoration: none;
   color:#fff;
+}
+.markdown-body a{
+  color: #688ef3 !important;
 }
 li{
   list-style: none;
@@ -63,7 +67,7 @@ li{
   color:#E6A23C;
 }
 .primary{
-  color:#409EFF;
+  color:#688ef3;
 }
 .mt20{
   margin-top:20px;
@@ -103,12 +107,54 @@ li{
   .monitor {max-width: 800px;} 
 }
 
+
+.el-tabs__item.is-active{
+  color: #688ef3;
+  font-weight: bold;
+}
+
+.el-tag{
+  color: #688ef3;
+}
+
+.el-checkbox__input.is-checked+.el-checkbox__label{
+  color: #688ef3;
+}
+
+.el-radio__input.is-checked+.el-radio__label{
+  color: #688ef3;
+}
+
+.el-link.el-link--primary{
+  color: #688ef3;
+}
+.el-link.el-link--primary:hover{
+  color: #688ef3;
+}
+
+.el-button--default, .el-button--default:hover{
+  border: 1px solid #688ef3;
+  color: #688ef3;
+}
+.el-button--primary, .el-button--primary:hover{
+  background: #688ef3;
+  color: #fff;
+}
+.el-button--text, .el-button--text:hover{
+  color: #688ef3;
+}
+
+
+.el-pagination.is-background .el-pager li:not(.disabled).active{
+  background-color: #688ef3;
+}
+
 /* dialog */
 .el-dialog__body{
   padding-top:15px!important;
 }
 .el-dialog__header{
-  background: #409EFF;
+  background: #688ef3;
 }
 .el-dialog__headerbtn:focus .el-dialog__close, .el-dialog__headerbtn:hover .el-dialog__close,.el-dialog__title,.el-icon-close,.el-dialog__headerbtn .el-dialog__close{
   color:#fff;
