@@ -125,11 +125,11 @@
         </el-button>
         <el-divider
           direction="vertical"
-          v-if="!hasLogin && this.enableSms"
+          v-if="!hasLogin && (this.enableSms || this.enableMail)"
         />
         <el-button
           type="text"
-          v-if="!hasLogin && this.enableSms"
+          v-if="!hasLogin && (this.enableSms || this.enableMail)"
           @click="jumpTo('/mecm/getPwd')"
         >
           {{ $t('login.forgotPwd') }}
@@ -183,6 +183,7 @@ export default {
       verifyStatus: false,
       returnUrl: '',
       enableSms: '',
+      enableMail: '',
       handlerIcon: 'fa fa-angle-double-right',
       successIcon: 'fa fa-check',
       background: '#FFCCCC',
@@ -218,15 +219,12 @@ export default {
     })
     if (window.location.href.indexOf('return_to=') > -1) {
       this.returnUrl = this.getQueryString('return_to')
-      this.enableSms = this.getQueryString('enable_sms')
-      if (this.enableSms.indexOf('true') > -1) {
-        this.enableSms = true
-      } else {
-        this.enableSms = false
-      }
+      this.enableSms = this.getQueryString('enable_sms').indexOf('true') > -1
+      this.enableMail = this.getQueryString('enable_mail').indexOf('true') > -1
       let obj = {
         return_url: this.returnUrl,
         enable_sms: this.enableSms,
+        enable_mail: this.enableMail,
         login_url: window.location.href.split('#')[1]
       }
       sessionStorage.setItem('obj', JSON.stringify(obj))

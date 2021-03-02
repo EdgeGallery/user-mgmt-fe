@@ -50,8 +50,9 @@ let api = {
       url: '/auth/logout'
     })
   },
-  getCaptcha (params, headers) {
-    return POST('/v1/identity/sms', params, headers)
+  getCaptcha (retrieveType, params, headers) {
+    let _url = retrieveType === 'ByMail' ? '/v1/identity/mail' : '/v1/identity/sms'
+    return POST(_url, params, headers)
   },
   getPwd (params, headers) {
     return PUT('/v1/users/password', params, headers)

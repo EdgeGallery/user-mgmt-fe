@@ -26,13 +26,47 @@
         ref="userData"
       >
         <div class="login-area">
-          <el-form-item prop="telephone">
+          <el-form-item v-if="enableSms && enableMail">
+            <el-radio-group
+              v-model="retrieveType"
+              @change="handleChangeType"
+            >
+              <el-radio
+                label="ByMail"
+                v-if="enableMail"
+              >
+                {{ $t('login.getPwdByMail') }}
+              </el-radio>
+              <el-radio
+                label="BySms"
+                v-if="enableSms"
+              >
+                {{ $t('login.getPwdBySms') }}
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item
+            prop="telephone"
+            v-if="enableSms && retrieveType === 'BySms'"
+          >
             <el-input
-              id="contact"
+              id="input_telephone"
               v-model="userData.telephone"
               type="text"
               clearable
               :placeholder="$t('login.telPla')"
+            />
+          </el-form-item>
+          <el-form-item
+            prop="mailAddress"
+            v-if="enableMail && retrieveType === 'ByMail'"
+          >
+            <el-input
+              id="input_mail"
+              v-model="userData.mailAddress"
+              type="text"
+              clearable
+              :placeholder="$t('login.mailAddr')"
             />
           </el-form-item>
           <el-form-item prop="verificationCode">
@@ -69,7 +103,7 @@
               id="upass"
               v-model="userData.newPassword"
               auto-complete="new-password"
-              type="password"
+              show-password
               clearable
               :placeholder="$t('login.pwdPla')"
             />
@@ -78,7 +112,7 @@
             <el-input
               id="verifypass"
               v-model="confirmPassword"
-              type="password"
+              show-password
               clearable
               :placeholder="$t('login.pwdConfPla')"
             />
@@ -134,19 +168,31 @@ export default {
       }
     }
     var validatetelephone = (rule, value, callback) => {
-      if (value === '') {
+      if (this.retrieveType === 'BySms' && value === '') {
         callback(new Error(this.$t('verify.telephoneTip')))
       } else {
-        if (this.userData.checkPass !== '') {
-          this.$refs.userData.validateField('checkPass')
-        }
         callback()
       }
     }
     var validateTelRule = (rule, value, callback) => {
       let pattern = /^1[34578]\d{9}$/
-      if (value.match(pattern) === null) {
+      if (this.retrieveType === 'BySms' && value.match(pattern) === null) {
         callback(new Error(this.$t('login.phoneNumberRule')))
+      } else {
+        callback()
+      }
+    }
+    var validateMailAddress = (rule, value, callback) => {
+      if (this.retrieveType === 'ByMail' && value === '') {
+        callback(new Error(this.$t('verify.mailAddressBlankTip')))
+      } else {
+        callback()
+      }
+    }
+    var validateMailAddressRule = (rule, value, callback) => {
+      let pattern = /^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)*@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+      if (this.retrieveType === 'ByMail' && value.match(pattern) === null) {
+        callback(new Error(this.$t('login.mailAddressRule')))
       } else {
         callback()
       }
@@ -170,18 +216,23 @@ export default {
       }
     }
     var validatepassconfirm = (rule, value, callback) => {
-      if (value !== this.userData.newPassword) {
+      if (this.confirmPassword !== this.userData.newPassword) {
         callback(new Error(this.$t('tip.passDiferent')))
       } else {
         callback()
       }
     }
     return {
-      visible: false,
+      obj: {},
+      enableSms: false,
+      enableMail: false,
+      retrieveType: '',
       confirmPassword: '',
       userData: {
+        type: 2,
         newPassword: '',
         telephone: '',
+        mailAddress: '',
         verificationCode: ''
       },
       ifBtnAble: false,
@@ -197,6 +248,10 @@ export default {
           { validator: validatetelephone, trigger: 'blur' },
           { validator: validateTelRule }
         ],
+        mailAddress: [
+          { validator: validateMailAddress, trigger: 'blur' },
+          { validator: validateMailAddressRule }
+        ],
         verificationCode: [
           { validator: validateverifycode, trigger: 'blur' },
           { validator: validateVerifyRule }
@@ -208,8 +263,13 @@ export default {
       regBtnLoading: false
     }
   },
+  mounted () {
+    this.obj = JSON.parse(sessionStorage.getItem('obj'))
+    this.enableSms = this.obj.enable_sms
+    this.enableMail = this.obj.enable_mail
+    this.retrieveType = this.enableMail ? 'ByMail' : 'BySms'
+  },
   created () {
-    this.keyupSubmit()
   },
   beforeDestroy () {
     clearTimeout(this.interval)
@@ -229,7 +289,7 @@ export default {
       this.$router.push(path)
     },
     to () {
-      this.$router.push(JSON.parse(sessionStorage.getItem('obj')).login_url)
+      this.$router.push(this.obj.login_url)
     },
     intervalStart () {
       this.interval = setInterval(() => {
@@ -254,9 +314,9 @@ export default {
               'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
             }
             api.getPwd(this.userData, headers).then(res => {
-              this.$message.success(this.$t('login.modifyPwd'))
+              this.$message.success(this.$t('tip.resetPassSuc'))
               this.regBtnLoading = false
-              this.to()
+              this.closeOnSuccessReset()
             }, error => {
               if (error) {
                 this.$message.error(this.$t('tip.failedReset'))
@@ -274,30 +334,48 @@ export default {
     closeSucessPop () {
       this.$router.go(-1)
     },
-    keyupSubmit () {
-      document.onkeydown = e => {
-        let _key = window.event.keyCode
-        if (_key === 13) {
-          this.submitForm()
-        }
-      }
+    closeOnSuccessReset () {
+      api.logout().then(res => {
+        api.logout().then(res => {
+          this.to()
+        })
+      })
     },
     getCaptcha () {
-      let param = { telephone: this.userData.telephone }
-      let headers = {
-        'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
-      }
-      api.getCaptcha(param, headers).then(res => {
-        this.ifBtnAble = true
-        this.showTime = true
-        this.intervalStart()
-        this.$message.success(this.$t('tip.getVerifyCodeSuc'))
-      }, error => {
-        if (error) {
-          this.$message.error(this.$t('tip.failedToGetCaptcha') + error.response.data.detail)
+      let _validField = this.retrieveType === 'ByMail' ? 'mailAddress' : 'telephone'
+      this.$refs['userData'].validateField(_validField, (errMsg) => {
+        if (errMsg === '') {
+          let param = this.retrieveType === 'ByMail' ? { mailAddress: this.userData.mailAddress }
+            : { telephone: this.userData.telephone }
+          let headers = {
+            'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
+          }
+          api.getCaptcha(this.retrieveType, param, headers).then(res => {
+            this.ifBtnAble = true
+            this.showTime = true
+            this.intervalStart()
+          }, error => {
+            if (error) {
+              this.$message.error(this.$t('tip.failedToGetCaptcha') + error.response.data.detail)
+            }
+            this.regBtnLoading = false
+          })
+        } else {
+          return false
         }
-        this.regBtnLoading = false
       })
+    },
+    handleChangeType () {
+      this.resetFormData()
+      this.$refs['userData'].resetFields()
+    },
+    resetFormData () {
+      this.userData.newPassword = ''
+      this.userData.telephone = ''
+      this.userData.mailAddress = ''
+      this.userData.verificationCode = ''
+
+      this.confirmPassword = ''
     }
   }
 }
@@ -305,7 +383,6 @@ export default {
 <style lang="less">
 .getpwd{
   height:100%;
-  background: url('./../assets/images/login.png') no-repeat center;
   background-size:cover;
   .loginBox{
     float: right;
@@ -317,6 +394,7 @@ export default {
     padding:15px;
     background: #fff;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
+    border-radius: 15px;
     .login-top{
       text-align: center;
       display: inline-block;
