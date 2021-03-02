@@ -51,6 +51,8 @@ const en = {
     welcome: 'EdgeGallery Account Registration',
     freeSign: 'Free Registration',
     getPwd: 'Get Password',
+    getPwdByMail: 'By Mail',
+    getPwdBySms: 'By Mobile Phone',
     verify: 'Drag slider to verify',
     finishVerify: 'Verifiy succeeded',
     changeOne: 'Chang one',
@@ -126,6 +128,7 @@ const en = {
     passwordTip: 'Password can not be empty',
     confirmpasswordTip: 'Confirm password can not be empty',
     telephoneTip: 'Mobile phone number can not be empty',
+    mailAddressBlankTip: 'Email Address can not be empty',
     verifyCodeTip: 'Verification code con not be empty',
     verifycodeRule: 'Please enter a six-digit verification code'
   },
@@ -142,7 +145,8 @@ const en = {
     nameAlSinged: 'The username number has been already registered',
     telAlSigned: 'The mobile phone number has been already registered',
     mailAlSigned: 'The email address has been already registered',
-    getVerifyCodeSuc: 'Successfully obtained verification code',
+    getVerifyCodeSuc: 'Successfully obtained verification code!',
+    resetPassSuc: 'Successfully reset your password!',
     passDiferent: 'The two passwords are different!'
   },
   ...enLocale
