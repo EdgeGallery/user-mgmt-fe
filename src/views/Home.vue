@@ -21,7 +21,10 @@
   >
     <Navbar />
     <div class="home-container">
-      <router-view id="container" />
+      <router-view
+        id="container"
+        class="clearfix"
+      />
     </div>
   </div>
 </template>
@@ -60,19 +63,18 @@ export default {
   height:100%;
   background: no-repeat center;
   background-size:cover;
-}
-.home-container{
-  height: calc(100% + 20px);
-  position: relative;
-  top: 65px;
   overflow-y: auto;
 }
+.home-container{
+  position: relative;
+}
 #container{
-  padding:0 50px;
+  padding:0 10% 30px;
+  position: relative;
 }
 @media screen and (max-width: 640px) {
   #container{
-    padding: 0;
+    padding: 0 0 30px;
   }
 }
 </style>

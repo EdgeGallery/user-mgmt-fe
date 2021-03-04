@@ -123,6 +123,10 @@
         >
           {{ $t('login.freeSign') }}
         </el-button>
+        <span
+          class="language_span"
+          @click="changeLang"
+        >{{ language }}</span>
         <el-divider
           direction="vertical"
           v-if="!hasLogin && (this.enableSms || this.enableMail)"
@@ -166,7 +170,8 @@ export default {
     return {
       userData: {
         username: '',
-        password: ''
+        password: '',
+        language: 'English'
       },
       rules: {
         username: [
@@ -187,15 +192,16 @@ export default {
       handlerIcon: 'fa fa-angle-double-right',
       successIcon: 'fa fa-check',
       background: '#FFCCCC',
-      progressBarBg: '#4b0',
+      progressBarBg: '#66a542',
       completedBg: '#66cc66',
-      handlerBg: '#fff',
+      handlerBg: '#f3f3f3',
       text: this.$t('login.verify'),
       successText: this.$t('login.finishVerify'),
       width: 360,
       height: 40,
       textSize: '16px',
-      interval: null
+      interval: null,
+      language: 'cn'
     }
   },
   watch: {
@@ -211,6 +217,12 @@ export default {
     this.clearKeyEvent()
   },
   mounted () {
+    let language = localStorage.getItem('language')
+    language
+      ? localStorage.setItem('language', language)
+      : localStorage.setItem('language', 'cn')
+    language = localStorage.getItem('language')
+    this.language = language === 'en' ? '简体中文' : 'English'
     api.loginInfo().then(res => {
       this.username = res.data.username
       if (this.username) {
@@ -329,6 +341,19 @@ export default {
     },
     jumpTo (path) {
       this.$router.push(path)
+    },
+    changeLang () {
+      let language
+      if (this.language === 'English') {
+        this.language = '简体中文'
+        language = 'en'
+      } else {
+        this.language = 'English'
+        language = 'cn'
+      }
+      this.$i18n.locale = language
+      localStorage.setItem('language', language)
+      this.$store.commit('changelanguage', language)
     }
   }
 }
@@ -341,9 +366,9 @@ export default {
     width: 410px;
     height: auto;
     text-align: center;
-    margin: 10% 12% 0 0;
+    margin: 20% 10% 0 0;
     padding: 25px 15px 5px;
-    background: #fff;
+    background: rgba(255,255,255,0.5);
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
       0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
     border-radius: 15px;
@@ -379,7 +404,12 @@ export default {
   @media screen and (max-width: 640px) {
     .loginBox{
       width: 310px;
-      margin: 5% 10px 0 0;
+      margin: 25% 10px 0 0;
+    }
+  }
+  @media screen and (max-width: 450px) {
+    .loginBox{
+      margin: 35% 10px 0 0;
     }
   }
   .login-btn {
@@ -405,6 +435,10 @@ export default {
       font-size: 12px;
       color: #252b3a;
       line-height: 18px;
+    }
+    .language_span{
+      cursor: pointer;
+      margin-left: 10px;
     }
   }
 }

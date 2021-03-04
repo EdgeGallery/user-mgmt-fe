@@ -131,6 +131,12 @@
               {{ $t('common.cancel') }}
             </el-button>
           </div>
+          <p class="language_p">
+            <span
+              class="language_span"
+              @click="changeLang"
+            >{{ language }}</span>
+          </p>
         </div>
       </el-form>
     </div>
@@ -256,7 +262,8 @@ export default {
         ]
       },
       regBtnLoading: false,
-      legalRegister: false
+      legalRegister: false,
+      language: 'English'
     }
   },
   watch: {
@@ -269,6 +276,12 @@ export default {
     }
   },
   mounted () {
+    let language = localStorage.getItem('language')
+    language
+      ? localStorage.setItem('language', language)
+      : localStorage.setItem('language', 'cn')
+    language = localStorage.getItem('language')
+    this.language = language === 'en' ? '简体中文' : 'English'
   },
   created () {
     this.keyupSubmit()
@@ -364,6 +377,19 @@ export default {
     },
     selectLegal (val) {
       this.legalRegister = val
+    },
+    changeLang () {
+      let language
+      if (this.language === 'English') {
+        this.language = '简体中文'
+        language = 'en'
+      } else {
+        this.language = 'English'
+        language = 'cn'
+      }
+      this.$i18n.locale = language
+      localStorage.setItem('language', language)
+      this.$store.commit('changelanguage', language)
     }
   }
 }
@@ -377,9 +403,10 @@ export default {
     width: 80%;
     max-width: 410px;
     text-align: center;
-    margin: 5% 10% 0 0;
+    margin: 15% 10% 0 0;
     padding:0 15px;
-    background: #fff;
+    background: rgba(255,255,255,0.5);
+    border-radius: 15px;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
     border-radius: 15px;
     .login-top{
@@ -414,7 +441,7 @@ export default {
       }
     }
     .regBtn{
-      padding-bottom: 25px;
+      padding-bottom: 5px;
     }
     .login-certify{
       padding: 0 25px;
@@ -446,10 +473,29 @@ export default {
     }
     .register-hint{
       font-size: 12px;
-      color: orange;
+      color: #b87e12;
       margin: 5px 0 15px;
       padding: 0 25px;
       text-align: left;
+    }
+    .language_p{
+      text-align: right;
+      padding: 0 25px 15px;
+    }
+    .language_span{
+      cursor: pointer;
+      margin-left: 5px;
+      font-size: 12px;
+    }
+  }
+  @media screen and (max-width: 800px) {
+    .loginBox{
+      margin: 120px 10px 0 0;
+    }
+  }
+  @media screen and (max-width: 640px) {
+    .loginBox{
+      margin: 160px 10px 0 0;
     }
   }
 }

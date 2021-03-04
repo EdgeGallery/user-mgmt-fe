@@ -15,34 +15,49 @@
   -->
 
 <template>
-  <div class="navgation">
+  <div>
     <div
-      class="logo lt"
-      @click="jumpTo('/')"
+      class="logo_pic"
+      v-show="!isShowNav"
     >
       <img
         src="../assets/images/logo.png"
         alt=""
+        @click="jumpTo('/')"
       >
     </div>
-    <div>
-      <Topbar :json-data="jsonData" />
-    </div>
-    <div class="nav-tabs rt">
-      <div class="language rt">
-        <span @click="changeLang">{{ language }}</span>
+    <div
+      class="navgation"
+      v-show="isShowNav"
+    >
+      <div
+        class="logo lt"
+        @click="jumpTo('/')"
+      >
+        <img
+          src="../assets/images/logo.png"
+          alt=""
+        >
       </div>
-      <div class="user rt">
-        <span
-          v-if="hasLogin"
-        >{{ userName }}</span>
-        <span
-          v-if="hasLogin"
-        >|</span>
-        <span
-          v-if="hasLogin"
-          @click="beforeLogout()"
-        >{{ $t('login.logout') }}</span>
+      <div>
+        <Topbar :json-data="jsonData" />
+      </div>
+      <div class="nav-tabs rt">
+        <div class="language rt">
+          <span @click="changeLang">{{ language }}</span>
+        </div>
+        <div class="user rt">
+          <span
+            v-if="hasLogin"
+          >{{ userName }}</span>
+          <span
+            v-if="hasLogin"
+          >|</span>
+          <span
+            v-if="hasLogin"
+            @click="beforeLogout()"
+          >{{ $t('login.logout') }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -65,7 +80,8 @@ export default {
       language: 'English',
       hasLogin: false,
       userName: '',
-      isSuperAdmin: false
+      isSuperAdmin: false,
+      isShowNav: false
     }
   },
   mounted () {
@@ -142,11 +158,34 @@ export default {
         window.location.href = urlPrefix + window.location.host + '/index.html'
       })
     }
+  },
+  watch: {
+    $route: {
+      handler: function (route) {
+        console.log(route.fullPath)
+        if (route.fullPath === '/usermgmt/list') {
+          this.isShowNav = true
+        } else {
+          this.isShowNav = false
+        }
+      },
+      immediate: true
+    }
+
   }
 }
 </script>
 
 <style lang='less' scoped>
+.logo_pic{
+  position: fixed;
+  z-index: 99;
+  img{
+    width: 200px;
+    margin: 20px 0 0 20px;
+    cursor: pointer;
+  }
+}
 .navgation{
   background: #282B33;
   height: 65px;
