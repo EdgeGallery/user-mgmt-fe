@@ -403,7 +403,7 @@ export default {
     width: 80%;
     max-width: 410px;
     text-align: center;
-    margin: 15% 10% 0 0;
+    margin: 180px 10% 0 0;
     padding:0 15px;
     background: rgba(255,255,255,0.5);
     border-radius: 15px;
@@ -486,6 +486,11 @@ export default {
       cursor: pointer;
       margin-left: 5px;
       font-size: 12px;
+    }
+  }
+  @media screen and (max-width: 1380px) {
+    .loginBox{
+      margin: 60px 10px 0 0;
     }
   }
   @media screen and (max-width: 800px) {

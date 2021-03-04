@@ -255,7 +255,7 @@ export default {
   methods: {
     setDivWidth () {
       let screenWidth = document.body.clientWidth
-      if (screenWidth >= 640) {
+      if (screenWidth >= 1024) {
         this.width = 360
       } else {
         this.width = 260
@@ -366,7 +366,7 @@ export default {
     width: 410px;
     height: auto;
     text-align: center;
-    margin: 20% 10% 0 0;
+    margin: 240px 10% 0 0;
     padding: 25px 15px 5px;
     background: rgba(255,255,255,0.5);
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
@@ -401,15 +401,20 @@ export default {
       }
     }
   }
+  @media screen and (max-width: 1380px) {
+    .loginBox{
+      margin: 140px 10px 0 0;
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    .loginBox{
+      margin: 200px 10px 0 0;
+    }
+  }
   @media screen and (max-width: 640px) {
     .loginBox{
       width: 310px;
-      margin: 25% 10px 0 0;
-    }
-  }
-  @media screen and (max-width: 450px) {
-    .loginBox{
-      margin: 35% 10px 0 0;
+      margin: 140px 10px 0 0;
     }
   }
   .login-btn {
