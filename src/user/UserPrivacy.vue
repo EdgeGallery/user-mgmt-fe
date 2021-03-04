@@ -44,7 +44,7 @@
         :subfield="false"
         default-open="preview"
         :box-shadow="false"
-        preview-background="#ffffff"
+        preview-background="rgba(255,255,255,0)"
       />
     </div>
   </div>
@@ -57,7 +57,7 @@ export default {
   data () {
     return {
       markdownSource: '',
-      privacyName: sessionStorage.getItem('privacyName')
+      privacyName: sessionStorage.getItem('privacyName') || 'useragreement'
     }
   },
   methods: {
@@ -84,7 +84,7 @@ export default {
     function apiHeight () {
       const oApi = document.getElementById('mavon-editor')
       const deviceHeight = document.documentElement.clientHeight
-      oApi.style.height = Number(deviceHeight) - 65 + 'px'
+      oApi.style.height = Number(deviceHeight) - 160 + 'px'
     }
     apiHeight()
     window.onresize = function () {
@@ -98,9 +98,11 @@ export default {
 .protocol{
   display: flex;
   font-size: 14px;
+  padding: 0 5%;
+  margin: 120px 0 0;
   .left{
     width: 300px;
-    background: #f7f7f7;
+    background: rgba(247,247,247,0.7);
     h4{
       padding-left: 30px;
       height: 60px;
@@ -139,7 +141,11 @@ export default {
   }
   #mavon-editor{
     flex-grow: 1;
-    background: #fff;
+    background: rgba(255,255,255,0.8);
+    overflow: auto;
+  }
+  .v-note-wrapper{
+    background: rgba(255,255,255,0);
   }
 }
 </style>

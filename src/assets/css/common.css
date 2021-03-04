@@ -42,7 +42,9 @@ li{
 .rt{
   float: right;
 }
-.clearfix{
+.clearfix:after{
+  content: '';
+  display: block;
   clear: both;
 }
 .breadcrumb{
