@@ -64,7 +64,7 @@ export default {
   data () {
     return {
       markdownSource: '',
-      privacyName: 'useragreement'
+      privacyName: sessionStorage.getItem('privacyName') || 'useragreement'
     }
   },
   methods: {
