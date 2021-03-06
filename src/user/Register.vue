@@ -283,6 +283,7 @@ export default {
   },
   methods: {
     jumpBlank (name) {
+      sessionStorage.setItem('privacyName', name)
       let routeData = this.$router.resolve({
         name: 'userprivacy'
       })
