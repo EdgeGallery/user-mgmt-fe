@@ -123,10 +123,7 @@
         >
           {{ $t('login.freeSign') }}
         </el-button>
-        <span
-          class="language_span"
-          @click="changeLang"
-        >{{ language }}</span>
+        <Language />
         <el-divider
           direction="vertical"
           v-if="!hasLogin && this.enableSms"
@@ -143,13 +140,15 @@
   </div>
 </template>
 <script>
+import Language from '../components/Language.vue'
 import 'font-awesome/css/font-awesome.min.css'
 import dragVerify from 'vue-drag-verify'
 import { api } from '../tools/api.js'
 export default {
   name: '',
   components: {
-    dragVerify
+    dragVerify,
+    Language
   },
   inject: ['reload'],
   data () {
@@ -199,8 +198,7 @@ export default {
       width: 360,
       height: 40,
       textSize: '16px',
-      interval: null,
-      language: 'cn'
+      interval: null
     }
   },
   watch: {
@@ -216,12 +214,6 @@ export default {
     this.clearKeyEvent()
   },
   mounted () {
-    let language = localStorage.getItem('language')
-    language
-      ? localStorage.setItem('language', language)
-      : localStorage.setItem('language', 'cn')
-    language = localStorage.getItem('language')
-    this.language = language === 'en' ? '简体中文' : 'English'
     api.loginInfo().then(res => {
       this.username = res.data.username
       if (this.username) {
@@ -346,19 +338,6 @@ export default {
     },
     jumpTo (path) {
       this.$router.push(path)
-    },
-    changeLang () {
-      let language
-      if (this.language === 'English') {
-        this.language = '简体中文'
-        language = 'en'
-      } else {
-        this.language = 'English'
-        language = 'cn'
-      }
-      this.$i18n.locale = language
-      localStorage.setItem('language', language)
-      this.$store.commit('changelanguage', language)
     }
   }
 }
@@ -368,7 +347,7 @@ export default {
   height: 100%;
   .loginBox {
     float: right;
-    width: 410px;
+    width: 440px;
     height: auto;
     text-align: center;
     margin: 240px 10% 0 0;
@@ -418,7 +397,7 @@ export default {
   }
   @media screen and (max-width: 640px) {
     .loginBox{
-      width: 310px;
+      width: 340px;
       margin: 140px 10px 0 0;
     }
   }
