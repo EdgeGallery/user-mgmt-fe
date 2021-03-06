@@ -67,10 +67,16 @@ export default {
 }
 .home-container{
   position: relative;
+  height: 100%;
 }
 #container{
   padding:0 10% 30px;
   position: relative;
+}
+@media screen and (max-width: 1380px) {
+  #container{
+    padding: 0 30px 30px;
+  }
 }
 @media screen and (max-width: 640px) {
   #container{

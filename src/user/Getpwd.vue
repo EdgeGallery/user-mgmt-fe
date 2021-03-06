@@ -136,17 +136,19 @@
           >
             {{ $t('common.cancel') }}
           </el-button>
+          <Language />
         </div>
       </el-form>
     </div>
   </div>
 </template>
 <script>
+import Language from '../components/Language.vue'
 import { api } from '../tools/api.js'
 export default {
   name: 'Register',
   components: {
-
+    Language
   },
   data () {
     var validatePass = (rule, value, callback) => {
@@ -390,9 +392,9 @@ export default {
     max-width: 410px;
     height: auto;
     text-align: center;
-    margin: 5% 10% 0 0;
+    margin: 240px 10% 0 0;
     padding:15px;
-    background: #fff;
+    background: rgba(255,255,255,0.5);
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
     border-radius: 15px;
     .login-top{
@@ -438,6 +440,22 @@ export default {
         font-size:18px;
         font-weight:bold;
       }
+    }
+  }
+  @media screen and (max-width: 1380px) {
+    .loginBox{
+      margin: 140px 10px 0 0;
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    .loginBox{
+      margin: 200px 10px 0 0;
+    }
+  }
+  @media screen and (max-width: 640px) {
+    .loginBox{
+      width: 310px;
+      margin: 140px 10px 0 0;
     }
   }
 }

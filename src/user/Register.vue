@@ -132,10 +132,7 @@
             </el-button>
           </div>
           <p class="language_p">
-            <span
-              class="language_span"
-              @click="changeLang"
-            >{{ language }}</span>
+            <Language />
           </p>
         </div>
       </el-form>
@@ -143,11 +140,12 @@
   </div>
 </template>
 <script>
+import Language from '../components/Language.vue'
 import { api } from '../tools/api.js'
 export default {
   name: 'Register',
   components: {
-
+    Language
   },
   data () {
     var validateName = (rule, value, callback) => {
@@ -262,8 +260,7 @@ export default {
         ]
       },
       regBtnLoading: false,
-      legalRegister: false,
-      language: 'English'
+      legalRegister: false
     }
   },
   watch: {
@@ -276,12 +273,6 @@ export default {
     }
   },
   mounted () {
-    let language = localStorage.getItem('language')
-    language
-      ? localStorage.setItem('language', language)
-      : localStorage.setItem('language', 'cn')
-    language = localStorage.getItem('language')
-    this.language = language === 'en' ? '简体中文' : 'English'
   },
   created () {
     this.keyupSubmit()
@@ -292,7 +283,6 @@ export default {
   },
   methods: {
     jumpBlank (name) {
-      sessionStorage.setItem('privacyName', name)
       let routeData = this.$router.resolve({
         name: 'userprivacy'
       })
@@ -377,19 +367,6 @@ export default {
     },
     selectLegal (val) {
       this.legalRegister = val
-    },
-    changeLang () {
-      let language
-      if (this.language === 'English') {
-        this.language = '简体中文'
-        language = 'en'
-      } else {
-        this.language = 'English'
-        language = 'cn'
-      }
-      this.$i18n.locale = language
-      localStorage.setItem('language', language)
-      this.$store.commit('changelanguage', language)
     }
   }
 }

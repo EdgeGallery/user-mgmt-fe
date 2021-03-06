@@ -37,6 +37,9 @@
       </ul>
     </div>
     <div id="mavon-editor">
+      <p class="language_p">
+        <Language />
+      </p>
       <mavon-editor
         v-model="markdownSource"
         :toolbars-flag="false"
@@ -51,13 +54,17 @@
 </template>
 
 <script>
+import Language from '../components/Language.vue'
 import axios from 'axios'
 export default {
   name: 'UserPrivacy',
+  components: {
+    Language
+  },
   data () {
     return {
       markdownSource: '',
-      privacyName: sessionStorage.getItem('privacyName') || 'useragreement'
+      privacyName: 'useragreement'
     }
   },
   methods: {
@@ -98,11 +105,11 @@ export default {
 .protocol{
   display: flex;
   font-size: 14px;
-  padding: 0 5%;
-  margin: 120px 0 0;
+  padding: 120px 5% 0 !important;
+  min-height: 300px;
   .left{
     width: 300px;
-    background: rgba(247,247,247,0.7);
+    background: rgba(247,247,247,0.8);
     h4{
       padding-left: 30px;
       height: 60px;
@@ -132,9 +139,10 @@ export default {
         }
       }
       li.selected{
-        color: #10bbb7;
+        color: #0ea6a2;
+        font-weight: bold;
         .line{
-          background: #10bbb7;
+          background: #0ea6a2;
         }
       }
     }
@@ -143,9 +151,18 @@ export default {
     flex-grow: 1;
     background: rgba(255,255,255,0.8);
     overflow: auto;
+    min-height: 300px;
+  }
+  .language_p{
+    height: 40px;
+    line-height: 40px;
+    text-align: right;
+    padding-right: 20px;
   }
   .v-note-wrapper{
     background: rgba(255,255,255,0);
+    height: calc(100% - 50px);
+    z-index: 1;
   }
 }
 </style>

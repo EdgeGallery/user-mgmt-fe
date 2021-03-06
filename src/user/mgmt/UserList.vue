@@ -373,17 +373,16 @@ export default {
 </script>
 <style lang="less">
 .userlist{
-  position: absolute;
-  top: 0px;
-  height: 100%;
+  top: 65px;
+  height: calc(100% - 65px);
   width: 100%;
-  padding: 0 30px;
   box-sizing: border-box;
   background: #fff;
 }
 .cls_userlist{
-  margin: 0 5%;
-  height: 100%;
+  padding: 0 20px;
+  height: calc(100% - 125px);
+  min-height: 300px;
   background: #fff;
   padding-top:20px;
   .table {

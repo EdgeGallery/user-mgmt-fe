@@ -162,7 +162,6 @@ export default {
   watch: {
     $route: {
       handler: function (route) {
-        console.log(route.fullPath)
         if (route.fullPath === '/usermgmt/list') {
           this.isShowNav = true
         } else {
