@@ -339,7 +339,7 @@ export default {
       }
       .el-form-item.is-error{
         .el-input__clear{
-          color: #F56C6C;
+          color: #cb4a4a;
         }
       }
       p{
