@@ -61,7 +61,7 @@ li{
   margin-top:25px;
 }
 .error{
-  color:#F56C6C;
+  color:#cb4a4a;
 }
 .success{
   color:#67C23A;
@@ -185,4 +185,8 @@ body .el-table th.gutter{
 .el-table .has-gutter th{
   background: #F0F3FA;
   height:32px;
+}
+
+.el-form-item__error{
+  color:#cb4a4a;
 }

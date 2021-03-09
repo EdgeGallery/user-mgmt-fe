@@ -407,6 +407,9 @@ export default {
     }
     .drag_verify{
       margin-bottom: 15px;
+      .dv_handler{
+        box-sizing: content-box;
+      }
     }
     .drag_verify .dv_handler i{
       font-size: 16px;
