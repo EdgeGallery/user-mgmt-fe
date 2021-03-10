@@ -116,6 +116,8 @@ const en = {
     registerTime: 'Registration Time:',
     emailAddr: 'Email Address:',
     mobilePhone: 'Mobile Number:',
+    mailAddrConflict: 'The email address conflict!',
+    mobilePhoneConflict: 'The mobile phone number conflict!',
     modifyPwd: 'Modify Password',
     oldPw: 'Old Password:',
     newPw: 'New Password:',
