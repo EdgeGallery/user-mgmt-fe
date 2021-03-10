@@ -136,19 +136,16 @@
           >
             {{ $t('common.cancel') }}
           </el-button>
-          <Language />
         </div>
       </el-form>
     </div>
   </div>
 </template>
 <script>
-import Language from '../components/Language.vue'
 import { api } from '../tools/api.js'
 export default {
   name: 'Register',
   components: {
-    Language
   },
   data () {
     var validatePass = (rule, value, callback) => {

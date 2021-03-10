@@ -46,7 +46,6 @@ const cn = {
     newPwd: '新密码',
     confirmNewPwd: '确认新密码',
     forgotPwd: '忘记密码？',
-    modifyPwd: '修改密码',
     loginWithUser: '帐号登录',
     welcome: '欢迎注册EdgeGallery',
     freeSign: '免费注册',
@@ -110,6 +109,21 @@ const cn = {
       configUserFailed: '设置用户失败！'
     }
   },
+  usercenter: {
+    welcomePrefix: '您好，',
+    basicInfo: '基本信息',
+    accountName: '帐号名：',
+    registerTime: '注册时间：',
+    emailAddr: '邮箱地址：',
+    mobilePhone: '手机号码：',
+    modifyPwd: '修改密码',
+    oldPw: '旧密码：',
+    newPw: '新密码：',
+    confirmNewPw: '确认新密码：',
+    passNotChanged: '输入的新密码与旧密码一致',
+    modifyPwdSucceed: '密码修改成功！',
+    modifyPwdFailed: '密码修改失败！'
+  },
   common: {
     cancel: '取消',
     submit: '提交',
@@ -137,7 +151,7 @@ const cn = {
     failedReset: '重置密码失败，请重试',
     wrongCaptcha: '验证失败，请先完成验证！',
     failedAuth: '认证失败，请检查你用户名和密码！',
-    regUserSuc: '你已成功注册该用户！',
+    regUserSuc: '您已成功注册用户！',
     sessionOut: '你的登录信息过期，请重新登录',
     sessionExp: 'Session过期',
     failedToGetCaptcha: '获取验证码失败！',

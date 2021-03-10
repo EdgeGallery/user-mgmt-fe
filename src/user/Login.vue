@@ -123,7 +123,6 @@
         >
           {{ $t('login.freeSign') }}
         </el-button>
-        <Language />
         <el-divider
           direction="vertical"
           v-if="!hasLogin && (this.enableSms || this.enableMail)"
@@ -140,15 +139,13 @@
   </div>
 </template>
 <script>
-import Language from '../components/Language.vue'
 import 'font-awesome/css/font-awesome.min.css'
 import dragVerify from 'vue-drag-verify'
 import { api } from '../tools/api.js'
 export default {
   name: '',
   components: {
-    dragVerify,
-    Language
+    dragVerify
   },
   inject: ['reload'],
   data () {
@@ -169,8 +166,7 @@ export default {
     return {
       userData: {
         username: '',
-        password: '',
-        language: 'English'
+        password: ''
       },
       rules: {
         username: [

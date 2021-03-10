@@ -50,6 +50,11 @@ export default new Router({
           path: 'usermgmt/list',
           name: 'userList',
           component: () => import('../user/mgmt/UserList.vue')
+        },
+        {
+          path: 'usermgmt/center',
+          name: 'userCenter',
+          component: () => import('../user/UserCenter.vue')
         }
       ]
     }

@@ -37,9 +37,6 @@
       </ul>
     </div>
     <div id="mavon-editor">
-      <p class="language_p">
-        <Language />
-      </p>
       <mavon-editor
         v-model="markdownSource"
         :toolbars-flag="false"
@@ -54,12 +51,10 @@
 </template>
 
 <script>
-import Language from '../components/Language.vue'
 import axios from 'axios'
 export default {
   name: 'UserPrivacy',
   components: {
-    Language
   },
   data () {
     return {
@@ -152,12 +147,6 @@ export default {
     background: rgba(255,255,255,0.8);
     overflow: auto;
     min-height: 300px;
-  }
-  .language_p{
-    height: 40px;
-    line-height: 40px;
-    text-align: right;
-    padding-right: 20px;
   }
   .v-note-wrapper{
     background: rgba(255,255,255,0);

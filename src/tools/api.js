@@ -72,6 +72,9 @@ let api = {
   },
   configUser (userId, params, headers) {
     return PUT('/v1/users/settings/' + userId, params, headers)
+  },
+  modifyUser (userId, params, headers) {
+    return PUT('/v1/users/' + userId, params, headers)
   }
 }
 
