@@ -370,8 +370,18 @@ export default {
           api.modifyUser(this.currUserInfo.userId, _reqData, headers).then(response => {
             this.editMailAddrFlag = false
             this.currUserInfo.mailAddress = this.basicInfoEditData.mailAddress
-          }).catch(() => {
-            this.$message.error(this.$t('usermgmt.tip.configUserFailed'))
+          }).catch(error => {
+            if (error && error.response) {
+              switch (error.response.status) {
+                case 400:
+                  error.message = 'Bad request'
+                  if (error.response.data.detail === 'repeat of mail address.') {
+                    error.message = this.$t('usercenter.mailAddrConflict')
+                  }
+                  break
+              }
+              this.$message.error(error.message)
+            }
           })
         } else {
           return false
@@ -389,8 +399,18 @@ export default {
           api.modifyUser(this.currUserInfo.userId, _reqData, headers).then(response => {
             this.editTelephoneFlag = false
             this.currUserInfo.telephone = this.basicInfoEditData.telephone
-          }).catch(() => {
-            this.$message.error(this.$t('usermgmt.tip.configUserFailed'))
+          }).catch(error => {
+            if (error && error.response) {
+              switch (error.response.status) {
+                case 400:
+                  error.message = 'Bad request'
+                  if (error.response.data.detail === 'repeat of telephone.') {
+                    error.message = this.$t('usercenter.mobilePhoneConflict')
+                  }
+                  break
+              }
+              this.$message.error(error.message)
+            }
           })
         } else {
           return false
