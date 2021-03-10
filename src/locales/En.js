@@ -46,7 +46,6 @@ const en = {
     newPwd: 'New password',
     confirmNewPwd: 'Confirm your new password',
     forgotPwd: 'Forgot password？',
-    modifyPwd: 'Modify Password',
     loginWithUser: 'Account Login',
     welcome: 'EdgeGallery Account Registration',
     freeSign: 'Free Registration',
@@ -109,6 +108,21 @@ const en = {
       platformMustBeSelected: 'Please select platform.',
       configUserFailed: 'Config User Failed!'
     }
+  },
+  usercenter: {
+    welcomePrefix: 'Hello, ',
+    basicInfo: 'Basic Information',
+    accountName: 'Account Name:',
+    registerTime: 'Registration Time:',
+    emailAddr: 'Email Address:',
+    mobilePhone: 'Mobile Number:',
+    modifyPwd: 'Modify Password',
+    oldPw: 'Old Password:',
+    newPw: 'New Password:',
+    confirmNewPw: 'Confirm Password:',
+    passNotChanged: 'New password is same as old password',
+    modifyPwdSucceed: 'Successfully modify your password!',
+    modifyPwdFailed: 'Failed to modify your password, please try again later.'
   },
   common: {
     cancel: 'Cancel',

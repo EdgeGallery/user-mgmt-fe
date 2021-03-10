@@ -22,26 +22,11 @@
     >
       <img
         src="../assets/images/logo.png"
-        alt=""
-        @click="jumpTo('/')"
       >
     </div>
     <div
-      class="navgation"
-      v-show="isShowNav"
+      class="nav_top_right"
     >
-      <div
-        class="logo lt"
-        @click="jumpTo('/')"
-      >
-        <img
-          src="../assets/images/logo.png"
-          alt=""
-        >
-      </div>
-      <div>
-        <Topbar :json-data="jsonData" />
-      </div>
       <div class="nav-tabs rt">
         <div class="language rt">
           <span @click="changeLang">{{ language }}</span>
@@ -58,6 +43,23 @@
             @click="beforeLogout()"
           >{{ $t('login.logout') }}</span>
         </div>
+      </div>
+    </div>
+    <div
+      class="navgation"
+      v-show="isShowNav"
+    >
+      <div
+        class="logo lt"
+        @click="jumpTo('/')"
+      >
+        <img
+          src="../assets/images/logo.png"
+          alt=""
+        >
+      </div>
+      <div>
+        <Topbar :json-data="jsonData" />
       </div>
     </div>
   </div>
@@ -162,7 +164,7 @@ export default {
   watch: {
     $route: {
       handler: function (route) {
-        if (route.fullPath === '/usermgmt/list') {
+        if (this.isSuperAdmin && route.fullPath !== '/usermgmt/center') {
           this.isShowNav = true
         } else {
           this.isShowNav = false
@@ -170,7 +172,6 @@ export default {
       },
       immediate: true
     }
-
   }
 }
 </script>
@@ -183,6 +184,53 @@ export default {
     width: 200px;
     margin: 20px 0 0 20px;
     cursor: pointer;
+  }
+}
+.nav_top_right{
+  position: fixed;
+  z-index: 99;
+  top: 0px;
+  right:0px;
+  height: 65px;
+  .language {
+    display: inline-block;
+    line-height: 65px;
+    font-size: 14px;
+    color: #6c92fa;
+    span {
+      width:60px!important;
+      top:3px!important;
+    }
+    span:hover {
+      text-decoration: underline;
+    }
+  }
+  .user {
+    display: inline-block;
+    line-height: 65px;
+    font-size: 14px;
+    color: #6c92fa;
+    span {
+      width:100%;
+      top:3px!important;
+    }
+    span:hover {
+      text-decoration: underline;
+    }
+  }
+  .nav-tabs{
+    height:100%;
+    font-size:20px;
+    line-height: 50px;
+    margin-right: 10px;
+    span{
+      height:24px;
+      margin-right: 10px;
+      position: relative;
+      top:8px;
+      cursor:pointer;
+      color:#f5f5f5;
+    }
   }
 }
 .navgation{
@@ -225,45 +273,5 @@ export default {
         }
       }
     }
-  .language {
-    display: inline-block;
-    line-height: 65px;
-    font-size: 14px;
-    color: #6c92fa;
-    span {
-      width:60px!important;
-      top:3px!important;
-    }
-    span:hover {
-      text-decoration: underline;
-    }
-  }
-  .user {
-    display: inline-block;
-    line-height: 65px;
-    font-size: 14px;
-    color: #6c92fa;
-    span {
-      width:100%;
-      top:3px!important;
-    }
-    span:hover {
-      text-decoration: underline;
-    }
-  }
-  .nav-tabs{
-    height:100%;
-    font-size:20px;
-    line-height: 50px;
-    margin-right: 10px;
-    span{
-      height:24px;
-      margin-right: 10px;
-      position: relative;
-      top:8px;
-      cursor:pointer;
-      color:#f5f5f5;
-    }
-  }
 }
 </style>

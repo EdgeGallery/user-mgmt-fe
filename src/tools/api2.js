@@ -47,6 +47,9 @@ let api = {
   },
   configUser (userId, params, headers) {
     return axios.get('/mock/donothing')
+  },
+  modifyUser (userId, params, headers) {
+    return axios.get('/mock/donothing')
   }
 }
 

@@ -131,21 +131,16 @@
               {{ $t('common.cancel') }}
             </el-button>
           </div>
-          <p class="language_p">
-            <Language />
-          </p>
         </div>
       </el-form>
     </div>
   </div>
 </template>
 <script>
-import Language from '../components/Language.vue'
 import { api } from '../tools/api.js'
 export default {
   name: 'Register',
   components: {
-    Language
   },
   data () {
     var validateName = (rule, value, callback) => {
@@ -455,15 +450,6 @@ export default {
       margin: 5px 0 15px;
       padding: 0 25px;
       text-align: left;
-    }
-    .language_p{
-      text-align: right;
-      padding: 0 25px 15px;
-    }
-    .language_span{
-      cursor: pointer;
-      margin-left: 5px;
-      font-size: 12px;
     }
   }
   @media screen and (max-width: 1380px) {

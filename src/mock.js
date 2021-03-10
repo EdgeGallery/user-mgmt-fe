@@ -28,7 +28,7 @@ const getLoginInfo = function () {
     'username': 'admin',
     'mailAddress': '13800000001@edgegallery.org',
     'telephone': '13800000001',
-    'createTime': '2021-01-29 12:02:41.539379',
+    'createTime': '2021-01-29 12:02:41',
     'userId': '39937079-99fe-4cd8-881f-04ca8c4fe09d',
     'permissions': [
       {
