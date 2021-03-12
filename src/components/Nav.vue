@@ -103,7 +103,9 @@ export default {
 
       if (this.isSuperAdmin) {
         this.jsonData = this.language === 'English' ? NavDataCn : NavData
-        this.jumpTo('/usermgmt/list')
+        if (this.$route.path === '/') {
+          this.jumpTo('/usermgmt/list')
+        }
       }
     })
   },
