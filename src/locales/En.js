@@ -104,9 +104,13 @@ const en = {
     },
     tip: {
       confirmDisallowUser: 'Are you sure to disallow this user?',
-      confirmAallowUser: 'Are you sure to allow this user?',
+      disallowUserSuccess: 'Disallow user succeed!',
+      disallowUserFailed: 'Disallow user failed!',
+      confirmAllowUser: 'Are you sure to allow this user?',
+      allowUserSuccess: 'Allow user succeed!',
+      allowUserFailed: 'Allow user failed!',
       platformMustBeSelected: 'Please select platform.',
-      configUserFailed: 'Config User Failed!'
+      configUserFailed: 'Config user failed!'
     }
   },
   usercenter: {

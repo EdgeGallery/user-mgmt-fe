@@ -104,7 +104,11 @@ const cn = {
     },
     tip: {
       confirmDisallowUser: '确认要停用该用户吗？',
+      disallowUserSuccess: '用户停用成功！',
+      disallowUserFailed: '用户停用失败！',
       confirmAllowUser: '确认要启用该用户吗？',
+      allowUserSuccess: '用户启用成功！',
+      allowUserFailed: '用户启用失败！',
       platformMustBeSelected: '请选择可以访问的平台。',
       configUserFailed: '设置用户失败！'
     }

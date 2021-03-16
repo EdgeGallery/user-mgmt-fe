@@ -172,8 +172,6 @@ export default {
       this.$refs[formName].resetFields()
       this.$emit('getSearchData', this.formData)
     }
-  },
-  mounted () {
   }
 }
 </script>

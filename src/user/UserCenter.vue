@@ -24,6 +24,7 @@
       >
         <img
           src="../assets/images/user.png"
+          alt=""
         >
       </div>
       <div
@@ -372,13 +373,11 @@ export default {
             this.currUserInfo.mailAddress = this.basicInfoEditData.mailAddress
           }).catch(error => {
             if (error && error.response) {
-              switch (error.response.status) {
-                case 400:
-                  error.message = 'Bad request'
-                  if (error.response.data.detail === 'repeat of mail address.') {
-                    error.message = this.$t('usercenter.mailAddrConflict')
-                  }
-                  break
+              if (error.response.status === 400) {
+                error.message = 'Bad request'
+                if (error.response.data.detail === 'repeat of mail address.') {
+                  error.message = this.$t('usercenter.mailAddrConflict')
+                }
               }
               this.$message.error(error.message)
             }
@@ -401,13 +400,11 @@ export default {
             this.currUserInfo.telephone = this.basicInfoEditData.telephone
           }).catch(error => {
             if (error && error.response) {
-              switch (error.response.status) {
-                case 400:
-                  error.message = 'Bad request'
-                  if (error.response.data.detail === 'repeat of telephone.') {
-                    error.message = this.$t('usercenter.mobilePhoneConflict')
-                  }
-                  break
+              if (error.response.status === 400) {
+                error.message = 'Bad request'
+                if (error.response.data.detail === 'repeat of telephone.') {
+                  error.message = this.$t('usercenter.mobilePhoneConflict')
+                }
               }
               this.$message.error(error.message)
             }

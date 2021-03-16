@@ -149,8 +149,6 @@ export default {
         this.$message.error(this.$t('usermgmt.tip.configUserFailed'))
       })
     }
-  },
-  mounted () {
   }
 }
 </script>

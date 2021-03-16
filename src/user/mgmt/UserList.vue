@@ -229,12 +229,8 @@ export default {
   },
   watch: {
   },
-  created () {
-  },
   mounted () {
     this.getUserList()
-  },
-  beforeDestroy () {
   },
   methods: {
     handlePageSizeChange (val) {
@@ -353,8 +349,10 @@ export default {
         'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
       }
       api.updateUserStatus(userId, disallowFlag, headers).then(response => {
+        this.$message.success(disallowFlag ? this.$t('usermgmt.tip.disallowUserSuccess') : this.$t('usermgmt.tip.allowUserSuccess'))
         this.getUserList()
       }).catch(() => {
+        this.$message.error(disallowFlag ? this.$t('usermgmt.tip.disallowUserFailed') : this.$t('usermgmt.tip.allowUserFailed'))
       })
     },
     handleSetUser (row) {

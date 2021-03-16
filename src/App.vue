@@ -35,7 +35,6 @@ export default {
       isRouterAlive: true
     }
   },
-  mounted () {},
   methods: {
     reload () {
       this.isRouterAlive = false

@@ -79,8 +79,6 @@ export default {
       this.getMarkDown(name)
     }
   },
-  created () {
-  },
   mounted () {
     this.getMarkDown(this.privacyName)
     function apiHeight () {

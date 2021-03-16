@@ -22,6 +22,7 @@
     >
       <img
         src="../assets/images/logo.png"
+        alt=""
       >
     </div>
     <div

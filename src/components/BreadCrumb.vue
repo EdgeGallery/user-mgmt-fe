@@ -47,9 +47,6 @@ export default {
       type: Object
     }
   },
-  mounted () {
-
-  },
   methods: {
     jumpTo () {
       return this.path
