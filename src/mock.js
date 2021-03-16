@@ -57,31 +57,23 @@ const getLoginInfo = function () {
 }
 
 const getVerifyCode = function () {
-  return [
-    {
-    }
-  ]
+  return doNothing
 }
 
 const modifyPassword = function () {
-  return [
-    {
-    }
-  ]
+  return doNothing
 }
 
 const registerUser = function () {
-  return [
-    {
-    }
-  ]
+  return doNothing
 }
 
 const checkUniqueness = function () {
-  return [
-    {
-    }
-  ]
+  return {
+    'username': false,
+    'mailAddress': false,
+    'telephone': false
+  }
 }
 
 const getUserList = function () {

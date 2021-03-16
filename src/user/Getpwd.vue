@@ -268,8 +268,6 @@ export default {
     this.enableMail = this.obj.enable_mail
     this.retrieveType = this.enableMail ? 'ByMail' : 'BySms'
   },
-  created () {
-  },
   beforeDestroy () {
     clearTimeout(this.interval)
     this.interval = null
@@ -335,7 +333,7 @@ export default {
     },
     closeOnSuccessReset () {
       api.logout().then(res => {
-        api.logout().then(res => {
+        api.logout().then(secondRes => {
           this.to()
         })
       })
