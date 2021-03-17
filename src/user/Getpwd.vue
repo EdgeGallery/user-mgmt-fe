@@ -47,6 +47,7 @@
           </el-form-item>
           <el-form-item
             prop="telephone"
+            :error="userExistCheckError"
             v-if="enableSms && retrieveType === 'BySms'"
           >
             <el-input
@@ -59,6 +60,7 @@
           </el-form-item>
           <el-form-item
             prop="mailAddress"
+            :error="userExistCheckError"
             v-if="enableMail && retrieveType === 'ByMail'"
           >
             <el-input
@@ -69,6 +71,23 @@
               :placeholder="$t('login.mailAddr')"
             />
           </el-form-item>
+          <drag-verify
+            v-if="showDragVerify"
+            :width="verify.width"
+            :height="verify.height"
+            :text="verify.text"
+            :success-text="verify.successText"
+            :background="verify.background"
+            :progress-bar-bg="verify.progressBarBg"
+            :completed-bg="verify.completedBg"
+            :handler-bg="verify.handlerBg"
+            :handler-icon="verify.handlerIcon"
+            :text-size="verify.textSize"
+            :success-icon="verify.successIcon"
+            :circle="false"
+            ref="Verify"
+            @passcallback="verifySuccess"
+          />
           <el-form-item prop="verificationCode">
             <el-row>
               <el-col
@@ -143,9 +162,11 @@
 </template>
 <script>
 import { api } from '../tools/api.js'
+import dragVerify from 'vue-drag-verify'
 export default {
   name: 'Register',
   components: {
+    dragVerify
   },
   data () {
     var validatePass = (rule, value, callback) => {
@@ -171,6 +192,7 @@ export default {
         callback(new Error(this.$t('verify.telephoneTip')))
       } else {
         callback()
+        this.userExistCheckError = ''
       }
     }
     var validateTelRule = (rule, value, callback) => {
@@ -179,6 +201,7 @@ export default {
         callback(new Error(this.$t('login.phoneNumberRule')))
       } else {
         callback()
+        this.userExistCheckError = ''
       }
     }
     var validateMailAddress = (rule, value, callback) => {
@@ -186,6 +209,7 @@ export default {
         callback(new Error(this.$t('verify.mailAddressBlankTip')))
       } else {
         callback()
+        this.userExistCheckError = ''
       }
     }
     var validateMailAddressRule = (rule, value, callback) => {
@@ -194,6 +218,7 @@ export default {
         callback(new Error(this.$t('login.mailAddressRule')))
       } else {
         callback()
+        this.userExistCheckError = ''
       }
     }
     var validateverifycode = (rule, value, callback) => {
@@ -234,6 +259,21 @@ export default {
         mailAddress: '',
         verificationCode: ''
       },
+      showDragVerify: true,
+      verify: {
+        status: false,
+        handlerIcon: 'fa fa-angle-double-right',
+        successIcon: 'fa fa-check',
+        background: '#FFCCCC',
+        progressBarBg: '#66a542',
+        completedBg: '#66cc66',
+        handlerBg: '#f3f3f3',
+        text: this.$t('login.verify'),
+        successText: this.$t('login.finishVerify'),
+        width: 330,
+        height: 40,
+        textSize: '16px'
+      },
       ifBtnAble: false,
       time: 60,
       showTime: false,
@@ -259,6 +299,7 @@ export default {
           { validator: validatepassconfirm, trigger: 'blur' }
         ]
       },
+      userExistCheckError: '',
       regBtnLoading: false
     }
   },
@@ -287,6 +328,13 @@ export default {
     },
     to () {
       this.$router.push(this.obj.login_url)
+    },
+    verifySuccess () {
+      if (this.$refs.Verify.isPassing) {
+        this.verify.status = true
+      } else {
+        this.verify.status = false
+      }
     },
     intervalStart () {
       this.interval = setInterval(() => {
@@ -332,8 +380,8 @@ export default {
       this.$router.go(-1)
     },
     closeOnSuccessReset () {
-      api.logout().then(res => {
-        api.logout().then(secondRes => {
+      api.logout().then(() => {
+        api.logout().then(() => {
           this.to()
         })
       })
@@ -341,30 +389,51 @@ export default {
     getCaptcha () {
       let _validField = this.retrieveType === 'ByMail' ? 'mailAddress' : 'telephone'
       this.$refs['userData'].validateField(_validField, (errMsg) => {
-        if (errMsg === '') {
-          let param = this.retrieveType === 'ByMail' ? { mailAddress: this.userData.mailAddress }
-            : { telephone: this.userData.telephone }
-          let headers = {
-            'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
-          }
-          api.getCaptcha(this.retrieveType, param, headers).then(res => {
-            this.ifBtnAble = true
-            this.showTime = true
-            this.intervalStart()
-          }, error => {
-            if (error) {
-              this.$message.error(this.$t('tip.failedToGetCaptcha') + error.response.data.detail)
-            }
-            this.regBtnLoading = false
-          })
-        } else {
+        if (errMsg) {
           return false
         }
+        if (!this.verify.status) {
+          this.$message.error(this.$t('tip.wrongCaptcha'))
+          return false
+        }
+        let param = this.retrieveType === 'ByMail' ? { mailAddress: this.userData.mailAddress }
+          : { telephone: this.userData.telephone }
+        let headers = {
+          'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
+        }
+
+        api.getCaptcha(this.retrieveType, param, headers).then(res => {
+          this.resetVerify()
+          this.ifBtnAble = true
+          this.showTime = true
+          this.intervalStart()
+        }, error => {
+          this.resetVerify()
+          if (error && error.response && error.response.data) {
+            if (error.response.data.code === 100000003) {
+              this.userExistCheckError = this.$t('tip.telNotExist')
+            } else if (error.response.data.code === 100000004) {
+              this.userExistCheckError = this.$t('tip.mailNotExist')
+            } else {
+              this.$message.error(this.$t('tip.failedToGetCaptcha') + error.response.data.detail)
+            }
+          } else {
+            this.$message.error(this.$t('tip.failedToGetCaptcha'))
+          }
+        })
       })
     },
     handleChangeType () {
       this.resetFormData()
       this.$refs['userData'].resetFields()
+      this.resetVerify()
+    },
+    resetVerify () {
+      this.showDragVerify = false
+      this.verify.status = false
+      setTimeout(() => {
+        this.showDragVerify = true
+      }, 0)
     },
     resetFormData () {
       this.userData.newPassword = ''
@@ -420,6 +489,18 @@ export default {
         text-align: left;
         margin-top:15px;
         margin-bottom: 0px;
+      }
+      .verify-box em{
+        top: 0;
+      }
+      .drag_verify{
+        margin-bottom: 15px;
+        .dv_handler{
+          box-sizing: content-box;
+        }
+      }
+      .drag_verify .dv_handler i{
+        font-size: 16px;
       }
     }
     .login-certify{
