@@ -108,6 +108,8 @@ export default {
           this.jumpTo('/usermgmt/list')
         }
       }
+
+      this.setShowNavFlag(this.$route.path)
     })
   },
   methods: {
@@ -162,16 +164,19 @@ export default {
         let urlPrefix = window.location.href.indexOf('https') > -1 ? 'https://' : 'http://'
         window.location.href = urlPrefix + window.location.host + '/index.html'
       })
+    },
+    setShowNavFlag (currPath) {
+      if (this.isSuperAdmin && currPath !== '/usermgmt/center') {
+        this.isShowNav = true
+      } else {
+        this.isShowNav = false
+      }
     }
   },
   watch: {
     $route: {
       handler: function (route) {
-        if (this.isSuperAdmin && route.fullPath !== '/usermgmt/center') {
-          this.isShowNav = true
-        } else {
-          this.isShowNav = false
-        }
+        this.setShowNavFlag(route.fullPath)
       },
       immediate: true
     }
