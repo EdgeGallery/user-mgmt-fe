@@ -150,11 +150,7 @@
 export default {
   data () {
     return {
-      statusOptionList: [
-        { value: -1, label: this.$t('common.all') },
-        { value: 1, label: this.$t('usermgmt.statusValue.allowed') },
-        { value: 0, label: this.$t('usermgmt.statusValue.disallowed') }
-      ],
+      statusOptionList: [],
       formData: {
         username: '',
         mailAddress: '',
@@ -164,6 +160,14 @@ export default {
       }
     }
   },
+  watch: {
+    '$i18n.locale': function () {
+      this.initStatusOptionList()
+    }
+  },
+  mounted () {
+    this.initStatusOptionList()
+  },
   methods: {
     search () {
       this.$emit('getSearchData', this.formData)
@@ -171,6 +175,13 @@ export default {
     resetForm (formName) {
       this.$refs[formName].resetFields()
       this.$emit('getSearchData', this.formData)
+    },
+    initStatusOptionList () {
+      this.statusOptionList = [
+        { value: -1, label: this.$t('common.all') },
+        { value: 1, label: this.$t('usermgmt.statusValue.allowed') },
+        { value: 0, label: this.$t('usermgmt.statusValue.disallowed') }
+      ]
     }
   }
 }

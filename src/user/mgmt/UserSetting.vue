@@ -95,10 +95,7 @@ export default {
   },
   data () {
     return {
-      roleOptionList: [
-        { value: 'ADMIN', label: this.$t('usermgmt.roleValue.admin') },
-        { value: 'TENANT', label: this.$t('usermgmt.roleValue.tenant') }
-      ],
+      roleOptionList: [],
       platformOptionList: [
         'APPSTORE',
         'DEVELOPER',
@@ -117,9 +114,21 @@ export default {
       if (val) {
         this.init()
       }
+    },
+    '$i18n.locale': function () {
+      this.initRoleOptionList()
     }
   },
+  mounted () {
+    this.initRoleOptionList()
+  },
   methods: {
+    initRoleOptionList () {
+      this.roleOptionList = [
+        { value: 'ADMIN', label: this.$t('usermgmt.roleValue.admin') },
+        { value: 'TENANT', label: this.$t('usermgmt.roleValue.tenant') }
+      ]
+    },
     init () {
       if (this.userData.permissions && this.userData.permissions.length) {
         this.currForm.role = this.userData.permissions[0].role

@@ -217,22 +217,40 @@ export default {
       userListData: [],
 
       roleType: 'ALL',
-      roleOptionList: [
-        { value: 'ADMIN', label: this.$t('usermgmt.roleValue.admin') },
-        { value: 'TENANT', label: this.$t('usermgmt.roleValue.tenant') },
-        { value: 'GUEST', label: this.$t('usermgmt.roleValue.guest') }
-      ],
+      roleOptionList: [],
 
       showUserSettingDlg: false,
       showUserData: {}
     }
   },
   watch: {
+    '$i18n.locale': function () {
+      this.initRoleOptionList()
+    }
   },
   mounted () {
-    this.getUserList()
+    api.loginInfo().then(res => {
+      let _userName = res.data.username
+      let _isSuperAdmin = _userName && _userName === 'admin'
+      if (!_isSuperAdmin) {
+        this.$router.push('/')
+        return
+      }
+
+      this.initRoleOptionList()
+      this.getUserList()
+    }).catch(() => {
+      this.$router.push('/')
+    })
   },
   methods: {
+    initRoleOptionList () {
+      this.roleOptionList = [
+        { value: 'ADMIN', label: this.$t('usermgmt.roleValue.admin') },
+        { value: 'TENANT', label: this.$t('usermgmt.roleValue.tenant') },
+        { value: 'GUEST', label: this.$t('usermgmt.roleValue.guest') }
+      ]
+    },
     handlePageSizeChange (val) {
       this.pageCtrl.currentPage = 1
       this.pageCtrl.pageSize = val

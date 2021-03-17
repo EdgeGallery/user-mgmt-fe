@@ -300,6 +300,7 @@ export default {
         ]
       },
       userExistCheckError: '',
+      resetVerifyTimeHandler: null,
       regBtnLoading: false
     }
   },
@@ -312,6 +313,7 @@ export default {
   beforeDestroy () {
     clearTimeout(this.interval)
     this.interval = null
+    this.clearResetVerifyTimeHandler()
   },
   watch: {
     '$i18n.locale': function () {
@@ -431,9 +433,16 @@ export default {
     resetVerify () {
       this.showDragVerify = false
       this.verify.status = false
-      setTimeout(() => {
+      this.clearResetVerifyTimeHandler()
+      this.resetVerifyTimeHandler = setTimeout(() => {
         this.showDragVerify = true
       }, 0)
+    },
+    clearResetVerifyTimeHandler () {
+      if (this.resetVerifyTimeHandler) {
+        clearTimeout(this.resetVerifyTimeHandler)
+        this.resetVerifyTimeHandler = null
+      }
     },
     resetFormData () {
       this.userData.newPassword = ''
