@@ -376,7 +376,7 @@ export default {
               if (error.response.status === 400) {
                 error.message = 'Bad request'
                 if (error.response.data.detail === 'repeat of mail address.') {
-                  error.message = this.$t('usercenter.mailAddrConflict')
+                  error.message = this.$t('tip.mailAlSigned')
                 }
               }
               this.$message.error(error.message)
@@ -403,7 +403,7 @@ export default {
               if (error.response.status === 400) {
                 error.message = 'Bad request'
                 if (error.response.data.detail === 'repeat of telephone.') {
-                  error.message = this.$t('usercenter.mobilePhoneConflict')
+                  error.message = this.$t('tip.telAlSigned')
                 }
               }
               this.$message.error(error.message)

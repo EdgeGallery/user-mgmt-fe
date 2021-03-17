@@ -120,8 +120,6 @@ const cn = {
     registerTime: '注册时间：',
     emailAddr: '邮箱地址：',
     mobilePhone: '手机号码：',
-    mailAddrConflict: '邮箱地址冲突！',
-    mobilePhoneConflict: '手机号码冲突！',
     modifyPwd: '修改密码',
     oldPw: '旧密码：',
     newPw: '新密码：',
@@ -164,6 +162,8 @@ const cn = {
     nameAlSinged: '用户名已经被注册',
     telAlSigned: '手机号码已经被注册',
     mailAlSigned: '邮箱地址已经被注册',
+    telNotExist: '手机号码不存在',
+    mailNotExist: '邮箱地址不存在',
     getVerifyCodeSuc: '获取验证码成功！',
     resetPassSuc: '您的密码重置成功！',
     passDiferent: '两次密码输入不一致'
