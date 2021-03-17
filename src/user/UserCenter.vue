@@ -349,6 +349,11 @@ export default {
   mounted () {
     api.loginInfo().then(res => {
       this.currUserInfo = res.data
+      if (!this.currUserInfo.username) {
+        this.$router.push('/')
+      }
+    }).catch(() => {
+      this.$router.push('/')
     })
   },
   methods: {

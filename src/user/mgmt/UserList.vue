@@ -229,8 +229,19 @@ export default {
     }
   },
   mounted () {
-    this.initRoleOptionList()
-    this.getUserList()
+    api.loginInfo().then(res => {
+      let _userName = res.data.username
+      let _isSuperAdmin = _userName && _userName === 'admin'
+      if (!_isSuperAdmin) {
+        this.$router.push('/')
+        return
+      }
+
+      this.initRoleOptionList()
+      this.getUserList()
+    }).catch(() => {
+      this.$router.push('/')
+    })
   },
   methods: {
     initRoleOptionList () {
