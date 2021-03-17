@@ -217,22 +217,29 @@ export default {
       userListData: [],
 
       roleType: 'ALL',
-      roleOptionList: [
-        { value: 'ADMIN', label: this.$t('usermgmt.roleValue.admin') },
-        { value: 'TENANT', label: this.$t('usermgmt.roleValue.tenant') },
-        { value: 'GUEST', label: this.$t('usermgmt.roleValue.guest') }
-      ],
+      roleOptionList: [],
 
       showUserSettingDlg: false,
       showUserData: {}
     }
   },
   watch: {
+    '$i18n.locale': function () {
+      this.initRoleOptionList()
+    }
   },
   mounted () {
+    this.initRoleOptionList()
     this.getUserList()
   },
   methods: {
+    initRoleOptionList () {
+      this.roleOptionList = [
+        { value: 'ADMIN', label: this.$t('usermgmt.roleValue.admin') },
+        { value: 'TENANT', label: this.$t('usermgmt.roleValue.tenant') },
+        { value: 'GUEST', label: this.$t('usermgmt.roleValue.guest') }
+      ]
+    },
     handlePageSizeChange (val) {
       this.pageCtrl.currentPage = 1
       this.pageCtrl.pageSize = val
