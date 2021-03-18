@@ -48,116 +48,114 @@
         @getSearchData="getSearchData"
       />
       <div class="tableDiv">
-        <el-row class="table">
-          <el-table
-            :data="userListData"
-            @sort-change="doSort"
-            :default-sort="{prop: 'createTime', order: 'ascending'}"
-            v-loading="dataLoading"
-            border
-            stripe
-            size="small"
-            style="width: 100%;"
+        <el-table
+          :data="userListData"
+          @sort-change="doSort"
+          :default-sort="{prop: 'createTime', order: 'ascending'}"
+          v-loading="dataLoading"
+          border
+          stripe
+          size="small"
+          style="width: 100%;"
+        >
+          <el-table-column
+            prop="username"
+            align="center"
+            sortable="custom"
+            :label="$t('usermgmt.userName')"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            width="120"
+            align="center"
+            :label="$t('usermgmt.role')"
+            :formatter="convertRole"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            width="320"
+            align="center"
+            :label="$t('usermgmt.accessPlatform')"
+            show-overflow-tooltip
           >
-            <el-table-column
-              prop="username"
-              align="center"
-              sortable="custom"
-              :label="$t('usermgmt.userName')"
-              show-overflow-tooltip
-            />
-            <el-table-column
-              width="120"
-              align="center"
-              :label="$t('usermgmt.role')"
-              :formatter="convertRole"
-              show-overflow-tooltip
-            />
-            <el-table-column
-              width="320"
-              align="center"
-              :label="$t('usermgmt.accessPlatform')"
-              show-overflow-tooltip
-            >
-              <template slot-scope="scope">
-                <el-tag
-                  size="mini"
-                  v-for="(item,index) in scope.row.permissions"
-                  :key="index"
-                >
-                  {{ item.platform }}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column
-              width="100"
-              align="center"
-              :label="$t('usermgmt.status')"
-              :formatter="convertStatus"
-              show-overflow-tooltip
-            />
-            <el-table-column
-              prop="mailAddress"
-              align="center"
-              :label="$t('usermgmt.mailAddress')"
-              :formatter="showNoConfigOnEmpty"
-              show-overflow-tooltip
-            />
-            <el-table-column
-              prop="telephone"
-              width="150"
-              align="center"
-              :label="$t('usermgmt.telephone')"
-              :formatter="showNoConfigOnEmpty"
-              show-overflow-tooltip
-            />
-            <el-table-column
-              prop="createTime"
-              width="225"
-              align="center"
-              sortable="custom"
-              :label="$t('usermgmt.registerTime')"
-              show-overflow-tooltip
-            />
-            <el-table-column
-              :label="$t('common.operation')"
-              align="center"
-              width="200"
-              show-overflow-tooltip
-            >
-              <template slot-scope="scope">
-                <el-button
-                  id="disallowBtn"
-                  @click.native.prevent="handleUpdateUserStatus(scope.row, true)"
-                  type="text"
-                  size="small"
-                  v-if="!judgeSystemUser(scope.row) && scope.row.allowed !== undefined && scope.row.allowed"
-                >
-                  {{ $t('usermgmt.operate.disallow') }}
-                </el-button>
-                <el-button
-                  id="allowBtn"
-                  @click.native.prevent="handleUpdateUserStatus(scope.row, false)"
-                  type="text"
-                  size="small"
-                  v-if="!judgeSystemUser(scope.row) && (scope.row.allowed === undefined || !scope.row.allowed)"
-                >
-                  {{ $t('usermgmt.operate.allow') }}
-                </el-button>
-                <el-button
-                  id="settingBtn"
-                  @click.native.prevent="handleSetUser(scope.row)"
-                  type="text"
-                  size="small"
-                  v-if="!judgeSystemUser(scope.row)"
-                  :disabled="scope.row.allowed === undefined || !scope.row.allowed"
-                >
-                  {{ $t('usermgmt.operate.setting') }}
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-row>
+            <template slot-scope="scope">
+              <el-tag
+                size="mini"
+                v-for="(item,index) in scope.row.permissions"
+                :key="index"
+              >
+                {{ item.platform }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            width="100"
+            align="center"
+            :label="$t('usermgmt.status')"
+            :formatter="convertStatus"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            prop="mailAddress"
+            align="center"
+            :label="$t('usermgmt.mailAddress')"
+            :formatter="showNoConfigOnEmpty"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            prop="telephone"
+            width="150"
+            align="center"
+            :label="$t('usermgmt.telephone')"
+            :formatter="showNoConfigOnEmpty"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            prop="createTime"
+            width="225"
+            align="center"
+            sortable="custom"
+            :label="$t('usermgmt.registerTime')"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            :label="$t('common.operation')"
+            align="center"
+            width="200"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              <el-button
+                id="disallowBtn"
+                @click.native.prevent="handleUpdateUserStatus(scope.row, true)"
+                type="text"
+                size="small"
+                v-if="!judgeSystemUser(scope.row) && scope.row.allowed !== undefined && scope.row.allowed"
+              >
+                {{ $t('usermgmt.operate.disallow') }}
+              </el-button>
+              <el-button
+                id="allowBtn"
+                @click.native.prevent="handleUpdateUserStatus(scope.row, false)"
+                type="text"
+                size="small"
+                v-if="!judgeSystemUser(scope.row) && (scope.row.allowed === undefined || !scope.row.allowed)"
+              >
+                {{ $t('usermgmt.operate.allow') }}
+              </el-button>
+              <el-button
+                id="settingBtn"
+                @click.native.prevent="handleSetUser(scope.row)"
+                type="text"
+                size="small"
+                v-if="!judgeSystemUser(scope.row)"
+                :disabled="scope.row.allowed === undefined || !scope.row.allowed"
+              >
+                {{ $t('usermgmt.operate.setting') }}
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
         <div class="pageBar">
           <el-pagination
             background
@@ -229,6 +227,7 @@ export default {
     }
   },
   mounted () {
+    this.$emit('clearBgImg')
     api.loginInfo().then(res => {
       let _userName = res.data.username
       let _isSuperAdmin = _userName && _userName === 'admin'
@@ -242,6 +241,9 @@ export default {
     }).catch(() => {
       this.$router.push('/')
     })
+  },
+  beforeDestroy () {
+    this.$emit('restoreBgImg')
   },
   methods: {
     initRoleOptionList () {
@@ -401,18 +403,11 @@ export default {
   min-height: 300px;
   background: #fff;
   padding-top:20px;
-  .table {
-    margin-top: 10px;
-  }
   .tableDiv {
     margin-top: 10px;
   }
-  .btn-p{
-    height:40px;
-    padding:5px 0px;
-  }
-  .mt20 {
-    margin-top: 20px;
+  .el-tabs__nav{
+    position: static;
   }
 }
 .el-col{

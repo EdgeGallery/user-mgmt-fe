@@ -26,8 +26,8 @@ const logout = function () {
 const getLoginInfo = function () {
   return {
     'username': 'admin',
-    'mailAddress': '13800000001@edgegallery.org',
-    'telephone': '13800000001',
+    'mailAddress': '1****@edgegallery.org',
+    'telephone': '138****0001',
     'createTime': '2021-01-29 12:02:41',
     'userId': '39937079-99fe-4cd8-881f-04ca8c4fe09d',
     'permissions': [
@@ -82,9 +82,9 @@ const getUserList = function () {
     'userList': [
       {
         'username': 'admin',
-        'mailAddress': '13800000001@edgegallery.org',
-        'telephone': '13800000001',
-        'createTime': '2021-01-29 12:02:41.539379',
+        'mailAddress': '1****@edgegallery.org',
+        'telephone': '138****0001',
+        'createTime': '2021-01-29 12:02:41',
         'userId': '39937079-99fe-4cd8-881f-04ca8c4fe09d',
         'permissions': [
           {
@@ -112,8 +112,8 @@ const getUserList = function () {
       },
       {
         'username': 'guest',
-        'mailAddress': '13800000000@edgegallery.org',
-        'telephone': '13800000000',
+        'mailAddress': '1****@edgegallery.org',
+        'telephone': '138****0000',
         'createTime': '2021-01-29 12:02:41.539379',
         'userId': 'de3565b1-a7c2-42b9-b281-3f032af29ff7',
         'permissions': [
@@ -142,7 +142,7 @@ const getUserList = function () {
       },
       {
         'username': 'zhangby004',
-        'mailAddress': '13800000001@edgegallery1111.org',
+        'mailAddress': '1****@edgegallery1111.org',
         'telephone': null,
         'createTime': '2021-01-29 14:41:07.026138',
         'userId': 'd3880ea6-de44-4fff-9c55-c6fb00b99fa5',

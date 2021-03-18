@@ -24,6 +24,8 @@
       <router-view
         id="container"
         class="clearfix"
+        @clearBgImg="clearBgImg"
+        @restoreBgImg="restoreBgImg"
       />
     </div>
   </div>
@@ -38,6 +40,7 @@ export default {
   },
   data () {
     return {
+      needChangeFlag: true,
       bgImg: require('../assets/images/login2.jpg'),
       bgImgData: [
         require('../assets/images/login2.jpg'),
@@ -49,8 +52,19 @@ export default {
   },
   methods: {
     changeBgImg () {
+      if (!this.needChangeFlag) {
+        return
+      }
       let dataItem = this.bgImgData[Math.floor(Math.random() * this.bgImgData.length)]
       this.bgImg = dataItem
+    },
+    clearBgImg () {
+      this.needChangeFlag = false
+      this.bgImg = undefined
+    },
+    restoreBgImg () {
+      this.needChangeFlag = true
+      this.changeBgImg()
     }
   },
   mounted () {
