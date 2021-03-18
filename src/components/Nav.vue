@@ -52,11 +52,11 @@
     >
       <div
         class="logo lt"
-        @click="jumpTo('/')"
       >
         <img
           src="../assets/images/logo.png"
           alt=""
+          @click="jumpTo('/')"
         >
       </div>
       <div>
@@ -253,7 +253,7 @@ export default {
     width: 80%;
     max-width:430px;
     line-height: 65px;
-    margin-left:17px;
+    margin-left:10px;
     img{
       width:150px;
       position: relative;
