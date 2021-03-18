@@ -411,19 +411,22 @@ export default {
           this.intervalStart()
         }, error => {
           this.resetVerify()
-          if (error && error.response && error.response.data) {
-            if (error.response.data.code === 100000003) {
-              this.userExistCheckError = this.$t('tip.telNotExist')
-            } else if (error.response.data.code === 100000004) {
-              this.userExistCheckError = this.$t('tip.mailNotExist')
-            } else {
-              this.$message.error(this.$t('tip.failedToGetCaptcha') + error.response.data.detail)
-            }
-          } else {
-            this.$message.error(this.$t('tip.failedToGetCaptcha'))
-          }
+          this.handleGetCaptchaError(error)
         })
       })
+    },
+    handleGetCaptchaError (error) {
+      if (error && error.response && error.response.data) {
+        if (error.response.data.code === 100000003) {
+          this.userExistCheckError = this.$t('tip.telNotExist')
+        } else if (error.response.data.code === 100000004) {
+          this.userExistCheckError = this.$t('tip.mailNotExist')
+        } else {
+          this.$message.error(this.$t('tip.failedToGetCaptcha') + error.response.data.detail)
+        }
+      } else {
+        this.$message.error(this.$t('tip.failedToGetCaptcha'))
+      }
     },
     handleChangeType () {
       this.resetFormData()

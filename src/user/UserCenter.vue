@@ -223,19 +223,21 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row style="text-align:center">
-            <el-button
-              type="primary"
-              @click="submitModifyPass"
-            >
-              {{ $t('common.confirm') }}
-            </el-button>
-            <el-button
-              type="info"
-              @click="modifyPassFlag=false"
-            >
-              {{ $t('common.cancel') }}
-            </el-button>
+          <el-row style="text-align:right">
+            <el-col :span="20">
+              <el-button
+                type="primary"
+                @click="submitModifyPass"
+              >
+                {{ $t('common.confirm') }}
+              </el-button>
+              <el-button
+                type="info"
+                @click="resetModifyPass"
+              >
+                {{ $t('common.cancel') }}
+              </el-button>
+            </el-col>
           </el-row>
         </el-form>
       </div>
@@ -359,11 +361,11 @@ export default {
   methods: {
     startEditMailAddr () {
       this.editMailAddrFlag = true
-      this.basicInfoEditData.mailAddress = this.currUserInfo.mailAddress ? this.currUserInfo.mailAddress : ''
+      this.basicInfoEditData.mailAddress = ''
     },
     startEditTele () {
       this.editTelephoneFlag = true
-      this.basicInfoEditData.telephone = this.currUserInfo.telephone ? this.currUserInfo.telephone : ''
+      this.basicInfoEditData.telephone = ''
     },
     submitModifyMail () {
       this.$refs['basicInfoEditForm'].validateField('mailAddress', (errMsg) => {
@@ -375,7 +377,7 @@ export default {
           _reqData.mailAddress = this.basicInfoEditData.mailAddress
           api.modifyUser(this.currUserInfo.userId, _reqData, headers).then(response => {
             this.editMailAddrFlag = false
-            this.currUserInfo.mailAddress = this.basicInfoEditData.mailAddress
+            this.currUserInfo.mailAddress = response.data.mailAddress
           }).catch(error => {
             if (error && error.response) {
               if (error.response.status === 400) {
@@ -402,7 +404,7 @@ export default {
           _reqData.telephone = this.basicInfoEditData.telephone
           api.modifyUser(this.currUserInfo.userId, _reqData, headers).then(response => {
             this.editTelephoneFlag = false
-            this.currUserInfo.telephone = this.basicInfoEditData.telephone
+            this.currUserInfo.telephone = response.data.telephone
           }).catch(error => {
             if (error && error.response) {
               if (error.response.status === 400) {
@@ -440,8 +442,7 @@ export default {
           api.getPwd(this.modifyPassData, headers).then(res => {
             this.$message.success(this.$t('usercenter.modifyPwdSucceed'))
             setTimeout(() => {
-              this.modifyPassFlag = false
-              this.$refs['modifyPassForm'].resetFields()
+              this.resetModifyPass()
             }, 1000)
           }, error => {
             if (error) {
@@ -452,6 +453,10 @@ export default {
           return false
         }
       })
+    },
+    resetModifyPass () {
+      this.modifyPassFlag = false
+      this.$refs['modifyPassForm'].resetFields()
     },
     showNoConfigOnEmpty (value) {
       if (value === undefined || value === null || value === '') {
