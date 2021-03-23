@@ -341,14 +341,12 @@ export default {
     intervalStart () {
       this.interval = setInterval(() => {
         this.time--
-        sessionStorage.setItem('getPwdTime', this.time)
         if (this.time === 0) {
           clearTimeout(this.interval)
           this.interval = null
           this.ifBtnAble = false
           this.showTime = false
           this.time = 60
-          sessionStorage.setItem('getPwdTime', 0)
         }
       }, 1000)
     },
