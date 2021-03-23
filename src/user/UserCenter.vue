@@ -351,7 +351,7 @@ export default {
   mounted () {
     api.loginInfo().then(res => {
       this.currUserInfo = res.data
-      if (!this.currUserInfo.username) {
+      if (!this.currUserInfo.username || this.currUserInfo.username === 'guest') {
         this.$router.push('/')
       }
     }).catch(() => {

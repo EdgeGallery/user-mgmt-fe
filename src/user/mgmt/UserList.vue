@@ -227,7 +227,6 @@ export default {
     }
   },
   mounted () {
-    this.$emit('clearBgImg')
     api.loginInfo().then(res => {
       let _userName = res.data.username
       let _isSuperAdmin = _userName && _userName === 'admin'
@@ -236,6 +235,7 @@ export default {
         return
       }
 
+      this.$emit('clearBgImg')
       this.initRoleOptionList()
       this.getUserList()
     }).catch(() => {

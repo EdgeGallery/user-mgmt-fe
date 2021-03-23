@@ -178,6 +178,7 @@ export default {
       },
       username: '',
       hasLogin: false,
+      loginStatusChanged: false,
       loginBtnLoading: false,
       logoutBtnLoading: false,
       verifyStatus: false,
@@ -195,7 +196,8 @@ export default {
       width: 360,
       height: 40,
       textSize: '16px',
-      interval: null
+      interval: null,
+      getLoginInfoInterval: null
     }
   },
   watch: {
@@ -216,6 +218,10 @@ export default {
       if (this.username) {
         this.hasLogin = true
       }
+
+      this.startGetLoginInfoInterval()
+    }).catch(() => {
+      this.startGetLoginInfoInterval()
     })
     if (window.location.href.indexOf('return_to=') > -1) {
       this.returnUrl = this.getQueryString('return_to')
@@ -241,6 +247,61 @@ export default {
     this.clearInterval()
   },
   methods: {
+    startGetLoginInfoInterval () {
+      this.getLoginInfoInterval = setInterval(() => {
+        this.loginStatusChanged = false
+        api.loginInfo().then(res => {
+          let _userName = res.data.username
+          let _hasLogin = false
+          if (_userName) {
+            _hasLogin = true
+          }
+
+          if (_userName !== this.username || _hasLogin !== this.hasLogin) {
+            this.loginStatusChanged = true
+          }
+
+          this.username = _userName
+          this.hasLogin = _hasLogin
+
+          this.autoJumpToApp()
+          this.refreshPage()
+        }).catch(() => {
+          if (this.hasLogin) {
+            this.loginStatusChanged = true
+          }
+          this.username = ''
+          this.hasLogin = false
+          if (this.loginStatusChanged) {
+            location.reload()
+          }
+        })
+      }, 3000)
+    },
+    autoJumpToApp () {
+      if (!this.loginStatusChanged) {
+        return
+      }
+      if (!this.hasLogin || this.username === 'guest') {
+        return
+      }
+      let _returnUrl = this.getReturnUrl()
+      if (_returnUrl) {
+        window.location.href = decodeURIComponent(_returnUrl)
+      }
+    },
+    refreshPage () {
+      if (!this.loginStatusChanged) {
+        return
+      }
+      if (!this.hasLogin || this.username !== 'admin') {
+        return
+      }
+      let _returnUrl = this.getReturnUrl()
+      if (!_returnUrl) {
+        location.reload()
+      }
+    },
     setDivWidth () {
       let screenWidth = document.body.clientWidth
       if (screenWidth >= 1024) {
@@ -252,6 +313,9 @@ export default {
     clearInterval () {
       clearTimeout(this.interval)
       this.interval = null
+
+      clearTimeout(this.getLoginInfoInterval)
+      this.getLoginInfoInterval = null
     },
     verifySuccess () {
       if (this.$refs.Verify.isPassing) {
@@ -267,6 +331,15 @@ export default {
         return decodeURIComponent(r[2])
       }
       return null
+    },
+    getReturnUrl () {
+      if (window.location.href.indexOf('return_to=') > -1) {
+        let _returnUrl = this.getQueryString('return_to')
+        if (_returnUrl) {
+          return _returnUrl
+        }
+      }
+      return ''
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
@@ -287,7 +360,7 @@ export default {
           'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
         }
         api.login(formData, headers).then(res => {
-          window.location.href = decodeURIComponent(JSON.parse(sessionStorage.getItem('obj')).return_url)
+          this.loginSuccess()
         }).catch(error => {
           this.loginBtnLoading = false
           if (error && error.response) {
@@ -309,6 +382,14 @@ export default {
           }, 500)
         })
       })
+    },
+    loginSuccess () {
+      let _returnUrl = this.getReturnUrl()
+      if (_returnUrl) {
+        window.location.href = decodeURIComponent(_returnUrl)
+      } else {
+        this.reload()
+      }
     },
     logout () {
       api.logout().then(res => {
