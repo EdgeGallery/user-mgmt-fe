@@ -267,9 +267,6 @@ export default {
       })
     }
   },
-  created () {
-    this.keyupSubmit()
-  },
   beforeDestroy () {
     clearTimeout(this.interval)
     this.interval = null
@@ -350,14 +347,6 @@ export default {
     },
     closeSucessPop () {
       this.$router.push('/')
-    },
-    keyupSubmit () {
-      document.onkeydown = e => {
-        let _key = window.event.keyCode
-        if (_key === 13) {
-          this.submitForm()
-        }
-      }
     },
     selectLegal (val) {
       this.legalRegister = val

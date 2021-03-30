@@ -398,15 +398,16 @@ export default {
       })
     },
     keyupSubmit () {
-      document.onkeydown = e => {
-        let _key = window.event.keyCode
-        if (_key === 13) {
-          this.submitForm()
-        }
-      }
+      document.onkeydown = this.processkeyEvent
     },
     clearKeyEvent () {
       document.onkeydown = null
+    },
+    processkeyEvent (event) {
+      let _key = event.keyCode
+      if (_key === 13) {
+        this.submitForm('userData')
+      }
     },
     jumpTo (path) {
       this.$router.push(path)

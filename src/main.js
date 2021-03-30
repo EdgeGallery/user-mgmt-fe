@@ -28,6 +28,17 @@ import VueCookies from 'vue-cookies'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 axios.defaults.withCredentials = true
+axios.interceptors.response.use(res => {
+  return res
+}, error => {
+  if (error && error.response) {
+    if (error.response.status === 403) {
+      window.location.reload()
+    }
+  }
+
+  return Promise.reject(error)
+})
 Vue.use(ElementUI, { locale })
 Vue.use(VueCookies)
 Vue.use(mavonEditor)
