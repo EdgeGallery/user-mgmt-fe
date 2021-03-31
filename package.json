@@ -10,25 +10,14 @@
     "eslint": "eslint -f checkstyle --ext .js,.vue src -o eslint_result.xml"
   },
   "dependencies": {
-    "a": "^2.1.2",
-    "acorn": "^7.2.0",
-    "auth0-js": "9.12.2",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "core-js": "^3.3.2",
-    "deep-extend": "^0.6.0",
     "element-ui": "^2.12.0",
-    "elliptic": "^6.5.3",
-    "http-proxy": "^1.18.1",
-    "http-proxy-agent": "^4.0.1",
     "less-loader": "^5.0.0",
-    "lodash": "^4.17.15",
-    "mavon-editor": "^2.9.0",
-    "sass-loader": "^8.0.0",
-    "serialize-javascript": "^4.0.0",
+    "mavon-editor": "^2.9.1",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.0",
     "vue-drag-verify": "^1.0.6",
-    "vue-generate-component": "^3.0.0",
     "vue-i18n": "^8.15.3",
     "vue-router": "^3.1.3",
     "vuex": "^3.1.3"
@@ -45,7 +34,8 @@
     "eslint-plugin-vue": "^5.2.3",
     "less": "^3.10.3",
     "mockjs": "^1.1.0",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "sass-loader": "^8.0.0"
   },
   "eslintConfig": {
     "root": true,
