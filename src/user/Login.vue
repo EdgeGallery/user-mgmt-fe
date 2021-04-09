@@ -304,7 +304,7 @@ export default {
     },
     setDivWidth () {
       let screenWidth = document.body.clientWidth
-      if (screenWidth >= 1024) {
+      if (screenWidth >= 641) {
         this.width = 360
       } else {
         this.width = 260
