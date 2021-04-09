@@ -458,6 +458,11 @@ export default {
       }
     }
   }
+  @media screen and (max-width: 1380px) {
+    .loginBox{
+      margin: 140px 10px 0 0;
+    }
+  }
   @media screen and (max-width: 1024px) {
     .loginBox{
       margin: 200px 10px 0 0;
@@ -466,6 +471,7 @@ export default {
   @media screen and (max-width: 640px) {
     .loginBox{
       width: 340px;
+      margin: 140px 10px 0 0;
     }
   }
   .login-btn {

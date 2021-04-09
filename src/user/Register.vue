@@ -438,6 +438,16 @@ export default {
       text-align: left;
     }
   }
+  @media screen and (max-width: 1380px) {
+    .loginBox{
+      margin: 60px 10px 0 0;
+    }
+  }
+  @media screen and (max-width: 800px) {
+    .loginBox{
+      margin: 120px 10px 0 0;
+    }
+  }
   @media screen and (max-width: 640px) {
     .loginBox{
       margin: 160px 10px 0 0;
