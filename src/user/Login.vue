@@ -55,6 +55,10 @@
           </el-form-item>
         </el-form>
       </div>
+      <Verify
+        v-if="!hasLogin"
+        @validateVerifyCodeSuccess="validateVerifyCodeSuccess"
+      />
       <div
         class="login-area"
         v-if="hasLogin"
@@ -64,27 +68,6 @@
         >
           {{ username }}{{ $t('login.hasLogin') }}
         </p>
-      </div>
-      <div
-        class="login-btn"
-        v-if="!hasLogin"
-      >
-        <drag-verify
-          :width="width"
-          :height="height"
-          :text="text"
-          :success-text="successText"
-          :background="background"
-          :progress-bar-bg="progressBarBg"
-          :completed-bg="completedBg"
-          :handler-bg="handlerBg"
-          :handler-icon="handlerIcon"
-          :text-size="textSize"
-          :success-icon="successIcon"
-          :circle="false"
-          ref="Verify"
-          @passcallback="verifySuccess"
-        />
       </div>
       <div
         class="login-btn"
@@ -139,13 +122,12 @@
   </div>
 </template>
 <script>
-import 'font-awesome/css/font-awesome.min.css'
-import dragVerify from 'vue-drag-verify'
 import { api } from '../tools/api.js'
+import Verify from '../components/Verify.vue'
 export default {
-  name: '',
+  name: 'Login',
   components: {
-    dragVerify
+    Verify
   },
   inject: ['reload'],
   data () {
@@ -166,7 +148,8 @@ export default {
     return {
       userData: {
         username: '',
-        password: ''
+        password: '',
+        verificationCode: ''
       },
       rules: {
         username: [
@@ -181,29 +164,20 @@ export default {
       loginStatusChanged: false,
       loginBtnLoading: false,
       logoutBtnLoading: false,
-      verifyStatus: false,
+
       returnUrl: '',
       enableSms: '',
       enableMail: '',
-      handlerIcon: 'fa fa-angle-double-right',
-      successIcon: 'fa fa-check',
-      background: '#FFCCCC',
-      progressBarBg: '#66a542',
-      completedBg: '#66cc66',
-      handlerBg: '#f3f3f3',
-      text: this.$t('login.verify'),
-      successText: this.$t('login.finishVerify'),
-      width: 360,
-      height: 40,
-      textSize: '16px',
-      interval: null,
       getLoginInfoInterval: null
     }
   },
   watch: {
     '$i18n.locale': function () {
-      this.text = this.$t('login.verify')
-      this.successText = this.$t('login.finishVerify')
+      this.$refs['userData'].fields.forEach(item => {
+        if (item.validateState === 'error') {
+          this.$refs['userData'].validateField(item.labelFor)
+        }
+      })
     }
   },
   created () {
@@ -235,9 +209,6 @@ export default {
       }
       sessionStorage.setItem('obj', JSON.stringify(obj))
     }
-    this.interval = setInterval(() => {
-      this.setDivWidth()
-    }, 100)
     let userInfo = JSON.parse(sessionStorage.getItem('userinfo'))
     if (userInfo) {
       this.userData.username = userInfo.username
@@ -302,27 +273,9 @@ export default {
         location.reload()
       }
     },
-    setDivWidth () {
-      let screenWidth = document.body.clientWidth
-      if (screenWidth >= 641) {
-        this.width = 360
-      } else {
-        this.width = 260
-      }
-    },
     clearInterval () {
-      clearTimeout(this.interval)
-      this.interval = null
-
       clearTimeout(this.getLoginInfoInterval)
       this.getLoginInfoInterval = null
-    },
-    verifySuccess () {
-      if (this.$refs.Verify.isPassing) {
-        this.verifyStatus = true
-      } else {
-        this.verifyStatus = false
-      }
     },
     getQueryString (name) {
       let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
@@ -342,46 +295,57 @@ export default {
       return ''
     },
     submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate()
+      this.$root.$emit('validateVerifyForm')
+    },
+    validateVerifyCodeSuccess (verifyCode) {
+      this.$refs['userData'].validate((valid) => {
         if (!valid) {
           return false
         }
-        if (!this.verifyStatus) {
-          this.$message.error(this.$t('tip.wrongCaptcha'))
-          return false
-        }
-        this.loginBtnLoading = true
-        let formData = new FormData()
-        Object.keys(this.userData).forEach(item => {
-          formData.append(item, this.userData[item])
-        })
-        let headers = {
-          'Content-Type': 'multipart/form-data',
-          'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
-        }
-        api.login(formData, headers).then(res => {
-          this.loginSuccess()
-        }).catch(error => {
-          this.loginBtnLoading = false
-          if (error && error.response) {
-            switch (error.response.status) {
-              case 400:
-                error.message = 'Bad request'
-                break
-              case 401:
-                error.message = this.$t('login.loginFail')
-                break
-              case 423:
-                error.message = this.$t('login.userLock')
-                break
-            }
-            this.$message.error(error.message)
-          }
-          setTimeout(() => {
-            this.reload()
-          }, 500)
-        })
+
+        this.userData.verificationCode = verifyCode
+        this.submitLogin()
       })
+    },
+    submitLogin () {
+      this.loginBtnLoading = true
+      let formData = new FormData()
+      Object.keys(this.userData).forEach(item => {
+        formData.append(item, this.userData[item])
+      })
+      let headers = {
+        'Content-Type': 'multipart/form-data',
+        'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
+      }
+      api.login(formData, headers).then(res => {
+        this.loginSuccess()
+      }).catch(error => {
+        this.loginBtnLoading = false
+        if (error && error.response) {
+          switch (error.response.status) {
+            case 400:
+              error.message = 'Bad request'
+              break
+            case 401:
+              error.message = this.$t('login.loginFail')
+              break
+            case 423:
+              error.message = this.$t('login.userLock')
+              break
+          }
+          this.$message.error(error.message)
+        }
+        let _resetLoginTimer = setTimeout(() => {
+          clearTimeout(_resetLoginTimer)
+          _resetLoginTimer = null
+          this.resetLogin()
+        }, 1000)
+      })
+    },
+    resetLogin () {
+      this.$refs['userData'].resetFields()
+      this.$root.$emit('resetVerifyForm')
     },
     loginSuccess () {
       let _returnUrl = this.getReturnUrl()
@@ -482,15 +446,6 @@ export default {
     }
     .verify-box em{
       top: 0;
-    }
-    .drag_verify{
-      margin-bottom: 15px;
-      .dv_handler{
-        box-sizing: content-box;
-      }
-    }
-    .drag_verify .dv_handler i{
-      font-size: 16px;
     }
   }
   .login-tips {

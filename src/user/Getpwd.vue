@@ -25,7 +25,10 @@
         :rules="rules"
         ref="userData"
       >
-        <div class="login-area">
+        <div
+          class="login-area"
+          v-show="currStep==1"
+        >
           <el-form-item v-if="enableSms && enableMail">
             <el-radio-group
               v-model="retrieveType"
@@ -47,7 +50,6 @@
           </el-form-item>
           <el-form-item
             prop="telephone"
-            :error="userExistCheckError"
             v-if="enableSms && retrieveType === 'BySms'"
           >
             <el-input
@@ -60,7 +62,6 @@
           </el-form-item>
           <el-form-item
             prop="mailAddress"
-            :error="userExistCheckError"
             v-if="enableMail && retrieveType === 'ByMail'"
           >
             <el-input
@@ -71,23 +72,18 @@
               :placeholder="$t('login.mailAddr')"
             />
           </el-form-item>
-          <drag-verify
-            v-if="showDragVerify"
-            :width="verify.width"
-            :height="verify.height"
-            :text="verify.text"
-            :success-text="verify.successText"
-            :background="verify.background"
-            :progress-bar-bg="verify.progressBarBg"
-            :completed-bg="verify.completedBg"
-            :handler-bg="verify.handlerBg"
-            :handler-icon="verify.handlerIcon"
-            :text-size="verify.textSize"
-            :success-icon="verify.successIcon"
-            :circle="false"
-            ref="Verify"
-            @passcallback="verifySuccess"
-          />
+        </div>
+        <Verify
+          v-show="currStep==1"
+          @validateVerifyCodeSuccess="validateVerifyCodeSuccess"
+        />
+        <div
+          class="login-area"
+          v-show="currStep==2"
+        >
+          <p class="get-captcha-hint">
+            {{ $t('login.sendCaptchaTo') }}{{ anomymizedReceiver }}
+          </p>
           <el-form-item prop="verificationCode">
             <el-row>
               <el-col
@@ -97,6 +93,7 @@
                 <el-input
                   v-model="userData.verificationCode"
                   type="text"
+                  maxlength="6"
                   :placeholder="$t('login.capPla')"
                   style="margin-top:0;"
                 />
@@ -139,10 +136,29 @@
         </div>
         <div style="margin-top:20px;">
           <el-button
+            v-if="currStep==1"
+            id="nextBtn"
+            type="primary"
+            size="medium"
+            @click="goNext()"
+          >
+            {{ $t('common.next') }}
+          </el-button>
+          <el-button
+            v-if="currStep==2"
+            id="prevBtn"
+            type="primary"
+            size="medium"
+            @click="goPrev()"
+          >
+            {{ $t('common.prev') }}
+          </el-button>
+          <el-button
+            v-if="currStep==2"
             id="submitBtn"
             type="primary"
             size="medium"
-            :loading="regBtnLoading"
+            :loading="confirmBtnLoading"
             @click="submitForm('userData')"
           >
             {{ $t('common.submit') }}
@@ -151,7 +167,7 @@
             id="cancelBtn"
             type="primary"
             size="medium"
-            @click="closeSucessPop()"
+            @click="handleCancel()"
           >
             {{ $t('common.cancel') }}
           </el-button>
@@ -162,11 +178,12 @@
 </template>
 <script>
 import { api } from '../tools/api.js'
-import dragVerify from 'vue-drag-verify'
+import { anomymizeMail, anomymizeTelphone } from '../tools/util'
+import Verify from '../components/Verify.vue'
 export default {
-  name: 'Register',
+  name: 'Getpwd',
   components: {
-    dragVerify
+    Verify
   },
   data () {
     var validatePass = (rule, value, callback) => {
@@ -187,38 +204,48 @@ export default {
         callback()
       }
     }
-    var validatetelephone = (rule, value, callback) => {
-      if (this.retrieveType === 'BySms' && value === '') {
+    var validateTelephone = (rule, value, callback) => {
+      if (this.isRetrieveBySms() && value === '') {
         callback(new Error(this.$t('verify.telephoneTip')))
       } else {
         callback()
-        this.userExistCheckError = ''
       }
     }
     var validateTelRule = (rule, value, callback) => {
       let pattern = /^1[34578]\d{9}$/
-      if (this.retrieveType === 'BySms' && value.match(pattern) === null) {
+      if (this.isRetrieveBySms() && value.match(pattern) === null) {
         callback(new Error(this.$t('login.phoneNumberRule')))
       } else {
         callback()
-        this.userExistCheckError = ''
+      }
+    }
+    var validateTelephoneExist = (rule, value, callback) => {
+      if (this.isRetrieveBySms()) {
+        this.checkIfExist(callback)
+      } else {
+        callback()
       }
     }
     var validateMailAddress = (rule, value, callback) => {
-      if (this.retrieveType === 'ByMail' && value === '') {
+      if (this.isRetrieveByMail() && value === '') {
         callback(new Error(this.$t('verify.mailAddressBlankTip')))
       } else {
         callback()
-        this.userExistCheckError = ''
       }
     }
     var validateMailAddressRule = (rule, value, callback) => {
       let pattern = /^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)*@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-      if (this.retrieveType === 'ByMail' && value.match(pattern) === null) {
+      if (this.isRetrieveByMail() && value.match(pattern) === null) {
         callback(new Error(this.$t('login.mailAddressRule')))
       } else {
         callback()
-        this.userExistCheckError = ''
+      }
+    }
+    var validateMailAddressExist = (rule, value, callback) => {
+      if (this.isRetrieveByMail()) {
+        this.checkIfExist(callback)
+      } else {
+        callback()
       }
     }
     var validateverifycode = (rule, value, callback) => {
@@ -239,7 +266,7 @@ export default {
         callback()
       }
     }
-    var validatepassconfirm = (rule, value, callback) => {
+    var validateConfirmPass = (rule, value, callback) => {
       if (this.confirmPassword !== this.userData.newPassword) {
         callback(new Error(this.$t('tip.passDiferent')))
       } else {
@@ -247,10 +274,12 @@ export default {
       }
     }
     return {
+      currStep: 1,
       obj: {},
       enableSms: false,
       enableMail: false,
       retrieveType: '',
+      imgVerificationCode: '',
       confirmPassword: '',
       userData: {
         type: 2,
@@ -258,21 +287,6 @@ export default {
         telephone: '',
         mailAddress: '',
         verificationCode: ''
-      },
-      showDragVerify: true,
-      verify: {
-        status: false,
-        handlerIcon: 'fa fa-angle-double-right',
-        successIcon: 'fa fa-check',
-        background: '#FFCCCC',
-        progressBarBg: '#66a542',
-        completedBg: '#66cc66',
-        handlerBg: '#f3f3f3',
-        text: this.$t('login.verify'),
-        successText: this.$t('login.finishVerify'),
-        width: 330,
-        height: 40,
-        textSize: '16px'
       },
       ifBtnAble: false,
       time: 60,
@@ -284,24 +298,25 @@ export default {
           { validator: validatePassRule }
         ],
         telephone: [
-          { validator: validatetelephone, trigger: 'blur' },
-          { validator: validateTelRule }
+          { validator: validateTelephone, trigger: 'blur' },
+          { validator: validateTelRule },
+          { validator: validateTelephoneExist, trigger: 'blur' }
         ],
         mailAddress: [
           { validator: validateMailAddress, trigger: 'blur' },
-          { validator: validateMailAddressRule }
+          { validator: validateMailAddressRule },
+          { validator: validateMailAddressExist, trigger: 'blur' }
         ],
         verificationCode: [
           { validator: validateverifycode, trigger: 'blur' },
           { validator: validateVerifyRule }
         ],
         confirmPassword: [
-          { validator: validatepassconfirm, trigger: 'blur' }
+          { validator: validateConfirmPass, trigger: 'blur' }
         ]
       },
-      userExistCheckError: '',
-      resetVerifyTimeHandler: null,
-      regBtnLoading: false
+      anomymizedReceiver: '',
+      confirmBtnLoading: false
     }
   },
   mounted () {
@@ -311,9 +326,7 @@ export default {
     this.retrieveType = this.enableMail ? 'ByMail' : 'BySms'
   },
   beforeDestroy () {
-    clearTimeout(this.interval)
-    this.interval = null
-    this.clearResetVerifyTimeHandler()
+    this.clearInterval()
   },
   watch: {
     '$i18n.locale': function () {
@@ -325,48 +338,100 @@ export default {
     }
   },
   methods: {
-    jumpTo (path) {
-      this.$router.push(path)
+    goNext () {
+      let _validField = this.isRetrieveByMail() ? 'mailAddress' : 'telephone'
+      this.$refs['userData'].validateField(_validField)
+
+      this.$root.$emit('validateVerifyForm')
     },
-    to () {
-      this.$router.push(this.obj.login_url)
+    validateVerifyCodeSuccess (verifyCode) {
+      let _validField = this.isRetrieveByMail() ? 'mailAddress' : 'telephone'
+      this.$refs['userData'].validateField(_validField, (errMsg) => {
+        if (errMsg) {
+          return false
+        }
+
+        this.currStep = 2
+        this.imgVerificationCode = verifyCode
+        this.anomymizedReceiver = this.anomymizeReceiver()
+      })
     },
-    verifySuccess () {
-      if (this.$refs.Verify.isPassing) {
-        this.verify.status = true
-      } else {
-        this.verify.status = false
+    checkIfExist (callback) {
+      let param = {
+        username: '',
+        mailAddress: this.isRetrieveByMail() ? this.userData.mailAddress : '',
+        telephone: this.isRetrieveBySms() ? this.userData.telephone : ''
       }
+      let headers = {
+        'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
+      }
+      api.uniqueness(param, headers).then(res => {
+        if (res.data) {
+          if (this.isRetrieveBySms() && !res.data.telephone) {
+            callback(new Error(this.$t('tip.telNotExist')))
+          } else if (this.isRetrieveByMail() && !res.data.mailAddress) {
+            callback(new Error(this.$t('tip.mailNotExist')))
+          } else {
+            callback()
+          }
+        }
+      })
+    },
+    goPrev () {
+      let _mailAddr = this.userData.mailAddress
+      let _telephone = this.userData.telephone
+
+      this.resetFormData()
+      this.$refs['userData'].resetFields()
+      this.$root.$emit('resetVerifyForm')
+
+      this.userData.mailAddress = _mailAddr
+      this.userData.telephone = _telephone
+
+      this.resetCaptchaTimer()
+
+      this.currStep = 1
     },
     intervalStart () {
       this.interval = setInterval(() => {
         this.time--
         if (this.time === 0) {
-          clearTimeout(this.interval)
-          this.interval = null
-          this.ifBtnAble = false
-          this.showTime = false
-          this.time = 60
+          this.resetCaptchaTimer()
         }
       }, 1000)
+    },
+    clearInterval () {
+      clearTimeout(this.interval)
+      this.interval = null
+    },
+    resetCaptchaTimer () {
+      this.clearInterval()
+      this.ifBtnAble = false
+      this.showTime = false
+      this.time = 60
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.userData.newPassword === this.confirmPassword) {
-            this.regBtnLoading = true
+            this.confirmBtnLoading = true
             let headers = {
               'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
             }
             api.getPwd(this.userData, headers).then(res => {
               this.$message.success(this.$t('tip.resetPassSuc'))
-              this.regBtnLoading = false
+              this.confirmBtnLoading = false
               this.closeOnSuccessReset()
             }, error => {
               if (error) {
                 this.$message.error(this.$t('tip.failedReset'))
               }
-              this.regBtnLoading = false
+              this.confirmBtnLoading = false
+              let _goPrevTimer = setTimeout(() => {
+                this.goPrev()
+                clearTimeout(_goPrevTimer)
+                _goPrevTimer = null
+              }, 1000)
             })
           } else {
             this.$message.error('The two password are different')
@@ -376,49 +441,37 @@ export default {
         }
       })
     },
-    closeSucessPop () {
+    handleCancel () {
       this.$router.go(-1)
     },
     closeOnSuccessReset () {
       api.logout().then(() => {
         api.logout().then(() => {
-          this.to()
+          this.$router.push(this.obj.login_url)
         })
       })
     },
     getCaptcha () {
-      let _validField = this.retrieveType === 'ByMail' ? 'mailAddress' : 'telephone'
-      this.$refs['userData'].validateField(_validField, (errMsg) => {
-        if (errMsg) {
-          return false
-        }
-        if (!this.verify.status) {
-          this.$message.error(this.$t('tip.wrongCaptcha'))
-          return false
-        }
-        let param = this.retrieveType === 'ByMail' ? { mailAddress: this.userData.mailAddress }
-          : { telephone: this.userData.telephone }
-        let headers = {
-          'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
-        }
-
-        api.getCaptcha(this.retrieveType, param, headers).then(res => {
-          this.resetVerify()
-          this.ifBtnAble = true
-          this.showTime = true
-          this.intervalStart()
-        }, error => {
-          this.resetVerify()
-          this.handleGetCaptchaError(error)
-        })
+      let param = this.isRetrieveByMail() ? { mailAddress: this.userData.mailAddress }
+        : { telephone: this.userData.telephone }
+      param.verificationCode = this.imgVerificationCode
+      let headers = {
+        'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
+      }
+      api.getCaptcha(this.retrieveType, param, headers).then(res => {
+        this.ifBtnAble = true
+        this.showTime = true
+        this.intervalStart()
+      }, error => {
+        this.handleGetCaptchaError(error)
       })
     },
     handleGetCaptchaError (error) {
       if (error && error.response && error.response.data) {
         if (error.response.data.code === 100000003) {
-          this.userExistCheckError = this.$t('tip.telNotExist')
+          this.$message.error(this.$t('tip.telNotExist'))
         } else if (error.response.data.code === 100000004) {
-          this.userExistCheckError = this.$t('tip.mailNotExist')
+          this.$message.error(this.$t('tip.mailNotExist'))
         } else {
           this.$message.error(this.$t('tip.failedToGetCaptcha') + error.response.data.detail)
         }
@@ -429,21 +482,7 @@ export default {
     handleChangeType () {
       this.resetFormData()
       this.$refs['userData'].resetFields()
-      this.resetVerify()
-    },
-    resetVerify () {
-      this.showDragVerify = false
-      this.verify.status = false
-      this.clearResetVerifyTimeHandler()
-      this.resetVerifyTimeHandler = setTimeout(() => {
-        this.showDragVerify = true
-      }, 0)
-    },
-    clearResetVerifyTimeHandler () {
-      if (this.resetVerifyTimeHandler) {
-        clearTimeout(this.resetVerifyTimeHandler)
-        this.resetVerifyTimeHandler = null
-      }
+      this.$root.$emit('resetVerifyForm')
     },
     resetFormData () {
       this.userData.newPassword = ''
@@ -452,6 +491,20 @@ export default {
       this.userData.verificationCode = ''
 
       this.confirmPassword = ''
+      this.imgVerificationCode = ''
+    },
+    anomymizeReceiver () {
+      if (this.isRetrieveByMail()) {
+        return anomymizeMail(this.userData.mailAddress)
+      } else {
+        return anomymizeTelphone(this.userData.telephone)
+      }
+    },
+    isRetrieveByMail () {
+      return this.retrieveType === 'ByMail'
+    },
+    isRetrieveBySms () {
+      return this.retrieveType === 'BySms'
     }
   }
 }
@@ -462,8 +515,7 @@ export default {
   background-size:cover;
   .loginBox{
     float: right;
-    width: 80%;
-    max-width: 410px;
+    width: 440px;
     height: auto;
     text-align: center;
     margin: 240px 10% 0 0;
@@ -500,32 +552,15 @@ export default {
         margin-top:15px;
         margin-bottom: 0px;
       }
-      .verify-box em{
-        top: 0;
-      }
-      .drag_verify{
-        margin-bottom: 15px;
-        .dv_handler{
-          box-sizing: content-box;
-        }
-      }
-      .drag_verify .dv_handler i{
-        font-size: 16px;
-      }
     }
-    .login-certify{
-      padding: 0 25px;
-      margin:25px 0;
-      span{
-        display:inline-block;
-        width:100%;
-        height:100%;
-        line-height: 38px;
-        border:1px solid #ddd;
-        border-radius: 5px;
-        font-size:18px;
-        font-weight:bold;
-      }
+    .get-captcha-hint{
+      display: inline-block;
+      width: 100%;
+      line-height: 18px;
+      font-size: 12px;
+      font-family: PingFangSC-Medium,sans-serif;
+      color: #252B3A;
+      margin-bottom:25px;
     }
   }
   @media screen and (max-width: 1380px) {

@@ -360,8 +360,8 @@ export default {
   height:100%;
   .loginBox{
     float: right;
-    width: 80%;
-    max-width: 410px;
+    width: 440px;
+    height: auto;
     text-align: center;
     margin: 180px 10% 0 0;
     padding:0 15px;

@@ -50,6 +50,12 @@ let api = {
       url: '/auth/logout'
     })
   },
+  checkVerificationCode (verificationCode) {
+    return axios({
+      method: 'GET',
+      url: '/v1/identity/verifycode-image/check?verifyCode=' + verificationCode
+    })
+  },
   getCaptcha (retrieveType, params, headers) {
     let _url = retrieveType === 'ByMail' ? '/v1/identity/mail' : '/v1/identity/sms'
     return POST(_url, params, headers)
