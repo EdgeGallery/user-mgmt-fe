@@ -85,6 +85,9 @@
             />
           </el-form-item>
         </div>
+        <Verify
+          @validateVerifyCodeSuccess="validateVerifyCodeSuccess"
+        />
         <div>
           <p class="register-hint">
             {{ $t('login.registerHint') }}
@@ -126,7 +129,7 @@
               id="cancelBtn"
               type="primary"
               size="medium"
-              @click="closeSucessPop()"
+              @click="handleCancel()"
             >
               {{ $t('common.cancel') }}
             </el-button>
@@ -138,9 +141,11 @@
 </template>
 <script>
 import { api } from '../tools/api.js'
+import Verify from '../components/Verify.vue'
 export default {
   name: 'Register',
   components: {
+    Verify
   },
   data () {
     var validateName = (rule, value, callback) => {
@@ -217,17 +222,13 @@ export default {
       this.verifyUnique(3, callback)
     }
     return {
-      visible: false,
-      ifBtnAble: false,
-      time: 60,
-      showTime: false,
-      interval: null,
       userData: {
         username: '',
         password: '',
         checkPass: '',
         telephone: '',
-        mailAddress: ''
+        mailAddress: '',
+        verificationCode: ''
       },
       rules: {
         username: [
@@ -267,10 +268,6 @@ export default {
       })
     }
   },
-  beforeDestroy () {
-    clearTimeout(this.interval)
-    this.interval = null
-  },
   methods: {
     jumpBlank (name) {
       sessionStorage.setItem('privacyName', name)
@@ -308,44 +305,38 @@ export default {
         }
       })
     },
-    intervalStart () {
-      this.interval = setInterval(() => {
-        this.time--
-        sessionStorage.setItem('time', this.time)
-        if (this.time === 0) {
-          clearTimeout(this.interval)
-          this.interval = null
-          this.ifBtnAble = false
-          this.showTime = false
-          this.time = 60
-          sessionStorage.removeItem('time')
-        }
-      }, 1000)
-    },
     submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid && this.legalRegister) {
-          this.regBtnLoading = true
-          delete this.userData.checkPass
-          let headers = {
-            'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
-          }
-          api.register(this.userData, headers).then(res => {
-            this.$message.success(this.$t('tip.regUserSuc'))
-            this.regBtnLoading = false
-            this.to()
-          }, error => {
-            if (error) {
-              this.$message.error(this.$t('tip.failedReg'))
-            }
-            this.regBtnLoading = false
-          })
-        } else {
+      this.$refs[formName].validate()
+      this.$root.$emit('validateVerifyForm')
+    },
+    validateVerifyCodeSuccess (verifyCode) {
+      this.$refs['userData'].validate((valid) => {
+        if (!valid || !this.legalRegister) {
           return false
         }
+
+        this.userData.verificationCode = verifyCode
+        this.submitRegister()
       })
     },
-    closeSucessPop () {
+    submitRegister () {
+      this.regBtnLoading = true
+      delete this.userData.checkPass
+      let headers = {
+        'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
+      }
+      api.register(this.userData, headers).then(res => {
+        this.$message.success(this.$t('tip.regUserSuc'))
+        this.regBtnLoading = false
+        this.to()
+      }, error => {
+        if (error) {
+          this.$message.error(this.$t('tip.failedReg'))
+        }
+        this.regBtnLoading = false
+      })
+    },
+    handleCancel () {
       this.$router.push('/')
     },
     selectLegal (val) {
