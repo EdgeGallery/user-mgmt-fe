@@ -392,6 +392,13 @@ export default {
 
       this.currStep = 1
     },
+    delayGoPrev () {
+      let _goPrevTimer = setTimeout(() => {
+        this.goPrev()
+        clearTimeout(_goPrevTimer)
+        _goPrevTimer = null
+      }, 1000)
+    },
     intervalStart () {
       this.interval = setInterval(() => {
         this.time--
@@ -427,11 +434,7 @@ export default {
                 this.$message.error(this.$t('tip.failedReset'))
               }
               this.confirmBtnLoading = false
-              let _goPrevTimer = setTimeout(() => {
-                this.goPrev()
-                clearTimeout(_goPrevTimer)
-                _goPrevTimer = null
-              }, 1000)
+              this.delayGoPrev()
             })
           } else {
             this.$message.error('The two password are different')
@@ -454,21 +457,23 @@ export default {
     getCaptcha () {
       let param = this.isRetrieveByMail() ? { mailAddress: this.userData.mailAddress }
         : { telephone: this.userData.telephone }
-      param.verificationCode = this.imgVerificationCode
       let headers = {
         'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
       }
-      api.getCaptcha(this.retrieveType, param, headers).then(res => {
+      api.getCaptcha(this.retrieveType, this.imgVerificationCode, param, headers).then(res => {
         this.ifBtnAble = true
         this.showTime = true
         this.intervalStart()
       }, error => {
         this.handleGetCaptchaError(error)
+        this.delayGoPrev()
       })
     },
     handleGetCaptchaError (error) {
       if (error && error.response && error.response.data) {
-        if (error.response.data.code === 100000003) {
+        if (error.response.data.msg && error.response.data.msg === 'verification code incorrect') {
+          this.$message.error(this.$t('verify.imgVerifycodeWrong'))
+        } else if (error.response.data.code === 100000003) {
           this.$message.error(this.$t('tip.telNotExist'))
         } else if (error.response.data.code === 100000004) {
           this.$message.error(this.$t('tip.mailNotExist'))

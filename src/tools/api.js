@@ -29,10 +29,10 @@ function PUT (url, params, headers) {
 }
 
 let api = {
-  login (params, headers) {
+  login (params, verificationCode, headers) {
     return axios({
       method: 'POST',
-      url: '/login',
+      url: '/login?verifyCode=' + verificationCode,
       withCredentials: true,
       headers: headers,
       data: params
@@ -53,18 +53,19 @@ let api = {
   checkVerificationCode (verificationCode) {
     return axios({
       method: 'GET',
-      url: '/v1/identity/verifycode-image/check?verifyCode=' + verificationCode
+      url: '/v1/identity/verifycode-image/precheck?verifyCode=' + verificationCode
     })
   },
-  getCaptcha (retrieveType, params, headers) {
+  getCaptcha (retrieveType, verificationCode, params, headers) {
     let _url = retrieveType === 'ByMail' ? '/v1/identity/mail' : '/v1/identity/sms'
+    _url += '?verifyCode=' + verificationCode
     return POST(_url, params, headers)
   },
   getPwd (params, headers) {
     return PUT('/v1/users/password', params, headers)
   },
-  register (params, headers) {
-    return POST('/v1/users', params, headers)
+  register (params, verificationCode, headers) {
+    return POST('/v1/users?verifyCode=' + verificationCode, params, headers)
   },
   uniqueness (params, headers) {
     return POST('/v1/users/action/uniqueness', params, headers)

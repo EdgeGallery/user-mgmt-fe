@@ -227,9 +227,9 @@ export default {
         password: '',
         checkPass: '',
         telephone: '',
-        mailAddress: '',
-        verificationCode: ''
+        mailAddress: ''
       },
+      verificationCode: '',
       rules: {
         username: [
           { validator: validateName, trigger: 'blur' },
@@ -315,7 +315,7 @@ export default {
           return false
         }
 
-        this.userData.verificationCode = verifyCode
+        this.verificationCode = verifyCode
         this.submitRegister()
       })
     },
@@ -325,7 +325,7 @@ export default {
       let headers = {
         'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
       }
-      api.register(this.userData, headers).then(res => {
+      api.register(this.userData, this.verificationCode, headers).then(res => {
         this.$message.success(this.$t('tip.regUserSuc'))
         this.regBtnLoading = false
         this.to()

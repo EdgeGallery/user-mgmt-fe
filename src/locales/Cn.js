@@ -154,7 +154,7 @@ const cn = {
     verifyCodeTip: '验证码不能为空',
     verifycodeRule: '请输入6位数字的验证码',
     imgVerifycodeRule: '请输入4位数字的验证码',
-    imgVerifycodeWrong: '验证码错误'
+    imgVerifycodeWrong: '验证码错误或已失效'
   },
   tip: {
     failedReg: '注册用户失败，请重试',

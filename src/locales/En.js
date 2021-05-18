@@ -154,7 +154,7 @@ const en = {
     verifyCodeTip: 'Verification code con not be empty',
     verifycodeRule: 'Please enter a six-digit verification code',
     imgVerifycodeRule: 'Please enter a four-digit verification code',
-    imgVerifycodeWrong: 'verification code error'
+    imgVerifycodeWrong: 'verification code error or expired'
   },
   tip: {
     networkError: 'Error, please check your internet!',

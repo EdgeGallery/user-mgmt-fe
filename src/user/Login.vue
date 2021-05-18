@@ -148,9 +148,9 @@ export default {
     return {
       userData: {
         username: '',
-        password: '',
-        verificationCode: ''
+        password: ''
       },
+      verificationCode: '',
       rules: {
         username: [
           { validator: validateName }
@@ -304,7 +304,7 @@ export default {
           return false
         }
 
-        this.userData.verificationCode = verifyCode
+        this.verificationCode = verifyCode
         this.submitLogin()
       })
     },
@@ -318,7 +318,7 @@ export default {
         'Content-Type': 'multipart/form-data',
         'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
       }
-      api.login(formData, headers).then(res => {
+      api.login(formData, this.verificationCode, headers).then(res => {
         this.loginSuccess()
       }).catch(error => {
         this.loginBtnLoading = false
