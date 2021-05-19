@@ -22,6 +22,7 @@
           :model="verifyData"
           :rules="rules"
           ref="verifyData"
+          @submit.native.prevent
         >
           <el-form-item
             prop="verificationCode"
@@ -56,7 +57,6 @@ export default {
   name: '',
   components: {
   },
-  inject: ['reload'],
   data () {
     var validateVerificationCode = (rule, value, callback) => {
       if (value === '') {

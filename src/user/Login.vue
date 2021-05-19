@@ -40,6 +40,7 @@
               type="text"
               :placeholder="$t('login.namePla')"
               clearable
+              ref="userNameInput"
             />
           </el-form-item>
           <el-form-item
@@ -129,7 +130,6 @@ export default {
   components: {
     Verify
   },
-  inject: ['reload'],
   data () {
     var validateName = (rule, value, callback) => {
       if (value === '') {
@@ -336,6 +336,7 @@ export default {
           }
           this.$message.error(error.message)
         }
+        this.$refs['userNameInput'].focus()
         let _resetLoginTimer = setTimeout(() => {
           clearTimeout(_resetLoginTimer)
           _resetLoginTimer = null
@@ -352,7 +353,7 @@ export default {
       if (_returnUrl) {
         window.location.href = decodeURIComponent(_returnUrl)
       } else {
-        this.reload()
+        location.reload()
       }
     },
     logout () {
