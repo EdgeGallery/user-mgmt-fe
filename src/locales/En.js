@@ -42,7 +42,9 @@ const en = {
     telPla: 'Mobile Phone Number',
     registerHint: 'Tip: it is recommended to fill in at least one piece of real information for email address and mobile phone number, so as to retrieve the password after forgetting it.',
     getCap: 'Get captcha',
-    capPla: 'Captcha',
+    capInImg: 'Image Captcha Code',
+    capPla: '6-Digit Captcha Code',
+    sendCaptchaTo: 'Send captcha to:',
     newPwd: 'New password',
     confirmNewPwd: 'Confirm your new password',
     forgotPwd: 'Forgot password？',
@@ -137,6 +139,8 @@ const en = {
     search: 'Search',
     query: 'Query',
     all: 'All',
+    next: 'Next',
+    prev: 'Previous',
     warning: 'Promt',
     unknown: 'Unknown',
     noconfig: 'No configured'
@@ -148,7 +152,9 @@ const en = {
     telephoneTip: 'Mobile phone number can not be empty',
     mailAddressBlankTip: 'Email Address can not be empty',
     verifyCodeTip: 'Verification code con not be empty',
-    verifycodeRule: 'Please enter a six-digit verification code'
+    verifycodeRule: 'Please enter a six-digit verification code',
+    imgVerifycodeRule: 'Please enter a four-digit verification code',
+    imgVerifycodeWrong: 'verification code error or expired'
   },
   tip: {
     networkError: 'Error, please check your internet!',

@@ -42,7 +42,9 @@ const cn = {
     telPla: '手机号码',
     registerHint: '提示：建议邮箱地址和手机号码二者至少提供一项真实信息，方便忘记密码后找回。',
     getCap: '获取验证码',
-    capPla: '验证码',
+    capInImg: '图形验证码',
+    capPla: '6位数字验证码',
+    sendCaptchaTo: '发送验证码至：',
     newPwd: '新密码',
     confirmNewPwd: '确认新密码',
     forgotPwd: '忘记密码？',
@@ -137,6 +139,8 @@ const cn = {
     search: '搜索',
     query: '查询',
     all: '全部',
+    next: '下一步',
+    prev: '上一步',
     warning: '提示',
     unknown: '未知',
     noconfig: '未设置'
@@ -148,7 +152,9 @@ const cn = {
     telephoneTip: '手机号码不能为空',
     mailAddressBlankTip: '邮箱地址不能为空',
     verifyCodeTip: '验证码不能为空',
-    verifycodeRule: '请输入六位数字的验证码'
+    verifycodeRule: '请输入6位数字的验证码',
+    imgVerifycodeRule: '请输入4位数字的验证码',
+    imgVerifycodeWrong: '验证码错误或已失效'
   },
   tip: {
     failedReg: '注册用户失败，请重试',
