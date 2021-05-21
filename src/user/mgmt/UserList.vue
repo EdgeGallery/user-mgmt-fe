@@ -51,7 +51,7 @@
         <el-table
           :data="userListData"
           @sort-change="doSort"
-          :default-sort="{prop: 'createTime', order: 'ascending'}"
+          :default-sort="{prop: 'createTime', order: 'descending'}"
           v-loading="dataLoading"
           border
           stripe
@@ -210,7 +210,7 @@ export default {
       },
       sortCtrl: {
         sortBy: 'createTime',
-        sortOrder: 'ASC'
+        sortOrder: 'DESC'
       },
       userListData: [],
 
@@ -287,7 +287,7 @@ export default {
         this.sortCtrl.sortOrder = _ascendingFlag ? 'ASC' : 'DESC'
       } else {
         this.sortCtrl.sortBy = 'createTime'
-        this.sortCtrl.sortOrder = 'ASC'
+        this.sortCtrl.sortOrder = 'DESC'
       }
       this.pageCtrl.currentPage = 1
       this.getUserList()
