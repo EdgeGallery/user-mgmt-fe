@@ -88,7 +88,6 @@
             <el-select
               id="elselect_status"
               v-model="formData.status"
-              :placeholder="$t('common.status')"
               size="small"
               style="width:95%"
               @change="search"

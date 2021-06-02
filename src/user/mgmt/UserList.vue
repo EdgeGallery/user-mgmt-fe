@@ -306,7 +306,7 @@ export default {
       }).catch((error) => {
         this.dataLoading = false
         if (error.response.status === 404 && error.response.data.details[0] === 'Record not found') {
-          this.paginationData = []
+          this.userListData = []
         } else {
           this.$message.error(this.$t('tip.failedToGetList'))
         }
