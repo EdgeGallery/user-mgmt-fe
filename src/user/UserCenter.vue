@@ -44,7 +44,7 @@
         </el-button>
       </div>
       <div
-        class="basic-info"
+        class="info-area"
         v-if="!modifyPassFlag"
       >
         <el-form
@@ -52,9 +52,7 @@
           :rules="basicInfoRules"
           ref="basicInfoEditForm"
         >
-          <p
-            style="height: 100px;line-height: 100px"
-          >
+          <p class="info-title">
             <strong>{{ $t('usercenter.basicInfo') }}</strong>
           </p>
           <el-row>
@@ -164,6 +162,30 @@
         </el-form>
       </div>
       <div
+        class="info-area"
+        v-if="!modifyPassFlag"
+      >
+        <p class="info-title">
+          <strong>{{ $t('usercenter.permissionInfo') }}</strong>
+        </p>
+        <el-row>
+          <el-col :span="8">
+            <span>{{ $t('usercenter.role') }}</span>
+          </el-col>
+          <el-col :span="16">
+            <span>{{ convertRole() }}</span>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <span>{{ $t('usercenter.platform') }}</span>
+          </el-col>
+          <el-col :span="16">
+            <span>{{ convertPlatform() }}</span>
+          </el-col>
+        </el-row>
+      </div>
+      <div
         class="modify-pass"
         v-if="modifyPassFlag"
       >
@@ -173,9 +195,7 @@
           label-width="200px"
           ref="modifyPassForm"
         >
-          <p
-            style="height: 100px;line-height: 100px"
-          >
+          <p class="info-title">
             <strong>{{ $t('usercenter.modifyPwd') }}</strong>
           </p>
           <el-row>
@@ -307,6 +327,7 @@ export default {
       }
     }
     return {
+      roleOptionList: [],
       currUserInfo: {},
       editMailAddrFlag: false,
       editTelephoneFlag: false,
@@ -348,17 +369,30 @@ export default {
       }
     }
   },
+  watch: {
+    '$i18n.locale': function () {
+      this.initRoleOptionList()
+    }
+  },
   mounted () {
     api.loginInfo().then(res => {
       this.currUserInfo = res.data
       if (!this.currUserInfo.username || this.currUserInfo.username === 'guest') {
         this.$router.push('/')
       }
+      this.initRoleOptionList()
     }).catch(() => {
       this.$router.push('/')
     })
   },
   methods: {
+    initRoleOptionList () {
+      this.roleOptionList = [
+        { value: 'ADMIN', label: this.$t('usermgmt.roleValue.admin') },
+        { value: 'TENANT', label: this.$t('usermgmt.roleValue.tenant') },
+        { value: 'GUEST', label: this.$t('usermgmt.roleValue.guest') }
+      ]
+    },
     startEditMailAddr () {
       this.editMailAddrFlag = true
       this.basicInfoEditData.mailAddress = ''
@@ -463,6 +497,21 @@ export default {
         return this.$t('common.noconfig')
       }
       return value
+    },
+    convertRole () {
+      if (this.currUserInfo && this.currUserInfo.permissions && this.currUserInfo.permissions.length) {
+        let roleOption = this.roleOptionList.find(item => item.value === this.currUserInfo.permissions[0].role)
+        if (roleOption) {
+          return roleOption.label
+        }
+      }
+      return this.$t('common.unknown')
+    },
+    convertPlatform () {
+      if (this.currUserInfo && this.currUserInfo.permissions && this.currUserInfo.permissions.length) {
+        return this.currUserInfo.permissions.map((item) => item.platform).join(' | ')
+      }
+      return this.$t('common.unknown')
     }
   }
 }
@@ -509,7 +558,7 @@ export default {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
       0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
     border-radius: 5px;
-    .basic-info {
+    .info-area {
       padding: 0 200px;
       .el-row {
         width: 40%;
@@ -531,6 +580,11 @@ export default {
       .el-form-item__label{
         color: #000000;
       }
+    }
+    .info-title {
+      height: 100px;
+      line-height: 100px;
+      color: #252b3a;
     }
   }
   @media screen and (max-width: 1380px) {
