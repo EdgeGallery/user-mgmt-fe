@@ -71,6 +71,7 @@ import NavDataCn from '../data/NavDataCn.js'
 import NavData from '../data/NavData.js'
 import Topbar from '../components/Topbar.vue'
 import { api } from '../tools/api.js'
+import { DEFAULT_USER_ADMIN, DEFAULT_USER_GUEST, isForceModifyPwScene } from '../tools/util.js'
 
 export default {
   name: 'Navgation',
@@ -99,7 +100,11 @@ export default {
       this.userName = res.data.username
       if (this.userName) {
         this.hasLogin = true
-        this.isSuperAdmin = this.userName === 'admin'
+        this.isSuperAdmin = this.userName === DEFAULT_USER_ADMIN
+      }
+
+      if (this.jumpToForceModifyPw()) {
+        return
       }
 
       if (this.isSuperAdmin) {
@@ -113,6 +118,17 @@ export default {
     })
   },
   methods: {
+    jumpToForceModifyPw () {
+      if (this.hasLogin && this.userName !== DEFAULT_USER_GUEST) {
+        let _pwModiScene = localStorage.getItem('pwmodiscene-' + this.$cookies.get('XSRF-TOKEN'))
+        if (isForceModifyPwScene(_pwModiScene)) {
+          this.jumpTo('/usermgmt/forcemodifypwd')
+          return true
+        }
+      }
+
+      return false
+    },
     jumpTo (path) {
       this.$router.push(path)
     },
@@ -166,7 +182,9 @@ export default {
       })
     },
     setShowNavFlag (currPath) {
-      if (this.isSuperAdmin && currPath !== '/usermgmt/center') {
+      if (this.isSuperAdmin &&
+        currPath !== '/usermgmt/center' &&
+        currPath !== '/usermgmt/forcemodifypwd') {
         this.isShowNav = true
       } else {
         this.isShowNav = false
@@ -176,6 +194,7 @@ export default {
   watch: {
     $route: {
       handler: function (route) {
+        this.jumpToForceModifyPw()
         this.setShowNavFlag(route.fullPath)
       },
       immediate: true

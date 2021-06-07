@@ -55,6 +55,11 @@ export default new Router({
           path: 'usermgmt/center',
           name: 'userCenter',
           component: () => import('../user/UserCenter.vue')
+        },
+        {
+          path: 'usermgmt/forcemodifypwd',
+          name: 'forceModifyPwd',
+          component: () => import('../user/modifypwd/ForceModifyPwd.vue')
         }
       ]
     }

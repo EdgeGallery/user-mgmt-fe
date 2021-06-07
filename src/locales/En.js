@@ -125,13 +125,17 @@ const en = {
     permissionInfo: 'Permission Information',
     role: 'Role:',
     platform: 'Platform:',
-    modifyPwd: 'Modify Password',
+    modifyPwd: 'Modify Password'
+  },
+  pwdmodify: {
     oldPw: 'Old Password:',
     newPw: 'New Password:',
     confirmNewPw: 'Confirm Password:',
     passNotChanged: 'New password is same as old password',
     modifyPwdSucceed: 'Successfully modify your password!',
-    modifyPwdFailed: 'Failed to modify your password, please try again later.'
+    modifyPwdFailed: 'Failed to modify your password, please try again later.',
+    firstLoginTip: 'Modify Password (First time login)',
+    expiredTip: 'Modify Password (Password has expired)'
   },
   common: {
     cancel: 'Cancel',

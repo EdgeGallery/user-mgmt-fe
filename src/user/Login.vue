@@ -286,12 +286,11 @@ export default {
       return null
     },
     getReturnUrl () {
-      if (window.location.href.indexOf('return_to=') > -1) {
-        let _returnUrl = this.getQueryString('return_to')
-        if (_returnUrl) {
-          return _returnUrl
-        }
+      let _objJson = sessionStorage.getItem('obj')
+      if (_objJson) {
+        return JSON.parse(_objJson).return_url
       }
+
       return ''
     },
     submitForm (formName) {
@@ -319,7 +318,7 @@ export default {
         'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
       }
       api.login(formData, this.verificationCode, headers).then(res => {
-        this.loginSuccess()
+        this.loginSuccess(res)
       }).catch(error => {
         this.loginBtnLoading = false
         if (error && error.response) {
@@ -348,7 +347,10 @@ export default {
       this.$refs['userData'].resetFields()
       this.$root.$emit('resetVerifyForm')
     },
-    loginSuccess () {
+    loginSuccess (response) {
+      if (response && response.headers && response.headers.pwmodiscene) {
+        localStorage.setItem('pwmodiscene-' + this.$cookies.get('XSRF-TOKEN'), response.headers.pwmodiscene)
+      }
       let _returnUrl = this.getReturnUrl()
       if (_returnUrl) {
         window.location.href = decodeURIComponent(_returnUrl)

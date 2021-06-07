@@ -32,7 +32,16 @@ export default {
   },
   data () {
     return {
-      isRouterAlive: true
+      isRouterAlive: true,
+      pathWhiteList: [
+        '/',
+        '/mecm/register',
+        '/mecm/getPwd',
+        '/mecm/userPrivacy',
+        '/usermgmt/list',
+        '/usermgmt/center',
+        '/usermgmt/forcemodifypwd'
+      ]
     }
   },
   methods: {
@@ -45,8 +54,7 @@ export default {
   },
   watch: {
     $route (to, from) {
-      if (to.path !== '/' && to.path !== '/mecm/register' && to.path !== '/mecm/getPwd' && to.path !== '/mecm/userPrivacy' &&
-        to.path !== '/usermgmt/list' && to.path !== '/usermgmt/center') {
+      if (this.pathWhiteList.indexOf(to.path) < 0) {
         this.$router.push('/')
       }
     }
