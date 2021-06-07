@@ -135,7 +135,9 @@ const cn = {
     modifyPwdSucceed: '密码修改成功！',
     modifyPwdFailed: '密码修改失败！',
     firstLoginTip: '修改默认密码（首次登录）',
-    expiredTip: '修改密码（密码过期）'
+    expiredTip: '修改密码（密码过期）',
+    cancelOnFirstLoginTip: '首次登录后必须修改默认密码，如果取消将退出当前帐号。是否继续？',
+    cancelOnPwExpiredTip: '您的密码已过期，必须设置新密码，如果取消将退出当前帐号。是否继续？'
   },
   common: {
     cancel: '取消',

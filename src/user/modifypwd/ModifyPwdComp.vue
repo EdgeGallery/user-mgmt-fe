@@ -88,7 +88,7 @@
 </template>
 <script>
 import { api } from '../../tools/api.js'
-import { isForceModifyPwScene } from '../../tools/util.js'
+import { isForceModifyPwScene, PW_MODIFY_SCENE_FIRSTLOGIN } from '../../tools/util.js'
 export default {
   name: 'ModifyPwdComp',
   props: {
@@ -177,8 +177,16 @@ export default {
     },
     cancel () {
       if (isForceModifyPwScene(this.modifyScene)) {
-        localStorage.removeItem('pwmodiscene-' + this.$cookies.get('XSRF-TOKEN'))
-        this.logout()
+        let _tipInfo = this.modifyScene === PW_MODIFY_SCENE_FIRSTLOGIN ? this.$t('pwdmodify.cancelOnFirstLoginTip')
+          : this.$t('pwdmodify.cancelOnPwExpiredTip')
+        this.$confirm(_tipInfo, this.$t('common.warning'), {
+          confirmButtonText: this.$t('common.confirm'),
+          cancelButtonText: this.$t('common.cancel'),
+          type: 'warning'
+        }).then(() => {
+          localStorage.removeItem('pwmodiscene-' + this.$cookies.get('XSRF-TOKEN'))
+          this.logout()
+        })
       }
     },
     logout () {
