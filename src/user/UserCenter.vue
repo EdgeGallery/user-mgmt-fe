@@ -202,7 +202,7 @@
             <el-col :span="24">
               <el-form-item
                 prop="oldPassword"
-                :label="$t('usercenter.oldPw')"
+                :label="$t('pwdmodify.oldPw')"
               >
                 <el-input
                   v-model="modifyPassData.oldPassword"
@@ -217,7 +217,7 @@
             <el-col :span="24">
               <el-form-item
                 prop="newPassword"
-                :label="$t('usercenter.newPw')"
+                :label="$t('pwdmodify.newPw')"
               >
                 <el-input
                   v-model="modifyPassData.newPassword"
@@ -232,7 +232,7 @@
             <el-col :span="24">
               <el-form-item
                 prop="confirmPassword"
-                :label="$t('usercenter.confirmNewPw')"
+                :label="$t('pwdmodify.confirmNewPw')"
               >
                 <el-input
                   v-model="modifyPassData.confirmPassword"
@@ -297,7 +297,7 @@ export default {
     }
     var validatePassSame = (rule, value, callback) => {
       if (value === this.modifyPassData.oldPassword) {
-        callback(new Error(this.$t('usercenter.passNotChanged')))
+        callback(new Error(this.$t('pwdmodify.passNotChanged')))
       } else {
         callback()
       }
@@ -472,13 +472,13 @@ export default {
             'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
           }
           api.getPwd(this.modifyPassData, headers).then(res => {
-            this.$message.success(this.$t('usercenter.modifyPwdSucceed'))
+            this.$message.success(this.$t('pwdmodify.modifyPwdSucceed'))
             setTimeout(() => {
               this.resetModifyPass()
             }, 1000)
           }, error => {
             if (error) {
-              this.$message.error(this.$t('usercenter.modifyPwdFailed'))
+              this.$message.error(this.$t('pwdmodify.modifyPwdFailed'))
             }
           })
         } else {
