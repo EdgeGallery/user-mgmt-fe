@@ -135,7 +135,9 @@ const en = {
     modifyPwdSucceed: 'Successfully modify your password!',
     modifyPwdFailed: 'Failed to modify your password, please try again later.',
     firstLoginTip: 'Modify Password (First time login)',
-    expiredTip: 'Modify Password (Password has expired)'
+    expiredTip: 'Modify Password (Password has expired)',
+    cancelOnFirstLoginTip: 'After the first login, you must change the default password. If you cancel, you will exit the current account. Continue?',
+    cancelOnPwExpiredTip: 'Your password has expired. You must set a new password. If you cancel, you will exit the current account. Continue?'
   },
   common: {
     cancel: 'Cancel',
