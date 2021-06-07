@@ -14,9 +14,17 @@
  *  limitations under the License.
  */
 
-export const codeChars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-export const codeColor1 = ['#fffff0', '#f0ffff', '#f0fff0', '#fff0f0']
-export const codeColor2 = ['#FF0033', '#006699', '#993366', '#FF9900', '#66CC66', '#FF33CC']
+export const DEFAULT_USER_ADMIN = 'admin'
+export const DEFAULT_USER_GUEST = 'guest'
+
+export const PW_MODIFY_SCENE_NORMAL = '0'
+export const PW_MODIFY_SCENE_FIRSTLOGIN = '1'
+export const PW_MODIFY_SCENE_EXPIRED = '2'
+
+// is force modify pw
+export const isForceModifyPwScene = (pwModiScene) => {
+  return pwModiScene === PW_MODIFY_SCENE_FIRSTLOGIN || pwModiScene === PW_MODIFY_SCENE_EXPIRED
+}
 
 // anomymize mail address
 export const anomymizeMail = (mailAddr) => {

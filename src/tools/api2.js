@@ -18,7 +18,7 @@ import axios from 'axios'
 require('../mock.js')
 
 let api = {
-  login (params, headers) {
+  login (params, verificationCode, headers) {
     return axios.get('/mock/login')
   },
   loginInfo () {
@@ -27,13 +27,13 @@ let api = {
   logout () {
     return axios.get('/mock/auth/logout')
   },
-  getCaptcha (params, headers) {
+  getCaptcha (retrieveType, verificationCode, params, headers) {
     return axios.get('/mock/identity/sms')
   },
   getPwd (params, headers) {
     return axios.get('/mock/users/password')
   },
-  register (params, headers) {
+  register (params, verificationCode, headers) {
     return axios.get('/mock/users/register')
   },
   uniqueness (params, headers) {

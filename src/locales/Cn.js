@@ -125,13 +125,17 @@ const cn = {
     permissionInfo: '用户权限',
     role: '所属角色：',
     platform: '可访问平台：',
-    modifyPwd: '修改密码',
+    modifyPwd: '修改密码'
+  },
+  pwdmodify: {
     oldPw: '旧密码：',
     newPw: '新密码：',
     confirmNewPw: '确认新密码：',
     passNotChanged: '输入的新密码与旧密码一致',
     modifyPwdSucceed: '密码修改成功！',
-    modifyPwdFailed: '密码修改失败！'
+    modifyPwdFailed: '密码修改失败！',
+    firstLoginTip: '修改默认密码（首次登录）',
+    expiredTip: '修改密码（密码过期）'
   },
   common: {
     cancel: '取消',

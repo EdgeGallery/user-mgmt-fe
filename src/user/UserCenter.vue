@@ -270,9 +270,7 @@
 <script>
 import { api } from '../tools/api.js'
 export default {
-  name: '',
-  components: {
-  },
+  name: 'UserCenter',
   data () {
     var validatePassRule = (rule, value, callback) => {
       let pattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{6,18}$/
