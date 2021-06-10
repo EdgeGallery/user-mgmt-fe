@@ -232,15 +232,13 @@ export default {
       verificationCode: '',
       rules: {
         username: [
-          { validator: validateName, trigger: 'blur' },
+          { validator: validateName },
           { validator: validateNameRule },
-          { validator: validateNameUnique, trigger: 'blur' },
-          { required: true }
+          { validator: validateNameUnique, trigger: 'blur' }
         ],
         password: [
-          { validator: validatePass, trigger: 'blur' },
-          { validator: validatePassRule },
-          { required: true }
+          { validator: validatePass },
+          { validator: validatePassRule }
         ],
         telephone: [
           { validator: validateTelRule },
@@ -251,8 +249,7 @@ export default {
           { validator: validateMailUnique, trigger: 'blur' }
         ],
         checkPass: [
-          { validator: validatepassconfirm, trigger: 'blur' },
-          { required: true }
+          { validator: validatepassconfirm }
         ]
       },
       regBtnLoading: false,

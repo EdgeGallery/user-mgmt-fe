@@ -40,13 +40,11 @@
         </el-form>
       </el-col>
       <el-col :span="7">
-        <el-image
-          v-if="showImgVerifyCode"
+        <img
+          id="verifycode_img"
           style="top: 1px;width: 100px; height: 39px;cursor:pointer"
-          :src="verifyCodeUrl"
-          :fit="fit"
-          @click.native="refreshImg()"
-        />
+          @click="refreshImg()"
+        >
       </el-col>
     </el-row>
   </div>
@@ -54,9 +52,7 @@
 <script>
 import { api } from '../tools/api.js'
 export default {
-  name: '',
-  components: {
-  },
+  name: 'Verify',
   data () {
     var validateVerificationCode = (rule, value, callback) => {
       if (value === '') {
@@ -89,8 +85,7 @@ export default {
           { validator: validateVerificationCodeIfRight }
         ]
       },
-      showImgVerifyCode: true,
-      resetImgVerifyTimeHandler: null,
+      verifyCodeImgObj: undefined,
       verifyCodeUrlPrefix: '',
       verifyCodeUrl: '',
       verificationCodeCheckIcon: ''
@@ -114,9 +109,11 @@ export default {
     })
   },
   mounted () {
+    this.verifyCodeImgObj = document.getElementById('verifycode_img')
+
     this.verifyCodeUrlPrefix = window.location.href.split(':')[0] + '://' + window.location.host +
       '/v1/identity/verifycode-image?sequence='
-    this.verifyCodeUrl = this.verifyCodeUrlPrefix + Math.random()
+    this.verifyCodeImgObj.src = this.verifyCodeUrlPrefix + Math.random()
   },
   methods: {
     validateVerifyForm () {
@@ -143,21 +140,13 @@ export default {
           callback(new Error(this.$t('verify.imgVerifycodeWrong')))
           this.resetImgVerify()
         }
+      }).catch(() => {
+        callback(new Error(this.$t('verify.imgVerifycodeWrong')))
+        this.resetImgVerify()
       })
     },
     resetImgVerify () {
-      this.showImgVerifyCode = false
-      this.clearResetImgVerifyTimeHandler()
-      this.resetImgVerifyTimeHandler = setTimeout(() => {
-        this.verifyCodeUrl = this.verifyCodeUrlPrefix + Math.random()
-        this.showImgVerifyCode = true
-      }, 0)
-    },
-    clearResetImgVerifyTimeHandler () {
-      if (this.resetImgVerifyTimeHandler) {
-        clearTimeout(this.resetImgVerifyTimeHandler)
-        this.resetImgVerifyTimeHandler = null
-      }
+      this.verifyCodeImgObj.src = this.verifyCodeUrlPrefix + Math.random()
     },
     refreshImg () {
       this.resetImgVerify()
