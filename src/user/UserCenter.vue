@@ -411,15 +411,7 @@ export default {
             this.editMailAddrFlag = false
             this.currUserInfo.mailAddress = response.data.mailAddress
           }).catch(error => {
-            if (error && error.response) {
-              if (error.response.status === 400) {
-                error.message = 'Bad request'
-                if (error.response.data.detail === 'repeat of mail address.') {
-                  error.message = this.$t('tip.mailAlSigned')
-                }
-              }
-              this.$message.error(error.message)
-            }
+            this.handleSubmitError(error)
           })
         } else {
           return false
@@ -438,20 +430,23 @@ export default {
             this.editTelephoneFlag = false
             this.currUserInfo.telephone = response.data.telephone
           }).catch(error => {
-            if (error && error.response) {
-              if (error.response.status === 400) {
-                error.message = 'Bad request'
-                if (error.response.data.detail === 'repeat of telephone.') {
-                  error.message = this.$t('tip.telAlSigned')
-                }
-              }
-              this.$message.error(error.message)
-            }
+            this.handleSubmitError(error)
           })
         } else {
           return false
         }
       })
+    },
+    handleSubmitError (error) {
+      if (error && error.response) {
+        if (error.response.status === 400) {
+          error.message = 'Bad request'
+          if (error.response.data.code) {
+            error.message = this.$t('errorCode.' + error.response.data.code)
+          }
+        }
+        this.$message.error(error.message)
+      }
     },
     prepareBasicInfoEditReq () {
       let _reqData = {}

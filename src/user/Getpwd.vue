@@ -471,14 +471,12 @@ export default {
     },
     handleGetCaptchaError (error) {
       if (error && error.response && error.response.data) {
-        if (error.response.data.msg && error.response.data.msg === 'verification code incorrect') {
-          this.$message.error(this.$t('verify.imgVerifycodeWrong'))
-        } else if (error.response.data.code === 100000003) {
-          this.$message.error(this.$t('tip.telNotExist'))
-        } else if (error.response.data.code === 100000004) {
-          this.$message.error(this.$t('tip.mailNotExist'))
+        if (error.response.data.code) {
+          this.$message.error(this.$t('errorCode.' + error.response.data.code))
+        } else if (error.response.data.message) {
+          this.$message.error(this.$t('tip.failedToGetCaptcha') + error.response.data.message)
         } else {
-          this.$message.error(this.$t('tip.failedToGetCaptcha') + error.response.data.detail)
+          this.$message.error(this.$t('tip.failedToGetCaptcha'))
         }
       } else {
         this.$message.error(this.$t('tip.failedToGetCaptcha'))
