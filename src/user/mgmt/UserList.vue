@@ -303,13 +303,10 @@ export default {
         this.pageCtrl.totalNum = response.data.totalCount
 
         this.dataLoading = false
-      }).catch((error) => {
+      }).catch(() => {
         this.dataLoading = false
-        if (error.response.status === 404 && error.response.data.details[0] === 'Record not found') {
-          this.userListData = []
-        } else {
-          this.$message.error(this.$t('tip.failedToGetList'))
-        }
+        this.userListData = []
+        this.$message.error(this.$t('tip.failedToGetList'))
       })
     },
     buildQueryReq () {

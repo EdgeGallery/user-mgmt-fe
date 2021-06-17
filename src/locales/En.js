@@ -184,6 +184,27 @@ const en = {
     resetPassSuc: 'Successfully reset your password!',
     passDiferent: 'The two passwords are different!'
   },
+  errorCode: {
+    70000: 'No login user.',
+    70001: 'No permission.',
+    70002: 'Illegal parameter.',
+    70003: 'Database Exception.',
+    70004: 'The user does not exist.',
+    70005: 'The mobile phone does not exist.',
+    70006: 'The email address does not exist.',
+    70007: 'The user name has been registered.',
+    70008: 'The mobile phone number has been registered.',
+    70009: 'The email address has been registered.',
+    70010: 'The password is incorrect.',
+    70011: 'The verification code is wrong or expired.',
+    70012: 'Sms server connect failed.',
+    70013: 'Send verification code by sms failed.',
+    70014: 'Send verification code by mail failed.',
+    70015: 'User register failed.',
+    70016: 'Modify password failed.',
+    70017: 'Login failed.',
+    79999: 'Unkown Error.'
+  },
   ...enLocale
 }
 

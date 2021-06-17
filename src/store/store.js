@@ -27,8 +27,5 @@ export default new Vuex.Store({
     changelanguage (state, data) {
       state.language = data
     }
-  },
-  actions: {
-
   }
 })
