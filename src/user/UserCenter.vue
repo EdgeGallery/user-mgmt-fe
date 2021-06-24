@@ -189,77 +189,14 @@
         class="modify-pass"
         v-if="modifyPassFlag"
       >
-        <el-form
-          :model="modifyPassData"
-          :rules="modifyPassRules"
-          label-width="200px"
-          ref="modifyPassForm"
-        >
-          <p class="info-title">
-            <strong>{{ $t('usercenter.modifyPwd') }}</strong>
-          </p>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item
-                prop="oldPassword"
-                :label="$t('pwdmodify.oldPw')"
-              >
-                <el-input
-                  v-model="modifyPassData.oldPassword"
-                  clearable
-                  show-password
-                  size="medium"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item
-                prop="newPassword"
-                :label="$t('pwdmodify.newPw')"
-              >
-                <el-input
-                  v-model="modifyPassData.newPassword"
-                  clearable
-                  show-password
-                  size="medium"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item
-                prop="confirmPassword"
-                :label="$t('pwdmodify.confirmNewPw')"
-              >
-                <el-input
-                  v-model="modifyPassData.confirmPassword"
-                  clearable
-                  show-password
-                  size="medium"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row style="text-align:right">
-            <el-col :span="20">
-              <el-button
-                type="primary"
-                @click="submitModifyPass"
-              >
-                {{ $t('common.confirm') }}
-              </el-button>
-              <el-button
-                type="info"
-                @click="resetModifyPass"
-              >
-                {{ $t('common.cancel') }}
-              </el-button>
-            </el-col>
-          </el-row>
-        </el-form>
+        <p class="info-title">
+          <strong>{{ $t('usercenter.modifyPwd') }}</strong>
+        </p>
+        <ModifyPwdComp
+          :modify-scene="0"
+          @processModifyPassSucceed="processModifyPassSucceed"
+          @processCancelModifyPass="processCancelModifyPass"
+        />
       </div>
       <div
         style="margin-top:200px;"
@@ -269,17 +206,13 @@
 </template>
 <script>
 import { api } from '../tools/api.js'
+import ModifyPwdComp from './modifypwd/ModifyPwdComp.vue'
 export default {
   name: 'UserCenter',
+  components: {
+    ModifyPwdComp
+  },
   data () {
-    var validatePassRule = (rule, value, callback) => {
-      let pattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{6,18}$/
-      if (value.match(pattern) === null) {
-        callback(new Error(this.$t('login.passwordRule')))
-      } else {
-        callback()
-      }
-    }
     var validatetelephone = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('verify.telephoneTip')))
@@ -295,13 +228,6 @@ export default {
         callback()
       }
     }
-    var validatePassSame = (rule, value, callback) => {
-      if (value === this.modifyPassData.oldPassword) {
-        callback(new Error(this.$t('pwdmodify.passNotChanged')))
-      } else {
-        callback()
-      }
-    }
     var validateMailAddress = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('verify.mailAddressBlankTip')))
@@ -313,13 +239,6 @@ export default {
       let pattern = /^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)*@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
       if (value.match(pattern) === null) {
         callback(new Error(this.$t('login.mailAddressRule')))
-      } else {
-        callback()
-      }
-    }
-    var validatepassconfirm = (rule, value, callback) => {
-      if (this.modifyPassData.confirmPassword !== this.modifyPassData.newPassword) {
-        callback(new Error(this.$t('tip.passDiferent')))
       } else {
         callback()
       }
@@ -344,27 +263,7 @@ export default {
         ]
       },
 
-      modifyPassFlag: false,
-      modifyPassData: {
-        type: 1,
-        oldPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      },
-      modifyPassRules: {
-        oldPassword: [
-          { required: true, message: this.$t('verify.passwordTip') }
-        ],
-        newPassword: [
-          { required: true, message: this.$t('verify.passwordTip') },
-          { validator: validatePassRule },
-          { validator: validatePassSame }
-        ],
-        confirmPassword: [
-          { required: true, message: this.$t('verify.passwordTip') },
-          { validator: validatepassconfirm, trigger: 'blur' }
-        ]
-      }
+      modifyPassFlag: false
     }
   },
   watch: {
@@ -460,30 +359,14 @@ export default {
       this.editMailAddrFlag = false
       this.editTelephoneFlag = false
     },
-    submitModifyPass () {
-      this.$refs['modifyPassForm'].validate((valid) => {
-        if (valid) {
-          let headers = {
-            'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
-          }
-          api.getPwd(this.modifyPassData, headers).then(res => {
-            this.$message.success(this.$t('pwdmodify.modifyPwdSucceed'))
-            setTimeout(() => {
-              this.resetModifyPass()
-            }, 1000)
-          }, error => {
-            if (error) {
-              this.$message.error(this.$t('pwdmodify.modifyPwdFailed'))
-            }
-          })
-        } else {
-          return false
-        }
-      })
+    processModifyPassSucceed () {
+      let _timer = setTimeout(() => {
+        this.modifyPassFlag = false
+        clearTimeout(_timer)
+      }, 1000)
     },
-    resetModifyPass () {
+    processCancelModifyPass () {
       this.modifyPassFlag = false
-      this.$refs['modifyPassForm'].resetFields()
     },
     showNoConfigOnEmpty (value) {
       if (value === undefined || value === null || value === '') {
@@ -563,16 +446,6 @@ export default {
     .modify-pass {
       padding: 0 100px;
       text-align: center;
-      .el-row {
-        width: 100%;
-        padding: 0 30%;
-        margin-bottom:10px;
-        text-align: left;
-        font-size: 14px;
-      }
-      .el-form-item__label{
-        color: #000000;
-      }
     }
     .info-title {
       height: 100px;
