@@ -88,7 +88,6 @@
 </template>
 <script>
 import { api } from '../../tools/api.js'
-import { isForceModifyPwScene, PW_MODIFY_SCENE_FIRSTLOGIN } from '../../tools/util.js'
 export default {
   name: 'ModifyPwdComp',
   props: {
@@ -100,6 +99,13 @@ export default {
     }
   },
   data () {
+    var validatePassEmpty = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('verify.passwordTip')))
+      } else {
+        callback()
+      }
+    }
     var validatePassRule = (rule, value, callback) => {
       let pattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{6,18}$/
       if (value.match(pattern) === null) {
@@ -131,18 +137,27 @@ export default {
       },
       modifyPassRules: {
         oldPassword: [
-          { required: true, message: this.$t('verify.passwordTip') }
+          { validator: validatePassEmpty }
         ],
         newPassword: [
-          { required: true, message: this.$t('verify.passwordTip') },
+          { validator: validatePassEmpty },
           { validator: validatePassRule },
-          { validator: validatePassSame }
+          { validator: validatePassSame, trigger: 'blur' }
         ],
         confirmPassword: [
-          { required: true, message: this.$t('verify.passwordTip') },
+          { validator: validatePassEmpty },
           { validator: validatepassconfirm, trigger: 'blur' }
         ]
       }
+    }
+  },
+  watch: {
+    '$i18n.locale': function () {
+      this.$refs['modifyPassForm'].fields.forEach(item => {
+        if (item.validateState === 'error') {
+          this.$refs['modifyPassForm'].validateField(item.labelFor)
+        }
+      })
     }
   },
   methods: {
@@ -156,7 +171,7 @@ export default {
         }
         api.getPwd(this.modifyPassData, headers).then(res => {
           this.$message.success(this.$t('pwdmodify.modifyPwdSucceed'))
-          this.processModifySucceed()
+          this.$emit('processModifyPassSucceed')
         }).catch(() => {
           this.$message.error(this.$t('pwdmodify.modifyPwdFailed'))
           let _timer = setTimeout(() => {
@@ -166,34 +181,8 @@ export default {
         })
       })
     },
-    processModifySucceed () {
-      if (isForceModifyPwScene(this.modifyScene)) {
-        localStorage.removeItem('pwmodiscene-' + this.$cookies.get('XSRF-TOKEN'))
-        let _timer = setTimeout(() => {
-          this.logout()
-          clearTimeout(_timer)
-        }, 1000)
-      }
-    },
     cancel () {
-      if (isForceModifyPwScene(this.modifyScene)) {
-        let _tipInfo = this.modifyScene === PW_MODIFY_SCENE_FIRSTLOGIN ? this.$t('pwdmodify.cancelOnFirstLoginTip')
-          : this.$t('pwdmodify.cancelOnPwExpiredTip')
-        this.$confirm(_tipInfo, this.$t('common.warning'), {
-          confirmButtonText: this.$t('common.confirm'),
-          cancelButtonText: this.$t('common.cancel'),
-          type: 'warning'
-        }).then(() => {
-          localStorage.removeItem('pwmodiscene-' + this.$cookies.get('XSRF-TOKEN'))
-          this.logout()
-        })
-      }
-    },
-    logout () {
-      api.logout().then(res => {
-        let urlPrefix = window.location.href.indexOf('https') > -1 ? 'https://' : 'http://'
-        window.location.href = urlPrefix + window.location.host + '/index.html'
-      })
+      this.$emit('processCancelModifyPass')
     }
   }
 }

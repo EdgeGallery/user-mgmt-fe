@@ -22,6 +22,8 @@
       </p>
       <ModifyPwdComp
         :modify-scene="scene"
+        @processModifyPassSucceed="processModifyPassSucceed"
+        @processCancelModifyPass="processCancelModifyPass"
       />
       <div
         style="margin-top:200px;"
@@ -66,6 +68,31 @@ export default {
         this.scene = PW_MODIFY_SCENE_FIRSTLOGIN
       }
       this.infoTitle = this.scene === PW_MODIFY_SCENE_FIRSTLOGIN ? this.$t('pwdmodify.firstLoginTip') : this.$t('pwdmodify.expiredTip')
+    },
+    processModifyPassSucceed () {
+      localStorage.removeItem('pwmodiscene-' + this.$cookies.get('XSRF-TOKEN'))
+      let _timer = setTimeout(() => {
+        this.logout()
+        clearTimeout(_timer)
+      }, 1000)
+    },
+    processCancelModifyPass () {
+      let _tipInfo = this.scene === PW_MODIFY_SCENE_FIRSTLOGIN ? this.$t('pwdmodify.cancelOnFirstLoginTip')
+        : this.$t('pwdmodify.cancelOnPwExpiredTip')
+      this.$confirm(_tipInfo, this.$t('common.warning'), {
+        confirmButtonText: this.$t('common.confirm'),
+        cancelButtonText: this.$t('common.cancel'),
+        type: 'warning'
+      }).then(() => {
+        localStorage.removeItem('pwmodiscene-' + this.$cookies.get('XSRF-TOKEN'))
+        this.logout()
+      })
+    },
+    logout () {
+      api.logout().then(res => {
+        let urlPrefix = window.location.href.indexOf('https') > -1 ? 'https://' : 'http://'
+        window.location.href = urlPrefix + window.location.host + '/index.html'
+      })
     }
   }
 }
