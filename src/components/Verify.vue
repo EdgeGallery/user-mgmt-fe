@@ -43,6 +43,7 @@
         <img
           id="verifycode_img"
           style="top: 1px;width: 100px; height: 39px;cursor:pointer"
+          alt=""
           @click="refreshImg()"
         >
       </el-col>
