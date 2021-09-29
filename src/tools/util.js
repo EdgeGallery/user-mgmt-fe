@@ -26,8 +26,8 @@ export const isForceModifyPwScene = (pwModiScene) => {
   return pwModiScene === PW_MODIFY_SCENE_FIRSTLOGIN || pwModiScene === PW_MODIFY_SCENE_EXPIRED
 }
 
-// anomymize mail address
-export const anomymizeMail = (mailAddr) => {
+// anonymize mail address
+export const anonymizeMail = (mailAddr) => {
   if (mailAddr) {
     let _atSignPos = mailAddr.indexOf('@')
     return _atSignPos <= 1
@@ -36,8 +36,8 @@ export const anomymizeMail = (mailAddr) => {
   return ''
 }
 
-// anomymize telehone number
-export const anomymizeTelphone = (telephone) => {
+// anonymize telehone number
+export const anonymizeTelphone = (telephone) => {
   if (telephone) {
     return telephone.length === 11
       ? telephone.substring(0, 3) + '****' + telephone.substring(7) : telephone

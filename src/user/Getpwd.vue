@@ -82,7 +82,7 @@
           v-show="currStep==2"
         >
           <p class="get-captcha-hint">
-            {{ $t('login.sendCaptchaTo') }}{{ anomymizedReceiver }}
+            {{ $t('login.sendCaptchaTo') }}{{ anonymizedReceiver }}
           </p>
           <el-form-item prop="verificationCode">
             <el-row>
@@ -178,7 +178,7 @@
 </template>
 <script>
 import { api } from '../tools/api.js'
-import { anomymizeMail, anomymizeTelphone } from '../tools/util'
+import { anonymizeMail, anonymizeTelphone } from '../tools/util'
 import Verify from '../components/Verify.vue'
 export default {
   name: 'Getpwd',
@@ -315,7 +315,7 @@ export default {
           { validator: validateConfirmPass, trigger: 'blur' }
         ]
       },
-      anomymizedReceiver: '',
+      anonymizedReceiver: '',
       confirmBtnLoading: false
     }
   },
@@ -353,7 +353,7 @@ export default {
 
         this.currStep = 2
         this.imgVerificationCode = verifyCode
-        this.anomymizedReceiver = this.anomymizeReceiver()
+        this.anonymizedReceiver = this.anonymizeReceiver()
       })
     },
     checkIfExist (callback) {
@@ -496,11 +496,11 @@ export default {
       this.confirmPassword = ''
       this.imgVerificationCode = ''
     },
-    anomymizeReceiver () {
+    anonymizeReceiver () {
       if (this.isRetrieveByMail()) {
-        return anomymizeMail(this.userData.mailAddress)
+        return anonymizeMail(this.userData.mailAddress)
       } else {
-        return anomymizeTelphone(this.userData.telephone)
+        return anonymizeTelphone(this.userData.telephone)
       }
     },
     isRetrieveByMail () {
