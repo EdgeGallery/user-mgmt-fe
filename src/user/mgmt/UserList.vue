@@ -103,14 +103,6 @@
             show-overflow-tooltip
           />
           <el-table-column
-            prop="telephone"
-            width="150"
-            align="center"
-            :label="$t('usermgmt.telephone')"
-            :formatter="showNoConfigOnEmpty"
-            show-overflow-tooltip
-          />
-          <el-table-column
             prop="createTime"
             width="225"
             align="center"
