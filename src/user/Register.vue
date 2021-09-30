@@ -73,26 +73,10 @@
               :placeholder="$t('login.mailAddr')"
             />
           </el-form-item>
-          <el-form-item
-            prop="telephone"
-          >
-            <el-input
-              id="contact"
-              v-model="userData.telephone"
-              type="text"
-              clearable
-              :placeholder="$t('login.telPla')"
-            />
-          </el-form-item>
         </div>
         <Verify
           @validateVerifyCodeSuccess="validateVerifyCodeSuccess"
         />
-        <div>
-          <p class="register-hint">
-            {{ $t('login.registerHint') }}
-          </p>
-        </div>
         <div>
           <p class="legal-register">
             <el-checkbox
@@ -195,19 +179,6 @@ export default {
       }
       callback()
     }
-    var validateTelRule = (rule, value, callback) => {
-      if (value !== '') {
-        let pattern = /^1[34578]\d{9}$/
-        if (value.match(pattern) === null) {
-          callback(new Error(this.$t('login.phoneNumberRule')))
-          return
-        }
-      }
-      callback()
-    }
-    var validateTelUnique = (rule, value, callback) => {
-      this.verifyUnique(2, callback)
-    }
     var validateMailAddress = (rule, value, callback) => {
       if (value !== '') {
         let pattern = /^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)*@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
@@ -226,7 +197,6 @@ export default {
         username: '',
         password: '',
         checkPass: '',
-        telephone: '',
         mailAddress: ''
       },
       verificationCode: '',
@@ -239,10 +209,6 @@ export default {
         password: [
           { validator: validatePass },
           { validator: validatePassRule }
-        ],
-        telephone: [
-          { validator: validateTelRule },
-          { validator: validateTelUnique, trigger: 'blur' }
         ],
         mailAddress: [
           { validator: validateMailAddress },

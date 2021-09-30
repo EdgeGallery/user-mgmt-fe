@@ -61,24 +61,6 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="4">
-          <el-form-item
-            :label="$t('usermgmt.telephone')"
-            prop="telephone"
-            label-width="100px"
-          >
-            <el-input
-              id="elinput_telephone"
-              maxlength="20"
-              size="small"
-              style="width:95%"
-              v-model="formData.telephone"
-              :placeholder="$t('usermgmt.telephone')"
-              @keyup.enter.native="search"
-              clearable
-            />
-          </el-form-item>
-        </el-col>
         <el-col :span="3">
           <el-form-item
             :label="$t('usermgmt.status')"
@@ -153,7 +135,6 @@ export default {
       formData: {
         username: '',
         mailAddress: '',
-        telephone: '',
         status: -1,
         registerTimeRange: []
       }
