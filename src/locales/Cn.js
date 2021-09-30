@@ -34,7 +34,7 @@ const cn = {
     gender: '性别',
     male: '男',
     female: '女',
-    namePla: '用户名 / 邮箱 / 手机',
+    namePla: '用户名 / 邮箱',
     pwdPla: '密码',
     pwdConfPla: '确认密码',
     compPla: '公司任职信息',

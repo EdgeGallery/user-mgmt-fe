@@ -115,50 +115,6 @@
               />
             </el-col>
           </el-row>
-          <el-row>
-            <el-col :span="8">
-              <span>{{ $t('usercenter.mobilePhone') }}</span>
-            </el-col>
-            <el-col :span="12">
-              <span v-if="!editTelephoneFlag">{{ showNoConfigOnEmpty(currUserInfo.telephone) }}</span>
-              <el-form-item
-                prop="telephone"
-                v-if="editTelephoneFlag"
-              >
-                <el-input
-                  v-model="basicInfoEditData.telephone"
-                  clearable
-                  size="medium"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="4">
-              <el-button
-                type="primary"
-                circle
-                icon="el-icon-edit"
-                size="mini"
-                @click="startEditTele"
-                v-if="!editTelephoneFlag"
-              />
-              <el-button
-                type="success"
-                circle
-                icon="el-icon-check"
-                size="mini"
-                @click="submitModifyTelephone"
-                v-if="editTelephoneFlag"
-              />
-              <el-button
-                type="info"
-                circle
-                icon="el-icon-error"
-                size="mini"
-                @click="editTelephoneFlag=false"
-                v-if="editTelephoneFlag"
-              />
-            </el-col>
-          </el-row>
         </el-form>
       </div>
       <div

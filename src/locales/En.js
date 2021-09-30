@@ -34,7 +34,7 @@ const en = {
     gender: 'Gender',
     male: 'Male',
     female: 'Female',
-    namePla: 'Username / Email / Mobile Phone',
+    namePla: 'Username / Email',
     pwdPla: 'Password',
     pwdConfPla: 'Confirm Password',
     compPla: 'Company',
