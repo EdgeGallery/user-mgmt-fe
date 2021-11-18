@@ -51,7 +51,8 @@
   </div>
 </template>
 <script>
-import { api } from '../tools/api.js'
+import { api, PROXY_PREFIX_CURRENTSERVER } from '../tools/api.js'
+
 export default {
   name: 'Verify',
   data () {
@@ -113,7 +114,7 @@ export default {
     this.verifyCodeImgObj = document.getElementById('verifycode_img')
 
     this.verifyCodeUrlPrefix = window.location.href.split(':')[0] + '://' + window.location.host +
-      '/v1/identity/verifycode-image?sequence='
+      PROXY_PREFIX_CURRENTSERVER + '/v1/identity/verifycode-image?sequence='
     this.verifyCodeImgObj.src = this.verifyCodeUrlPrefix + Math.random()
   },
   methods: {

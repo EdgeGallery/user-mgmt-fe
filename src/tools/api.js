@@ -16,14 +16,16 @@
 
 import axios from 'axios'
 
+const PROXY_PREFIX_CURRENTSERVER = window.location.pathname.slice(0, window.location.pathname.length - '/index.html'.length)
+
 function POST (url, params, headers) {
-  return axios.post(url, params, {
+  return axios.post(PROXY_PREFIX_CURRENTSERVER + url, params, {
     headers: headers
   })
 }
 
 function PUT (url, params, headers) {
-  return axios.put(url, params, {
+  return axios.put(PROXY_PREFIX_CURRENTSERVER + url, params, {
     headers: headers
   })
 }
@@ -32,7 +34,7 @@ let api = {
   login (params, verificationCode, headers) {
     return axios({
       method: 'POST',
-      url: '/login?verifyCode=' + verificationCode,
+      url: PROXY_PREFIX_CURRENTSERVER + '/login?verifyCode=' + verificationCode,
       withCredentials: true,
       headers: headers,
       data: params
@@ -41,19 +43,19 @@ let api = {
   loginInfo () {
     return axios({
       method: 'GET',
-      url: '/auth/login-info'
+      url: PROXY_PREFIX_CURRENTSERVER + '/auth/login-info'
     })
   },
   logout () {
     return axios({
       method: 'GET',
-      url: '/auth/logout'
+      url: PROXY_PREFIX_CURRENTSERVER + '/auth/logout'
     })
   },
   checkVerificationCode (verificationCode) {
     return axios({
       method: 'GET',
-      url: '/v1/identity/verifycode-image/precheck?verifyCode=' + verificationCode
+      url: PROXY_PREFIX_CURRENTSERVER + '/v1/identity/verifycode-image/precheck?verifyCode=' + verificationCode
     })
   },
   getCaptcha (retrieveType, verificationCode, params, headers) {
@@ -86,5 +88,6 @@ let api = {
 }
 
 export {
-  api
+  api,
+  PROXY_PREFIX_CURRENTSERVER
 }
