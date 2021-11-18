@@ -70,7 +70,7 @@
 import NavDataCn from '../data/NavDataCn.js'
 import NavData from '../data/NavData.js'
 import Topbar from '../components/Topbar.vue'
-import { api } from '../tools/api.js'
+import { api, PROXY_PREFIX_CURRENTSERVER } from '../tools/api.js'
 import { DEFAULT_USER_ADMIN, DEFAULT_USER_GUEST, isForceModifyPwScene } from '../tools/util.js'
 
 export default {
@@ -178,7 +178,7 @@ export default {
     logout () {
       api.logout().then(res => {
         let urlPrefix = window.location.href.indexOf('https') > -1 ? 'https://' : 'http://'
-        window.location.href = urlPrefix + window.location.host + '/index.html'
+        window.location.href = urlPrefix + window.location.host + PROXY_PREFIX_CURRENTSERVER + '/index.html'
       })
     },
     setShowNavFlag (currPath) {

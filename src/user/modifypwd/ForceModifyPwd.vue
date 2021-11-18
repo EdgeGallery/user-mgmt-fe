@@ -32,7 +32,7 @@
   </div>
 </template>
 <script>
-import { api } from '../../tools/api.js'
+import { api, PROXY_PREFIX_CURRENTSERVER } from '../../tools/api.js'
 import { isForceModifyPwScene, PW_MODIFY_SCENE_FIRSTLOGIN } from '../../tools/util.js'
 import ModifyPwdComp from './ModifyPwdComp.vue'
 export default {
@@ -91,7 +91,7 @@ export default {
     logout () {
       api.logout().then(res => {
         let urlPrefix = window.location.href.indexOf('https') > -1 ? 'https://' : 'http://'
-        window.location.href = urlPrefix + window.location.host + '/index.html'
+        window.location.href = urlPrefix + window.location.host + PROXY_PREFIX_CURRENTSERVER + '/index.html'
       })
     }
   }
