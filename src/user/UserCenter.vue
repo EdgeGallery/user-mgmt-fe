@@ -38,7 +38,7 @@
         <el-button
           type="primary"
           @click="startModifyPass"
-          v-if="!modifyPassFlag"
+          v-if="!modifyPassFlag && !isExternalUser"
         >
           {{ $t('usercenter.modifyPwd') }}
         </el-button>
@@ -95,7 +95,7 @@
                 icon="el-icon-edit"
                 size="mini"
                 @click="startEditMailAddr"
-                v-if="!editMailAddrFlag"
+                v-if="!editMailAddrFlag && !isExternalUser"
               />
               <el-button
                 type="success"
@@ -219,7 +219,8 @@ export default {
         ]
       },
 
-      modifyPassFlag: false
+      modifyPassFlag: false,
+      isExternalUser: false
     }
   },
   watch: {
@@ -234,6 +235,7 @@ export default {
         this.$router.push('/')
       }
       this.initRoleOptionList()
+      this.isExternalUser = this.judgeExternalUser()
     }).catch(() => {
       this.$router.push('/')
     })
@@ -344,6 +346,14 @@ export default {
         return this.currUserInfo.permissions.map((item) => item.platform).join(' | ')
       }
       return this.$t('common.unknown')
+    },
+    judgeExternalUser () {
+      let _uiCtrlInfo = sessionStorage.getItem('uiCtrlInfo')
+      if (_uiCtrlInfo) {
+        return JSON.parse(_uiCtrlInfo).enable_external_iam && this.currUserInfo.username !== 'admin'
+      }
+
+      return false
     }
   }
 }
