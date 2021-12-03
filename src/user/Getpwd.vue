@@ -275,7 +275,7 @@ export default {
     }
     return {
       currStep: 1,
-      obj: {},
+      uiCtrlInfo: {},
       enableSms: false,
       enableMail: false,
       retrieveType: '',
@@ -320,9 +320,9 @@ export default {
     }
   },
   mounted () {
-    this.obj = JSON.parse(sessionStorage.getItem('obj'))
-    this.enableSms = this.obj.enable_sms
-    this.enableMail = this.obj.enable_mail
+    this.uiCtrlInfo = JSON.parse(sessionStorage.getItem('uiCtrlInfo'))
+    this.enableSms = this.uiCtrlInfo.enable_sms
+    this.enableMail = this.uiCtrlInfo.enable_mail
     this.retrieveType = this.enableMail ? 'ByMail' : 'BySms'
   },
   beforeDestroy () {
@@ -450,7 +450,7 @@ export default {
     closeOnSuccessReset () {
       api.logout().then(() => {
         api.logout().then(() => {
-          this.$router.push(this.obj.login_url)
+          this.$router.push(this.uiCtrlInfo.login_url)
         })
       })
     },
