@@ -21,6 +21,8 @@ export const PW_MODIFY_SCENE_NORMAL = '0'
 export const PW_MODIFY_SCENE_FIRSTLOGIN = '1'
 export const PW_MODIFY_SCENE_EXPIRED = '2'
 
+export const ERRCODE_VERIFYCODE_WRONG = 70011
+
 // is force modify pw
 export const isForceModifyPwScene = (pwModiScene) => {
   return pwModiScene === PW_MODIFY_SCENE_FIRSTLOGIN || pwModiScene === PW_MODIFY_SCENE_EXPIRED
