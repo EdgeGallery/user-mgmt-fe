@@ -124,6 +124,7 @@
 </template>
 <script>
 import { api } from '../tools/api.js'
+import { ERRCODE_VERIFYCODE_WRONG } from '../tools/util.js'
 import Verify from '../components/Verify.vue'
 export default {
   name: 'Login',
@@ -324,26 +325,7 @@ export default {
         this.loginSuccess(res)
       }).catch(error => {
         this.loginBtnLoading = false
-        if (error && error.response) {
-          switch (error.response.status) {
-            case 400:
-              error.message = 'Bad request'
-              break
-            case 401:
-              error.message = this.$t('login.loginFail')
-              break
-            case 423:
-              error.message = this.$t('login.userLock')
-              break
-          }
-          this.$message.error(error.message)
-        }
-        this.$refs['userNameInput'].focus()
-        let _resetLoginTimer = setTimeout(() => {
-          clearTimeout(_resetLoginTimer)
-          _resetLoginTimer = null
-          this.resetLogin()
-        }, 1000)
+        this.loginFailed(error)
       })
     },
     resetLogin () {
@@ -360,6 +342,44 @@ export default {
       } else {
         location.reload()
       }
+    },
+    loginFailed (error) {
+      if (error && error.response) {
+        let _ignoreErrorHint = false
+        let _errorMsg = error.message
+
+        switch (error.response.status) {
+          case 400: {
+            _errorMsg = 'Bad request'
+            if (error.response.data && error.response.data.code && error.response.data.code === ERRCODE_VERIFYCODE_WRONG) {
+              _ignoreErrorHint = true
+            }
+            break
+          }
+          case 401: {
+            _errorMsg = this.$t('login.loginFail')
+            break
+          }
+          case 423: {
+            _errorMsg = this.$t('login.userLock')
+            break
+          }
+          default: {
+            _errorMsg = error.message
+          }
+        }
+
+        if (!_ignoreErrorHint) {
+          this.$message.error(_errorMsg)
+        }
+      }
+
+      this.$refs['userNameInput'].focus()
+      let _resetLoginTimer = setTimeout(() => {
+        clearTimeout(_resetLoginTimer)
+        _resetLoginTimer = null
+        this.resetLogin()
+      }, 1000)
     },
     logout () {
       api.logout().then(res => {
