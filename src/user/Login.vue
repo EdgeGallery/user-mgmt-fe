@@ -124,7 +124,7 @@
 </template>
 <script>
 import { api } from '../tools/api.js'
-import { ERRCODE_VERIFYCODE_WRONG } from '../tools/util.js'
+import { ERRCODE_VERIFYCODE_WRONG, getQueryString } from '../tools/util.js'
 import Verify from '../components/Verify.vue'
 export default {
   name: 'Login',
@@ -200,10 +200,10 @@ export default {
       this.startGetLoginInfoInterval()
     })
     if (window.location.href.indexOf('return_to=') > -1) {
-      this.returnUrl = this.getQueryString('return_to')
-      this.enableSms = this.getQueryString('enable_sms').indexOf('true') > -1
-      this.enableMail = this.getQueryString('enable_mail').indexOf('true') > -1
-      this.enableExternalIam = this.getQueryString('enable_external_iam').indexOf('true') > -1
+      this.returnUrl = getQueryString('return_to')
+      this.enableSms = getQueryString('enable_sms').indexOf('true') > -1
+      this.enableMail = getQueryString('enable_mail').indexOf('true') > -1
+      this.enableExternalIam = getQueryString('enable_external_iam').indexOf('true') > -1
       let _uiCtrlInfo = {
         return_url: this.returnUrl,
         enable_sms: this.enableSms,
@@ -280,14 +280,6 @@ export default {
     clearInterval () {
       clearTimeout(this.getLoginInfoInterval)
       this.getLoginInfoInterval = null
-    },
-    getQueryString (name) {
-      let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
-      let r = window.location.href.split('?')[1].substr(0).match(reg)
-      if (r != null) {
-        return decodeURIComponent(r[2])
-      }
-      return null
     },
     getReturnUrl () {
       let _uiCtrlInfo = sessionStorage.getItem('uiCtrlInfo')
