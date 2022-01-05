@@ -228,7 +228,7 @@ export default {
   right:0px;
   height: 65px;
   .language {
-    display: inline-block;
+    display: none;
     line-height: 65px;
     font-size: 14px;
     color: #6c92fa;
