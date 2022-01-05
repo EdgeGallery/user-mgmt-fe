@@ -47,3 +47,14 @@ export const anonymizeTelphone = (telephone) => {
 
   return ''
 }
+
+// get query parameter from location href
+export const getQueryString = (paraName) => {
+  let _splitResultArr = window.location.href.split('?')
+  if (_splitResultArr.length < 2) {
+    return null
+  }
+  let reg = new RegExp('(^|&)' + paraName + '=([^&]*)(&|$)', 'i')
+  let result = _splitResultArr[1].match(reg)
+  return result != null ? decodeURIComponent(result[2]) : null
+}

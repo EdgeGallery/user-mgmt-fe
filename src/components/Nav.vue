@@ -71,7 +71,7 @@ import NavDataCn from '../data/NavDataCn.js'
 import NavData from '../data/NavData.js'
 import Topbar from '../components/Topbar.vue'
 import { api, PROXY_PREFIX_CURRENTSERVER } from '../tools/api.js'
-import { DEFAULT_USER_ADMIN, DEFAULT_USER_GUEST, isForceModifyPwScene } from '../tools/util.js'
+import { DEFAULT_USER_ADMIN, DEFAULT_USER_GUEST, isForceModifyPwScene, getQueryString } from '../tools/util.js'
 
 export default {
   name: 'Navgation',
@@ -89,12 +89,13 @@ export default {
     }
   },
   mounted () {
-    let language = localStorage.getItem('language')
+    let language = this.initLang()
     language
       ? localStorage.setItem('language', language)
       : localStorage.setItem('language', 'cn')
     language = localStorage.getItem('language')
     this.language = language === 'en' ? '简体中文' : 'English'
+    this.$i18n.locale = language
 
     api.loginInfo().then(res => {
       this.userName = res.data.username
@@ -118,6 +119,13 @@ export default {
     })
   },
   methods: {
+    initLang () {
+      let _lang = getQueryString('lang')
+      if (_lang) {
+        _lang = _lang.substring(0, 2)
+      }
+      return _lang || localStorage.getItem('language')
+    },
     jumpToForceModifyPw () {
       if (this.hasLogin && this.userName !== DEFAULT_USER_GUEST) {
         let _pwModiScene = localStorage.getItem('pwmodiscene-' + this.$cookies.get('XSRF-TOKEN'))
@@ -220,7 +228,7 @@ export default {
   right:0px;
   height: 65px;
   .language {
-    display: inline-block;
+    display: none;
     line-height: 65px;
     font-size: 14px;
     color: #6c92fa;
