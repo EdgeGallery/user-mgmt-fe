@@ -75,7 +75,7 @@
             <el-col :span="8">
               <span>{{ $t('usercenter.emailAddr') }}</span>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="10">
               <span v-if="!editMailAddrFlag">{{ showNoConfigOnEmpty(currUserInfo.mailAddress) }}</span>
               <el-form-item
                 prop="mailAddress"
@@ -88,7 +88,7 @@
                 />
               </el-form-item>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="6">
               <el-button
                 type="primary"
                 circle
@@ -403,7 +403,7 @@ export default {
     .info-area {
       padding: 0 200px;
       .el-row {
-        width: 40%;
+        width: 50%;
         margin-bottom:30px;
         text-align: left;
         font-size: 14px;
