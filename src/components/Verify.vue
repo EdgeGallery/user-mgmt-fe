@@ -181,7 +181,8 @@ export default {
     width: 150px;
     height: 60px;
     border-radius: 30px;
-    cursor:pointer
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.6);
   }
 }
 </style>

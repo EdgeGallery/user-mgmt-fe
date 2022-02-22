@@ -420,7 +420,7 @@ export default {
             width: 100%;
             line-height: 36px;
             font-size: 36px;
-            font-family: PingFangSC-Medium,sans-serif;
+            font-family: HarmonyHeiTi,PingFangSC-Medium,sans-serif;
             color: #FFFFFF;
             margin-bottom: 30px;
           }
@@ -434,6 +434,7 @@ export default {
           button {
             width: 100%;
             font-size: 30px;
+            font-family: HarmonyHeiTi,PingFangSC-Medium,sans-serif;
             color: #150D33;
             background-image: linear-gradient(to right, #5EABE2, #50BCB5);
             height: 60px;
