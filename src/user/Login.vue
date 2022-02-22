@@ -16,110 +16,152 @@
 
 <template>
   <div class="login">
-    <div
-      class="loginBox"
+    <el-row
+      class="layoutRow"
     >
-      <div
-        class="login-area"
-        v-if="!hasLogin"
+      <el-col
+        class="layoutLeftCol"
+        :span="12"
       >
-        <p class="login-top">
-          {{ $t('login.loginWithUser') }}
-        </p>
-        <el-form
-          :model="userData"
-          :rules="rules"
-          ref="userData"
+        <div
+          class="leftArea"
         >
-          <el-form-item
-            prop="username"
+          <div
+            class="logoArea"
+            :style="{backgroundImage: 'url(' + logoImg + ')' }"
+          />
+          <div
+            class="illustration"
+            :style="{backgroundImage: 'url(' + illustrationImg + ')' }"
+          />
+        </div>
+      </el-col>
+      <el-col
+        class="layoutRightCol"
+        :span="12"
+      >
+        <div
+          class="loginBox"
+        >
+          <div
+            class="login-area"
+            v-if="!hasLogin"
           >
-            <el-input
-              id="uname"
-              v-model="userData.username"
+            <p class="login-top">
+              {{ $t('login.loginWithUser') }}
+            </p>
+            <el-form
+              :model="userData"
+              :rules="rules"
+              ref="userData"
+            >
+              <el-form-item
+                prop="username"
+              >
+                <el-input
+                  id="uname"
+                  v-model="userData.username"
+                  type="text"
+                  :placeholder="$t('login.namePla')"
+                  clearable
+                  ref="userNameInput"
+                >
+                  <i slot="prefix">
+                    <img
+                      class="input_img"
+                      src="../assets/images/icon_user.png"
+                      alt
+                    >
+                  </i>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                prop="password"
+              >
+                <el-input
+                  id="upass"
+                  v-model="userData.password"
+                  type="password"
+                  :placeholder="$t('login.pwdPla')"
+                  clearable
+                >
+                  <i slot="prefix">
+                    <img
+                      class="input_img"
+                      src="../assets/images/icon_pw.png"
+                      alt
+                    >
+                  </i>
+                </el-input>
+              </el-form-item>
+            </el-form>
+          </div>
+          <Verify
+            v-if="!hasLogin"
+            @validateVerifyCodeSuccess="validateVerifyCodeSuccess"
+          />
+          <div
+            class="login-area"
+            v-if="hasLogin"
+          >
+            <p
+              style="height: 120px;line-height: 120px;"
+            >
+              {{ username }}{{ $t('login.hasLogin') }}
+            </p>
+          </div>
+          <div
+            class="login-btn"
+            v-if="!hasLogin"
+          >
+            <el-button
+              id="loginBtn"
+              type="primary"
+              size="medium"
+              :loading="loginBtnLoading"
+              @click="submitForm('userData')"
+            >
+              {{ $t('login.login') }}
+            </el-button>
+          </div>
+          <div
+            class="login-btn"
+            style="margin-top:130px;"
+            v-if="hasLogin"
+          >
+            <el-button
+              id="logoutBtn"
+              type="primary"
+              size="medium"
+              :loading="logoutBtnLoading"
+              @click="logout()"
+            >
+              {{ $t('login.logout') }}
+            </el-button>
+          </div>
+          <div class="login-tips rt">
+            <el-button
               type="text"
-              :placeholder="$t('login.namePla')"
-              clearable
-              ref="userNameInput"
+              v-if="!hasLogin && !this.enableExternalIam"
+              @click="jumpTo('/mecm/register')"
+            >
+              {{ $t('login.freeSign') }}
+            </el-button>
+            <el-divider
+              direction="vertical"
+              v-if="!hasLogin && !this.enableExternalIam && (this.enableSms || this.enableMail)"
             />
-          </el-form-item>
-          <el-form-item
-            prop="password"
-          >
-            <el-input
-              id="upass"
-              v-model="userData.password"
-              type="password"
-              :placeholder="$t('login.pwdPla')"
-              clearable
-            />
-          </el-form-item>
-        </el-form>
-      </div>
-      <Verify
-        v-if="!hasLogin"
-        @validateVerifyCodeSuccess="validateVerifyCodeSuccess"
-      />
-      <div
-        class="login-area"
-        v-if="hasLogin"
-      >
-        <p
-          style="height: 120px;line-height: 120px;"
-        >
-          {{ username }}{{ $t('login.hasLogin') }}
-        </p>
-      </div>
-      <div
-        class="login-btn"
-        v-if="!hasLogin"
-      >
-        <el-button
-          id="loginBtn"
-          type="primary"
-          size="medium"
-          :loading="loginBtnLoading"
-          @click="submitForm('userData')"
-        >
-          {{ $t('login.login') }}
-        </el-button>
-      </div>
-      <div
-        class="login-btn"
-        style="margin-top:130px;"
-        v-if="hasLogin"
-      >
-        <el-button
-          id="logoutBtn"
-          type="primary"
-          size="medium"
-          :loading="logoutBtnLoading"
-          @click="logout()"
-        >
-          {{ $t('login.logout') }}
-        </el-button>
-      </div>
-      <div class="login-tips rt">
-        <el-button
-          type="text"
-          v-if="!hasLogin && !this.enableExternalIam"
-          @click="jumpTo('/mecm/register')"
-        >
-          {{ $t('login.freeSign') }}
-        </el-button>
-        <el-divider
-          direction="vertical"
-          v-if="!hasLogin && !this.enableExternalIam && (this.enableSms || this.enableMail)"
-        />
-        <el-button
-          type="text"
-          v-if="!hasLogin && !this.enableExternalIam && (this.enableSms || this.enableMail)"
-          @click="jumpTo('/mecm/getPwd')"
-        >
-          {{ $t('login.forgotPwd') }}
-        </el-button>
-      </div>
-    </div>
+            <el-button
+              type="text"
+              v-if="!hasLogin && !this.enableExternalIam && (this.enableSms || this.enableMail)"
+              @click="jumpTo('/mecm/getPwd')"
+            >
+              {{ $t('login.forgotPwd') }}
+            </el-button>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -147,6 +189,8 @@ export default {
       }
     }
     return {
+      logoImg: require('../assets/images/logo_new.png'),
+      illustrationImg: require('../assets/images/illustration.png'),
       userData: {
         username: '',
         password: ''
@@ -400,83 +444,102 @@ export default {
 <style lang="less">
 .login {
   height: 100%;
-  .loginBox {
-    float: right;
-    width: 440px;
-    height: auto;
-    text-align: center;
-    margin: 240px 10% 0 0;
-    padding: 25px 15px 5px;
-    background: rgba(255,255,255,0.5);
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
-      0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
-    border-radius: 15px;
-    .login-top {
-      text-align: center;
-      display: inline-block;
-      width: 100%;
-      line-height: 18px;
-      font-size: 18px;
-      font-family: PingFangSC-Medium,sans-serif;
-      color: #252b3a;
-      margin-bottom: 25px;
+  padding: 0;
+  .layoutRow {
+    margin: 120px 0px 120px 60px;
+    .layoutLeftCol {
+      .leftArea {
+        float: right;
+        width: 641px;
+        height: 740px;
+        background: rgba(255,255,255,1.0);
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
+          0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+        border-radius: 17px 0 0 17px;
+        .logoArea {
+          position: relative;
+          top: 37px;
+          left: 54px;
+          width: 191px;
+          height: 85px;
+        }
+        .illustration {
+          position: relative;
+          top: 35px;
+          left: 62px;
+          width: 499px;
+          height: 467px;
+        }
+      }
     }
-    .login-area {
-      padding: 0 25px;
-    }
-    .login-certify {
-      padding: 0 25px;
-      margin: 25px 0;
-      span {
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-        line-height: 38px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
+    .layoutRightCol {
+      .loginBox {
+        float: left;
+        width: 641px;
+        height: 740px;
+        padding: 147px 109px 0px 98px;
+        background: rgba(53,31,132,0.8);
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
+          0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+        border-radius: 0 17px 17px 0;
+        .login-area {
+          padding: 0;
+          .login-top {
+            display: inline-block;
+            width: 100%;
+            line-height: 40px;
+            font-size: 40px;
+            font-family: HarmonyHeiTi,PingFangSC-Medium,sans-serif;
+            color: #FFFFFF;
+            margin-bottom: 50px;
+          }
+          .input_img {
+            position: relative;
+            top: 5px;
+          }
+        }
+        .login-btn {
+          padding: 0;
+          button {
+            width: 100%;
+            font-size: 30px;
+            font-family: HarmonyHeiTi,PingFangSC-Medium,sans-serif;
+            color: #150D33;
+            background-image: linear-gradient(to right, #5EABE2, #50BCB5);
+            height: 60px;
+            border-radius: 30px;
+          }
+          .verify-box em{
+            top: 0;
+          }
+        }
+        .login-tips {
+          margin-top: 15px;
+          padding: 0 25px;
+          span {
+            font-size: 18px;
+            color: #50BCB5;
+            line-height: 18px;
+          }
+          .el-divider {
+            background-color: rgba(255,255,255,0.2);
+          }
+        }
       }
     }
   }
-  @media screen and (max-width: 1380px) {
-    .loginBox{
-      margin: 140px 10px 0 0;
-    }
-  }
-  @media screen and (max-width: 1024px) {
-    .loginBox{
-      margin: 200px 10px 0 0;
-    }
-  }
-  @media screen and (max-width: 640px) {
-    .loginBox{
-      width: 340px;
-      margin: 140px 10px 0 0;
-    }
-  }
-  .login-btn {
-    padding: 0 25px;
-    button {
-      width: 100%;
-      font-size: 18px;
-    }
-    .verify-box em{
-      top: 0;
-    }
-  }
-  .login-tips {
-    margin-top: 15px;
-    padding: 0 25px;
-    span {
-      font-size: 12px;
-      color: #252b3a;
-      line-height: 18px;
-    }
-    .language_span{
-      cursor: pointer;
-      margin-left: 10px;
+  .el-input__inner {
+    width: 100%;
+    background: rgba(163,148,211,0.2);
+    border:1px solid rgba(255,255,255,0.2);
+    height: 60px;
+    border-radius: 30px;
+    font-size: 20px;
+    color: #BDB7DE;
+    padding: 0 0 0 80px;
+    &:focus {
+      background: rgba(25,11,70,0.6);
+      border:1px solid #50BCB5;
     }
   }
 }

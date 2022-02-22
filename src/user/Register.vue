@@ -17,110 +17,168 @@
 
 <template>
   <div class="register">
-    <div class="loginBox">
-      <p class="login-top">
-        {{ $t('login.welcome') }}
-      </p>
-      <el-form
-        :model="userData"
-        :rules="rules"
-        ref="userData"
+    <el-row
+      class="layoutRow"
+    >
+      <el-col
+        class="layoutLeftCol"
+        :span="12"
       >
-        <div class="login-area">
-          <el-form-item
-            prop="username"
-          >
-            <el-input
-              id="uname"
-              v-model="userData.username"
-              auto-complete="new-accounts"
-              type="text"
-              clearable
-              :placeholder="$t('login.userName')"
-            />
-          </el-form-item>
-          <el-form-item
-            prop="password"
-          >
-            <el-input
-              id="upass"
-              v-model="userData.password"
-              auto-complete="new-password"
-              show-password
-              clearable
-              :placeholder="$t('login.pwdPla')"
-            />
-          </el-form-item>
-          <el-form-item
-            prop="checkPass"
-          >
-            <el-input
-              id="verifypass"
-              v-model="userData.checkPass"
-              show-password
-              clearable
-              :placeholder="$t('login.pwdConfPla')"
-            />
-          </el-form-item>
-          <el-form-item
-            prop="mailAddress"
-          >
-            <el-input
-              id="contact_mail"
-              v-model="userData.mailAddress"
-              type="text"
-              clearable
-              :placeholder="$t('login.mailAddr')"
-            />
-          </el-form-item>
+        <div
+          class="leftArea"
+        >
+          <div
+            class="logoArea"
+            :style="{backgroundImage: 'url(' + logoImg + ')' }"
+          />
+          <div
+            class="illustration"
+            :style="{backgroundImage: 'url(' + illustrationImg + ')' }"
+          />
         </div>
-        <Verify
-          @validateVerifyCodeSuccess="validateVerifyCodeSuccess"
-        />
-        <div>
-          <p class="legal-register">
-            <el-checkbox
-              v-model="legalRegister"
-              @change="selectLegal"
-            />
-            {{ $t('login.iAgree') }}
-            <el-link
-              type="primary"
-              @click="jumpBlank('useragreement')"
+      </el-col>
+      <el-col
+        class="layoutRightCol"
+        :span="12"
+      >
+        <div class="loginBox">
+          <div class="login-area">
+            <p class="login-top">
+              {{ $t('login.welcome') }}
+            </p>
+            <el-form
+              :model="userData"
+              :rules="rules"
+              ref="userData"
             >
-              {{ $t('login.userAgreement') }}
-            </el-link>
-            {{ $t('login.and') }}
-            <el-link
-              type="primary"
-              @click="jumpBlank('userprivacy')"
-            >
-              {{ $t('login.privacyStatement') }}
-            </el-link>
-          </p>
-          <div class="regBtn">
-            <el-button
-              id="submitBtn"
-              type="primary"
-              size="medium"
-              :loading="regBtnLoading"
-              :disabled="!legalRegister"
-              @click="submitForm('userData')"
-            >
-              {{ $t('login.legalRegister') }}
-            </el-button>
-            <el-button
-              id="cancelBtn"
-              type="primary"
-              size="medium"
-              @click="handleCancel()"
-            >
-              {{ $t('common.cancel') }}
-            </el-button>
+              <el-form-item
+                prop="username"
+              >
+                <el-input
+                  id="uname"
+                  v-model="userData.username"
+                  auto-complete="new-accounts"
+                  type="text"
+                  clearable
+                  :placeholder="$t('login.userName')"
+                >
+                  <i slot="prefix">
+                    <img
+                      class="input_img"
+                      src="../assets/images/icon_user.png"
+                      alt
+                    >
+                  </i>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                prop="password"
+              >
+                <el-input
+                  id="upass"
+                  v-model="userData.password"
+                  auto-complete="new-password"
+                  show-password
+                  clearable
+                  :placeholder="$t('login.pwdPla')"
+                >
+                  <i slot="prefix">
+                    <img
+                      class="input_img"
+                      src="../assets/images/icon_pw.png"
+                      alt
+                    >
+                  </i>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                prop="checkPass"
+              >
+                <el-input
+                  id="verifypass"
+                  v-model="userData.checkPass"
+                  show-password
+                  clearable
+                  :placeholder="$t('login.pwdConfPla')"
+                >
+                  <i slot="prefix">
+                    <img
+                      class="input_img"
+                      src="../assets/images/icon_pw.png"
+                      alt
+                    >
+                  </i>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                prop="mailAddress"
+              >
+                <el-input
+                  id="contact_mail"
+                  v-model="userData.mailAddress"
+                  type="text"
+                  clearable
+                  :placeholder="$t('login.mailAddr')"
+                >
+                  <i slot="prefix">
+                    <img
+                      class="input_img"
+                      src="../assets/images/icon_mail.png"
+                      alt
+                    >
+                  </i>
+                </el-input>
+              </el-form-item>
+            </el-form>
+          </div>
+          <Verify
+            @validateVerifyCodeSuccess="validateVerifyCodeSuccess"
+          />
+          <div>
+            <div class="regBtn">
+              <el-button
+                id="submitBtn"
+                type="primary"
+                size="medium"
+                :loading="regBtnLoading"
+                @click="submitForm('userData')"
+              >
+                {{ $t('login.register') }}
+              </el-button>
+            </div>
+            <p class="legal-register">
+              <el-checkbox
+                v-model="legalRegister"
+                @change="selectLegal"
+              />
+              {{ $t('login.iAgree') }}
+              <el-link
+                type="primary"
+                @click="jumpBlank('useragreement')"
+              >
+                {{ $t('login.userAgreement') }}
+              </el-link>
+              {{ $t('login.and') }}
+              <el-link
+                type="primary"
+                @click="jumpBlank('userprivacy')"
+              >
+                {{ $t('login.privacyStatement') }}
+              </el-link>
+            </p>
+            <p class="cancel-register">
+              {{ $t('login.hasAccountHint') }}
+              <el-link
+                type="primary"
+                @click="handleCancel()"
+              >
+                {{ $t('login.goLogin') }}
+              </el-link>
+            </p>
           </div>
         </div>
-      </el-form>
-    </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -193,6 +251,8 @@ export default {
       this.verifyUnique(3, callback)
     }
     return {
+      logoImg: require('../assets/images/logo_new.png'),
+      illustrationImg: require('../assets/images/illustration.png'),
       userData: {
         username: '',
         password: '',
@@ -274,7 +334,7 @@ export default {
     },
     validateVerifyCodeSuccess (verifyCode) {
       this.$refs['userData'].validate((valid) => {
-        if (!valid || !this.legalRegister) {
+        if (!valid) {
           return false
         }
 
@@ -283,6 +343,10 @@ export default {
       })
     },
     submitRegister () {
+      if (!this.legalRegister) {
+        this.$message.warning(this.$t('tip.approveLegal'))
+        return
+      }
       this.regBtnLoading = true
       delete this.userData.checkPass
       let headers = {
@@ -310,101 +374,119 @@ export default {
 </script>
 <style lang="less">
 .register{
-  min-width: 320px;
-  height:100%;
-  .loginBox{
-    float: right;
-    width: 440px;
-    height: auto;
-    text-align: center;
-    margin: 180px 10% 0 0;
-    padding:0 15px;
-    background: rgba(255,255,255,0.5);
-    border-radius: 15px;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
-    .login-top{
-      text-align: center;
-      display: inline-block;
-      width: 100%;
-      line-height: 18px;
-      font-size: 18px;
-      font-family: PingFangSC-Medium,sans-serif;
-      color: #252B3A;
-      margin:25px 0;
+  height: 100%;
+  padding: 0;
+  .layoutRow {
+    margin: 120px 0px 120px 60px;
+    .layoutLeftCol {
+      .leftArea {
+        float: right;
+        width: 641px;
+        height: 740px;
+        background: rgba(255,255,255,1.0);
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
+          0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+        border-radius: 17px 0 0 17px;
+        .logoArea {
+          position: relative;
+          top: 37px;
+          left: 54px;
+          width: 191px;
+          height: 85px;
+        }
+        .illustration {
+          position: relative;
+          top: 35px;
+          left: 62px;
+          width: 499px;
+          height: 467px;
+        }
+      }
     }
-    .login-area{
-      padding: 0 25px;
-      .el-form-item{
-        margin-bottom: 25px;
-        .el-form-item__error{
+    .layoutRightCol {
+      .loginBox{
+        float: left;
+        width: 641px;
+        height: 740px;
+        padding: 50px 109px 0px 98px;
+        background: rgba(53,31,132,0.8);
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
+          0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+        border-radius: 0 17px 17px 0;
+        .login-area{
+          padding: 0;
+          .login-top{
+            display: inline-block;
+            width: 100%;
+            line-height: 36px;
+            font-size: 36px;
+            font-family: HarmonyHeiTi,PingFangSC-Medium,sans-serif;
+            color: #FFFFFF;
+            margin-bottom: 30px;
+          }
+          .input_img {
+            position: relative;
+            top: 5px;
+          }
+        }
+        .regBtn{
+          padding: 0;
+          button {
+            width: 100%;
+            font-size: 30px;
+            font-family: HarmonyHeiTi,PingFangSC-Medium,sans-serif;
+            color: #150D33;
+            background-image: linear-gradient(to right, #5EABE2, #50BCB5);
+            height: 60px;
+            border-radius: 30px;
+          }
+        }
+        .legal-register{
+          font-size: 16px;
+          color: #BDBDBD;
+          margin: 20px 0;
+          padding: 0;
           text-align: left;
-          padding-top: 2px;
+          .el-checkbox{
+            margin-right: 10px;
+          }
+          .el-link{
+            font-size: 16px;
+            color: #50BCB5;
+            margin-top: -5px;
+          }
+          .el-link--inner {
+            word-wrap: break-word;
+          }
+        }
+        .cancel-register{
+          font-size: 18px;
+          color: #BDBDBD;
+          margin-top: 5px;
+          margin-right: -75px;
+          padding: 0;
+          text-align: right;
+          .el-link{
+            font-size: 18px;
+            color: #50BCB5;
+            margin-top: -5px;
+          }
         }
       }
-      .el-form-item.is-error{
-        .el-input__clear{
-          color: #cb4a4a;
-        }
-      }
-      p{
-        line-height: 25px;
-        text-align: left;
-        margin-top:5px;
-        margin-bottom: 0px;
-      }
-    }
-    .regBtn{
-      padding-bottom: 5px;
-    }
-    .login-certify{
-      padding: 0 25px;
-      margin:25px 0;
-      span{
-        display:inline-block;
-        width:100%;
-        height:100%;
-        line-height: 38px;
-        border:1px solid #ddd;
-        border-radius: 5px;
-        font-size:18px;
-        font-weight:bold;
-      }
-    }
-    .legal-register{
-      font-size: 12px;
-      margin: 5px 0 15px;
-      padding: 0 25px;
-      text-align: left;
-      .el-checkbox{
-        margin-right: 5px;
-      }
-      .el-link{
-        font-weight: normal;
-        font-size: 12px;
-        margin-top: -3px;
-      }
-    }
-    .register-hint{
-      font-size: 12px;
-      color: #b87e12;
-      margin: 5px 0 15px;
-      padding: 0 25px;
-      text-align: left;
     }
   }
-  @media screen and (max-width: 1380px) {
-    .loginBox{
-      margin: 60px 10px 0 0;
-    }
-  }
-  @media screen and (max-width: 800px) {
-    .loginBox{
-      margin: 120px 10px 0 0;
-    }
-  }
-  @media screen and (max-width: 640px) {
-    .loginBox{
-      margin: 160px 10px 0 0;
+  .el-input__inner {
+    width: 100%;
+    background: rgba(163,148,211,0.2);
+    border:1px solid rgba(255,255,255,0.2);
+    height: 60px;
+    border-radius: 30px;
+    font-size: 20px;
+    color: #BDB7DE;
+    padding: 0 0 0 80px;
+    &:focus {
+      background: rgba(25,11,70,0.6);
+      border:1px solid #50BCB5;
     }
   }
 }
