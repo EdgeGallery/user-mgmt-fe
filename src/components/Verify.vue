@@ -17,7 +17,7 @@
 <template>
   <div class="verify-area">
     <el-row>
-      <el-col :span="17">
+      <el-col :span="15" class="verifyInputCol">
         <el-form
           :model="verifyData"
           :rules="rules"
@@ -35,14 +35,22 @@
               :suffix-icon="verificationCodeCheckIcon"
               :placeholder="$t('login.capInImg')"
               clearable
-            />
+            >
+              <i slot="prefix">
+                <img
+                  class="input_img"
+                  src="../assets/images/icon_verify.png"
+                  alt
+                />
+              </i>
+            </el-input>
           </el-form-item>
         </el-form>
       </el-col>
-      <el-col :span="7">
+      <el-col :span="9">
         <img
           id="verifycode_img"
-          style="top: 1px;width: 100px; height: 39px;cursor:pointer"
+          class="verify-code-img"
           alt=""
           @click="refreshImg()"
         >
@@ -158,6 +166,19 @@ export default {
 </script>
 <style lang="less">
 .verify-area{
-  padding: 0 25px;
+  padding: 0;
+  .verifyInputCol {
+    .input_img {
+      position: relative;
+      top: 5px;
+    }
+  }
+  .verify-code-img{
+    float:right;
+    width: 150px;
+    height: 60px;
+    border-radius: 30px;
+    cursor:pointer
+  }
 }
 </style>

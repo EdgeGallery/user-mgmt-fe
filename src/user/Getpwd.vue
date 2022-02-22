@@ -16,164 +16,235 @@
 
 <template>
   <div class="getpwd">
-    <div class="loginBox">
-      <p class="login-top">
-        {{ $t('login.getPwd') }}
-      </p>
-      <el-form
-        :model="userData"
-        :rules="rules"
-        ref="userData"
+
+    <el-row
+      class="layoutRow"
+    >
+      <el-col
+         class="layoutLeftCol"
+        :span="12"
       >
         <div
-          class="login-area"
-          v-show="currStep==1"
+          class="leftArea"
         >
-          <el-form-item v-if="enableSms && enableMail">
-            <el-radio-group
-              v-model="retrieveType"
-              @change="handleChangeType"
-            >
-              <el-radio
-                label="ByMail"
-                v-if="enableMail"
-              >
-                {{ $t('login.getPwdByMail') }}
-              </el-radio>
-              <el-radio
-                label="BySms"
-                v-if="enableSms"
-              >
-                {{ $t('login.getPwdBySms') }}
-              </el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item
-            prop="telephone"
-            v-if="enableSms && retrieveType === 'BySms'"
-          >
-            <el-input
-              id="input_telephone"
-              v-model="userData.telephone"
-              type="text"
-              clearable
-              :placeholder="$t('login.telPla')"
-            />
-          </el-form-item>
-          <el-form-item
-            prop="mailAddress"
-            v-if="enableMail && retrieveType === 'ByMail'"
-          >
-            <el-input
-              id="input_mail"
-              v-model="userData.mailAddress"
-              type="text"
-              clearable
-              :placeholder="$t('login.mailAddr')"
-            />
-          </el-form-item>
+          <div
+            class="logoArea"
+            :style="{backgroundImage: 'url(' + logoImg + ')' }"
+          />
+          <div
+            class="illustration"
+            :style="{backgroundImage: 'url(' + illustrationImg + ')' }"
+          />
         </div>
-        <Verify
-          v-show="currStep==1"
-          @validateVerifyCodeSuccess="validateVerifyCodeSuccess"
-        />
-        <div
-          class="login-area"
-          v-show="currStep==2"
-        >
-          <p class="get-captcha-hint">
-            {{ $t('login.sendCaptchaTo') }}{{ anonymizedReceiver }}
-          </p>
-          <el-form-item prop="verificationCode">
-            <el-row>
-              <el-col
-                :span="16"
-                :xs="12"
+      </el-col>
+      <el-col
+        class="layoutRightCol"
+        :span="12"
+      >
+        <div class="loginBox">
+          <el-form
+            :model="userData"
+            :rules="rules"
+            ref="userData"
+          >
+            <div
+              class="login-area"
+              v-show="currStep==1"
+            >
+              <p class="login-top">
+                {{ $t('login.getPwd') }}
+              </p>
+              <el-form-item v-if="enableSms && enableMail">
+                <el-radio-group
+                  v-model="retrieveType"
+                  @change="handleChangeType"
+                >
+                  <el-radio
+                    label="ByMail"
+                    v-if="enableMail"
+                  >
+                    {{ $t('login.getPwdByMail') }}
+                  </el-radio>
+                  <el-radio
+                    label="BySms"
+                    v-if="enableSms"
+                  >
+                    {{ $t('login.getPwdBySms') }}
+                  </el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item
+                prop="telephone"
+                v-if="enableSms && retrieveType === 'BySms'"
               >
                 <el-input
-                  v-model="userData.verificationCode"
+                  id="input_telephone"
+                  v-model="userData.telephone"
                   type="text"
-                  maxlength="6"
-                  :placeholder="$t('login.capPla')"
-                  style="margin-top:0;"
+                  clearable
+                  :placeholder="$t('login.telPla')"
                 />
-              </el-col>
-              <el-col
-                :span="8"
-                :xs="12"
+              </el-form-item>
+              <el-form-item
+                prop="mailAddress"
+                v-if="enableMail && retrieveType === 'ByMail'"
               >
-                <el-button
-                  style="float:right;"
-                  type="primary"
-                  size="middle"
-                  @click="getCaptcha"
-                  :disabled="ifBtnAble"
+                <el-input
+                  id="input_mail"
+                  v-model="userData.mailAddress"
+                  type="text"
+                  clearable
+                  :placeholder="$t('login.mailAddr')"
                 >
-                  <span v-if="!showTime">{{ $t('login.getCap') }}</span><span v-if="showTime">&nbsp;&nbsp;{{ time }}s</span>
-                </el-button>
-              </el-col>
-            </el-row>
-          </el-form-item>
-          <el-form-item prop="newPassword">
-            <el-input
-              id="upass"
-              v-model="userData.newPassword"
-              auto-complete="new-password"
-              show-password
-              clearable
-              :placeholder="$t('login.pwdPla')"
+                  <i slot="prefix">
+                    <img
+                      class="input_img"
+                      src="../assets/images/icon_mail.png"
+                      alt
+                    />
+                  </i>
+                </el-input>
+              </el-form-item>
+            </div>
+            <Verify
+              v-show="currStep==1"
+              @validateVerifyCodeSuccess="validateVerifyCodeSuccess"
             />
-          </el-form-item>
-          <el-form-item prop="confirmPassword">
-            <el-input
-              id="verifypass"
-              v-model="confirmPassword"
-              show-password
-              clearable
-              :placeholder="$t('login.pwdConfPla')"
-            />
-          </el-form-item>
+            <div
+              class="login-area"
+              v-show="currStep==2"
+            >
+              <p class="login-top">
+                {{ $t('login.getPwd') }}
+              </p>
+              <p class="get-captcha-hint">
+                {{ $t('login.sendCaptchaTo') }}{{ anonymizedReceiver }}
+              </p>
+              <el-form-item prop="verificationCode">
+                <el-row>
+                  <el-col
+                    :span="15"
+                    :xs="12"
+                  >
+                    <el-input
+                      v-model="userData.verificationCode"
+                      type="text"
+                      maxlength="6"
+                      :placeholder="$t('login.capPla')"
+                      style="margin-top:0;"
+                    >
+                      <i slot="prefix">
+                        <img
+                          class="input_img"
+                          src="../assets/images/icon_verify.png"
+                          alt
+                        />
+                      </i>
+                    </el-input>
+                  </el-col>
+                  <el-col
+                    :span="9"
+                    :xs="12"
+                  >
+                    <el-button
+                      v-if="!ifBtnAble"
+                      class="get-captcha-btn-active"
+                      type="primary"
+                      size="middle"
+                      @click="getCaptcha"
+                    >
+                      <span v-if="!showTime">{{ $t('login.getCap') }}</span><span v-if="showTime">&nbsp;&nbsp;{{ time }}s</span>
+                    </el-button>
+                    <el-button
+                      v-if="ifBtnAble"
+                      class="get-captcha-btn-deactive"
+                      type="primary"
+                      size="middle"
+                      disabled
+                    >
+                      <span v-if="!showTime">{{ $t('login.getCap') }}</span><span v-if="showTime">&nbsp;&nbsp;{{ time }}s</span>
+                    </el-button>
+                  </el-col>
+                </el-row>
+              </el-form-item>
+              <el-form-item prop="newPassword">
+                <el-input
+                  id="upass"
+                  v-model="userData.newPassword"
+                  auto-complete="new-password"
+                  show-password
+                  clearable
+                  :placeholder="$t('login.pwdPla')"
+                >
+                  <i slot="prefix">
+                    <img
+                      class="input_img"
+                      src="../assets/images/icon_pw.png"
+                      alt
+                    />
+                  </i>
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="confirmPassword">
+                <el-input
+                  id="verifypass"
+                  v-model="confirmPassword"
+                  show-password
+                  clearable
+                  :placeholder="$t('login.pwdConfPla')"
+                >
+                  <i slot="prefix">
+                    <img
+                      class="input_img"
+                      src="../assets/images/icon_pw.png"
+                      alt
+                    />
+                  </i>
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="stepSwitchBtn">
+              <el-button
+                v-if="currStep==1"
+                id="nextBtn"
+                type="primary"
+                size="medium"
+                @click="goNext()"
+              >
+                {{ $t('common.next') }}
+              </el-button>
+              <el-button
+                v-if="currStep==2"
+                id="prevBtn"
+                type="primary"
+                size="medium"
+                @click="goPrev()"
+              >
+                {{ $t('common.prev') }}
+              </el-button>
+              <el-button
+                v-if="currStep==2"
+                id="submitBtn"
+                type="primary"
+                size="medium"
+                :loading="confirmBtnLoading"
+                @click="submitForm('userData')"
+              >
+                {{ $t('common.submit') }}
+              </el-button>
+              <el-button
+                id="cancelBtn"
+                type="primary"
+                size="medium"
+                @click="handleCancel()"
+              >
+                {{ $t('common.cancel') }}
+              </el-button>
+            </div>
+          </el-form>
         </div>
-        <div style="margin-top:20px;">
-          <el-button
-            v-if="currStep==1"
-            id="nextBtn"
-            type="primary"
-            size="medium"
-            @click="goNext()"
-          >
-            {{ $t('common.next') }}
-          </el-button>
-          <el-button
-            v-if="currStep==2"
-            id="prevBtn"
-            type="primary"
-            size="medium"
-            @click="goPrev()"
-          >
-            {{ $t('common.prev') }}
-          </el-button>
-          <el-button
-            v-if="currStep==2"
-            id="submitBtn"
-            type="primary"
-            size="medium"
-            :loading="confirmBtnLoading"
-            @click="submitForm('userData')"
-          >
-            {{ $t('common.submit') }}
-          </el-button>
-          <el-button
-            id="cancelBtn"
-            type="primary"
-            size="medium"
-            @click="handleCancel()"
-          >
-            {{ $t('common.cancel') }}
-          </el-button>
-        </div>
-      </el-form>
-    </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -274,6 +345,8 @@ export default {
       }
     }
     return {
+      logoImg: require('../assets/images/logo_new.png'),
+      illustrationImg: require('../assets/images/illustration.png'),
       currStep: 1,
       uiCtrlInfo: {},
       enableSms: false,
@@ -514,72 +587,115 @@ export default {
 </script>
 <style lang="less">
 .getpwd{
-  height:100%;
-  background-size:cover;
-  .loginBox{
-    float: right;
-    width: 440px;
-    height: auto;
-    text-align: center;
-    margin: 240px 10% 0 0;
-    padding:15px;
-    background: rgba(255,255,255,0.5);
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
-    border-radius: 15px;
-    .login-top{
-      text-align: center;
-      display: inline-block;
-      width: 100%;
-      line-height: 18px;
-      font-size: 18px;
-      font-family: PingFangSC-Medium,sans-serif;
-      color: #252B3A;
-      margin-bottom:25px;
-    }
-    .login-area{
-      padding: 0 25px;
-      .el-form-item{
-        margin-bottom: 25px;
-        .el-form-item__error{
-          text-align: left;
+  height: 100%;
+  padding: 0;
+  .layoutRow {
+    margin: 120px 0px 120px 60px;
+    .layoutLeftCol {
+      .leftArea {
+        float: right;
+        width: 641px;
+        height: 740px;
+        background: rgba(255,255,255,1.0);
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
+          0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+        border-radius: 17px 0 0 17px;
+        .logoArea {
+          position: relative;
+          top: 37px;
+          left: 54px;
+          width: 191px;
+          height: 85px;
+        }
+        .illustration {
+          position: relative;
+          top: 35px;
+          left: 62px;
+          width: 499px;
+          height: 467px;
         }
       }
-      .el-form-item.is-error{
-        .el-input__clear{
-          color: #cb4a4a;
+    }
+    .layoutRightCol {
+      .loginBox{
+        float: left;
+        width: 641px;
+        height: 740px;
+        padding: 150px 109px 0px 98px;
+        background: rgba(53,31,132,0.8);
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
+          0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+        border-radius: 0 17px 17px 0;
+        .login-area{
+          padding: 0;
+          .login-top{
+            display: inline-block;
+            width: 100%;
+            line-height: 36px;
+            font-size: 36px;
+            font-family: PingFangSC-Medium,sans-serif;
+            color: #FFFFFF;
+            margin-bottom: 30px;
+          }
+          .get-captcha-hint{
+            display: inline-block;
+            width: 100%;
+            line-height: 14px;
+            font-size: 14px;
+            font-family: PingFangSC-Medium,sans-serif;
+            color: #FFFFFF;
+            margin-bottom: 25px;
+          }
+          .get-captcha-btn-active{
+            float: right;
+            width: 150px;
+            font-size: 20px;
+            color: #150D33;
+            background-image: linear-gradient(to right, #5EABE2, #50BCB5);
+            height: 60px;
+            border-radius: 30px;
+          }
+          .get-captcha-btn-deactive{
+            float: right;
+            width: 150px;
+            font-size: 20px;
+            color: #ded9f3;
+            background-image: linear-gradient(to right, #a1a8ac, #c1c4c3);
+            height: 60px;
+            border-radius: 30px;
+            border: 1px solid #c1c4c3;
+          }
+          .input_img {
+            position: relative;
+            top: 5px;
+          }
+        }
+        .stepSwitchBtn{
+          padding: 0;
+          button {
+            width: 120px;
+            font-size: 20px;
+            color: #150D33;
+            background-image: linear-gradient(to right, #5EABE2, #50BCB5);
+            height: 40px;
+            border-radius: 20px;
+          }
         }
       }
-      p{
-        line-height: 25px;
-        text-align: left;
-        margin-top:15px;
-        margin-bottom: 0px;
-      }
-    }
-    .get-captcha-hint{
-      display: inline-block;
-      width: 100%;
-      line-height: 18px;
-      font-size: 12px;
-      font-family: PingFangSC-Medium,sans-serif;
-      color: #252B3A;
-      margin-bottom:25px;
     }
   }
-  @media screen and (max-width: 1380px) {
-    .loginBox{
-      margin: 140px 10px 0 0;
-    }
-  }
-  @media screen and (max-width: 1024px) {
-    .loginBox{
-      margin: 200px 10px 0 0;
-    }
-  }
-  @media screen and (max-width: 640px) {
-    .loginBox{
-      width: 310px;
-      margin: 140px 10px 0 0;
+  .el-input__inner {
+    width: 100%;
+    background: rgba(163,148,211,0.2);
+    border:1px solid rgba(255,255,255,0.2);
+    height: 60px;
+    border-radius: 30px;
+    font-size: 20px;
+    color: #BDB7DE;
+    padding: 0 0 0 80px;
+    &:focus {
+      background: rgba(25,11,70,0.6);
+      border:1px solid #50BCB5;
     }
   }
 }

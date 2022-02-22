@@ -17,15 +17,6 @@
 <template>
   <div>
     <div
-      class="logo_pic"
-      v-show="!isShowNav"
-    >
-      <img
-        src="../assets/images/logo.png"
-        alt=""
-      >
-    </div>
-    <div
       class="nav_top_right"
     >
       <div class="nav-tabs rt">
@@ -212,15 +203,6 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.logo_pic{
-  position: fixed;
-  z-index: 99;
-  img{
-    width: 200px;
-    margin: 20px 0 0 20px;
-    cursor: pointer;
-  }
-}
 .nav_top_right{
   position: fixed;
   z-index: 99;

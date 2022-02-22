@@ -41,12 +41,9 @@ export default {
   data () {
     return {
       needChangeFlag: true,
-      bgImg: require('../assets/images/login2.jpg'),
+      bgImg: require('../assets/images/background.png'),
       bgImgData: [
-        require('../assets/images/login2.jpg'),
-        require('../assets/images/login4.jpg'),
-        require('../assets/images/login6.jpg'),
-        require('../assets/images/login7.jpg')
+        require('../assets/images/background.png')
       ]
     }
   },
