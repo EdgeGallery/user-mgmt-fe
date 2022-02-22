@@ -20,7 +20,7 @@
       class="layoutRow"
     >
       <el-col
-         class="layoutLeftCol"
+        class="layoutLeftCol"
         :span="12"
       >
         <div
@@ -71,7 +71,7 @@
                       class="input_img"
                       src="../assets/images/icon_user.png"
                       alt
-                    />
+                    >
                   </i>
                 </el-input>
               </el-form-item>
@@ -90,7 +90,7 @@
                       class="input_img"
                       src="../assets/images/icon_pw.png"
                       alt
-                    />
+                    >
                   </i>
                 </el-input>
               </el-form-item>

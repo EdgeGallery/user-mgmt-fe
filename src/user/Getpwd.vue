@@ -16,12 +16,11 @@
 
 <template>
   <div class="getpwd">
-
     <el-row
       class="layoutRow"
     >
       <el-col
-         class="layoutLeftCol"
+        class="layoutLeftCol"
         :span="12"
       >
         <div
@@ -101,7 +100,7 @@
                       class="input_img"
                       src="../assets/images/icon_mail.png"
                       alt
-                    />
+                    >
                   </i>
                 </el-input>
               </el-form-item>
@@ -138,7 +137,7 @@
                           class="input_img"
                           src="../assets/images/icon_verify.png"
                           alt
-                        />
+                        >
                       </i>
                     </el-input>
                   </el-col>
@@ -181,7 +180,7 @@
                       class="input_img"
                       src="../assets/images/icon_pw.png"
                       alt
-                    />
+                    >
                   </i>
                 </el-input>
               </el-form-item>
@@ -198,7 +197,7 @@
                       class="input_img"
                       src="../assets/images/icon_pw.png"
                       alt
-                    />
+                    >
                   </i>
                 </el-input>
               </el-form-item>

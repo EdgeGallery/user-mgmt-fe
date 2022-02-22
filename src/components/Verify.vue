@@ -17,7 +17,10 @@
 <template>
   <div class="verify-area">
     <el-row>
-      <el-col :span="15" class="verifyInputCol">
+      <el-col
+        :span="15"
+        class="verifyInputCol"
+      >
         <el-form
           :model="verifyData"
           :rules="rules"
@@ -41,7 +44,7 @@
                   class="input_img"
                   src="../assets/images/icon_verify.png"
                   alt
-                />
+                >
               </i>
             </el-input>
           </el-form-item>
