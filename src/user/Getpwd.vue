@@ -632,7 +632,7 @@ export default {
             width: 100%;
             line-height: 36px;
             font-size: 36px;
-            font-family: HarmonyHeiTi,PingFangSC-Medium,sans-serif;
+            font-family: PingFangSC-Medium,sans-serif;
             color: #FFFFFF;
             margin-bottom: 30px;
           }
@@ -649,8 +649,8 @@ export default {
             float: right;
             width: 150px;
             font-size: 20px;
-            font-family: HarmonyHeiTi,PingFangSC-Medium,sans-serif;
-            color: #150D33;
+            font-family: PingFangSC-Medium,sans-serif;
+            color: #241658;
             background-image: linear-gradient(to right, #5EABE2, #50BCB5);
             height: 60px;
             border-radius: 30px;
@@ -659,7 +659,7 @@ export default {
             float: right;
             width: 150px;
             font-size: 20px;
-            font-family: HarmonyHeiTi,PingFangSC-Medium,sans-serif;
+            font-family: PingFangSC-Medium,sans-serif;
             color: #ded9f3;
             background-image: linear-gradient(to right, #a1a8ac, #c1c4c3);
             height: 60px;
@@ -672,12 +672,12 @@ export default {
           }
         }
         .stepSwitchBtn{
-          padding: 0;
+          padding: 10px 0 0 0;
           button {
             width: 120px;
             font-size: 20px;
-            font-family: HarmonyHeiTi,PingFangSC-Medium,sans-serif;
-            color: #150D33;
+            font-family: PingFangSC-Medium,sans-serif;
+            color: #241658;
             background-image: linear-gradient(to right, #5EABE2, #50BCB5);
             height: 40px;
             border-radius: 20px;

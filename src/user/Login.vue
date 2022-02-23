@@ -489,7 +489,7 @@ export default {
             width: 100%;
             line-height: 40px;
             font-size: 40px;
-            font-family: HarmonyHeiTi,PingFangSC-Medium,sans-serif;
+            font-family: PingFangSC-Medium,sans-serif;
             color: #FFFFFF;
             margin-bottom: 50px;
           }
@@ -499,15 +499,16 @@ export default {
           }
         }
         .login-btn {
-          padding: 0;
+          padding: 10px 0 0 0;
           button {
             width: 100%;
             font-size: 30px;
-            font-family: HarmonyHeiTi,PingFangSC-Medium,sans-serif;
-            color: #150D33;
+            font-family: PingFangSC-Medium,sans-serif;
+            color: #241658;
             background-image: linear-gradient(to right, #5EABE2, #50BCB5);
             height: 60px;
             border-radius: 30px;
+            box-shadow:0px 0px 40px rgba(94,171,226,0.7);
           }
           .verify-box em{
             top: 0;
