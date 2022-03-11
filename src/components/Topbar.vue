@@ -150,6 +150,10 @@ export default {
   .el-menu-item{
     height: 50px;
     line-height: 50px;
+    background-color: #3e279B !important;
+  }
+  .el-menu-item.is-active{
+    color: #FFFFFF !important;
   }
 }
 .el-menu--horizontal>.el-submenu .el-submenu__title{
@@ -160,7 +164,8 @@ export default {
   display: flex;
   .first-menu{
     font-size: 18px;
-    font-weight: bold;
+    color: #FFFFFF !important;
+    font-weight: none;
   }
   .second-menu{
     font-size: 15px;
