@@ -451,6 +451,9 @@ export default {
           .el-checkbox{
             margin-right: 10px;
           }
+          .el-checkbox__input{
+            margin-top: -3px;
+          }
           .el-link{
             font-size: 16px;
             color: #50BCB5;
