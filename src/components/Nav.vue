@@ -251,7 +251,7 @@ export default {
   }
 }
 .navgation{
-  background: #282B33;
+  background: #3e279B;
   height: 65px;
   top: 0px;
   width: 100%;
@@ -261,12 +261,13 @@ export default {
     height:65px;
     width: 80%;
     max-width:430px;
-    line-height: 65px;
+    line-height: 57px;
     margin-left:10px;
     img{
-      width:150px;
+      width:130px;
       position: relative;
-      top: 0px;
+      top: 15px;
+      left: 175px;
       cursor: pointer;
     }
     span{

@@ -104,9 +104,7 @@
             class="login-area"
             v-if="hasLogin"
           >
-            <p
-              style="height: 120px;line-height: 120px;"
-            >
+            <p class="login-hint">
               {{ username }}{{ $t('login.hasLogin') }}
             </p>
           </div>
@@ -492,6 +490,16 @@ export default {
             font-family: PingFangSC-Medium,sans-serif;
             color: #FFFFFF;
             margin-bottom: 50px;
+          }
+          .login-hint{
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            line-height: 30px;
+            font-size: 30px;
+            font-family: PingFangSC-Medium,sans-serif;
+            color: #FFFFFF;
+            margin-top: 100px;
           }
           .input_img {
             position: relative;
